@@ -38,4 +38,13 @@ test('map container has stable sizing and Leaflet receives a size refresh', asyn
   assert.match(css, /\.map-panel[\s\S]*height:\s*640px/);
   assert.match(css, /#map[\s\S]*height:\s*640px/);
   assert.match(js, /invalidateSize/);
+  assert.match(js, /ResizeObserver/);
+});
+
+test('local CSS includes Leaflet pane positioning fallback for CDN timing issues', async () => {
+  const css = await readFile(new URL('../style.css', import.meta.url), 'utf8');
+
+  assert.match(css, /\.leaflet-pane,\s*\.leaflet-tile/);
+  assert.match(css, /\.leaflet-pane[\s\S]*position:\s*absolute/);
+  assert.match(css, /\.leaflet-tile[\s\S]*position:\s*absolute/);
 });
