@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="台风巴威：杭州生存指南，用地图主舞台展示巴威与西湖圣地的距离、路径、境界、风圈和防台准备。"
+      content="台风巴威：杭州生存指南，用地图主舞台展示巴威与天命人的距离、路径、境界、风圈和防台准备。"
     />
-    <title>巴威临杭，西湖圣地守城录</title>
+    <title>巴威会淋湿我的泡面吗？</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="preconnect" href="https://fonts.loli.net" crossorigin />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
@@ -25,20 +25,31 @@
         <div class="map-panel">
           <div id="map" aria-label="台风巴威路径地图"></div>
 
-          <header class="realm-panel" id="realm-panel" aria-live="polite">
-            <p class="realm-panel__kicker">巴威 BAVI | 归墟帝影</p>
-            <h1>西湖圣地守城录</h1>
+          <button
+            class="realm-toggle"
+            id="realm-toggle"
+            type="button"
+            aria-controls="realm-panel"
+            aria-expanded="false"
+            aria-label="展开主面板"
+            title="展开主面板"
+          >
+            杭
+          </button>
+
+          <header class="realm-panel is-collapsed" id="realm-panel" aria-hidden="true" aria-live="polite">
+            <h1>巴威会淋湿我的泡面吗？</h1>
             <p id="hero-summary" class="realm-panel__summary">
               正在读取天机推演，正式预警请以气象部门发布为准。
             </p>
             <div class="realm-grid">
               <article>
-                <span>西湖圣地</span>
-                <strong id="hangzhou-realm">轮海初开</strong>
-                <small id="hangzhou-realm-desc">杭州境界说明待命。</small>
+                <span>天命人</span>
+                <strong id="hangzhou-realm">轮海秘境</strong>
+                <small id="hangzhou-realm-desc">天命人境界说明待命。</small>
               </article>
               <article>
-                <span>巴威称号</span>
+                <span>巴威等级</span>
                 <strong id="bavi-realm">归墟帝影</strong>
                 <small id="bavi-realm-desc">巴威境界说明待命。</small>
               </article>
@@ -77,22 +88,22 @@
               <span id="timeline-start">--</span>
               <span id="timeline-end">--</span>
             </div>
-            <p id="active-point-detail">拖动时间轴，查看巴威逼近时杭州境界如何变化。</p>
+            <p id="active-point-detail">拖动时间轴，查看巴威逼近时天命人境界如何变化。</p>
           </section>
 
           <div class="distance-readout" id="distance-ruler-label">量天尺待命</div>
 
           <div class="breakthrough-banner" id="breakthrough-banner" role="status" aria-live="polite">
             <span id="breakthrough-kicker">天机有变</span>
-            <strong id="breakthrough-title">西湖圣地破境</strong>
+            <strong id="breakthrough-title">天命人破境</strong>
             <p id="breakthrough-detail">境界突破会在关键距离触发。</p>
           </div>
         </div>
 
         <aside class="battle-tools" aria-label="地图辅助信息">
           <section class="side-card side-card--storm" id="bavi-player">
-            <div class="side-card__label">归墟帝影</div>
-            <h2>巴威 BAVI</h2>
+            <div class="side-card__label">巴威</div>
+            <h2 id="storm-realm-title">归墟帝影</h2>
             <p id="wind-pressure">-- m/s | -- hPa</p>
             <p>移动方向：<span id="storm-move">--</span></p>
             <p id="storm-mood-label">正在读取巴威状态。</p>
@@ -100,9 +111,8 @@
           </section>
 
           <section class="side-card side-card--city" id="hangzhou-squad">
-            <div class="side-card__label">西湖圣地</div>
-            <h2 id="city-banter">杭州护城大阵待命。</h2>
-            <p id="distance-note">距离按台风中心与杭州中心点估算。</p>
+            <div class="side-card__label">天命人</div>
+            <h2 id="city-banter">天命人防台状态待命。</h2>
             <div class="life-grid" aria-label="杭州生活指数">
               <article>
                 <span>阳台阵眼</span>

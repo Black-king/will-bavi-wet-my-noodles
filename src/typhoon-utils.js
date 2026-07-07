@@ -3,47 +3,47 @@ const EARTH_RADIUS_KM = 6371;
 const HANGZHOU_REALMS = [
   {
     key: 'lunhai',
-    name: '轮海初开',
+    name: '轮海秘境',
     stage: 1,
     visualClass: 'realm-lunhai',
-    description: '杭州进入观察状态，西湖阵眼微亮，重点是确认巴威位置和数据更新时间。',
+    description: '天命人进入观察状态，先确认巴威位置、距离和数据更新时间。',
     advice: '先保持关注，不制造恐慌。'
   },
   {
     key: 'daogong',
-    name: '道宫点灯',
+    name: '道宫秘境',
     stage: 2,
     visualClass: 'realm-daogong',
-    description: '防台准备开始启动，门窗、阳台、饮水、照明、药品对应道宫五灯。',
+    description: '防台准备开始启动，门窗、阳台、饮水、照明、药品逐项点亮。',
     advice: '适合把防台清单逐项点亮。'
   },
   {
     key: 'siji',
-    name: '四极镇城',
+    name: '四极秘境',
     stage: 3,
     visualClass: 'realm-siji',
-    description: '杭州护城大阵展开四极阵脚，说明风雨影响需要认真看待。',
+    description: '天命人进入筑防状态，风雨影响需要认真看待。',
     advice: '阳台和门窗先检查一遍。'
   },
   {
     key: 'hualong',
-    name: '化龙守望',
+    name: '化龙秘境',
     stage: 4,
     visualClass: 'realm-hualong',
-    description: '巴威进入关键观察距离，杭州大阵开始稳定运转，预报变化要持续跟进。',
+    description: '巴威进入关键观察距离，天命人需要持续跟进预报变化。',
     advice: '减少临时外出安排，补齐物资。'
   },
   {
     key: 'xiantai',
-    name: '仙台临战',
+    name: '仙台秘境',
     stage: 5,
     visualClass: 'realm-xiantai',
-    description: '杭州进入重点警戒窗口，台风距离或风险已明显抬升。',
+    description: '天命人进入重点警戒窗口，台风距离或风险已明显抬升。',
     advice: '减少不必要外出，正式预警优先。'
   },
   {
     key: 'diguan',
-    name: '帝关开阵',
+    name: '帝关临战',
     stage: 6,
     visualClass: 'realm-diguan',
     description: '最接近或最大影响时段到来，页面只做生活提醒，决策以官方信息为准。',
@@ -56,13 +56,13 @@ const IMPERIAL_ARTIFACTS = [
     key: 'liangtianchi',
     label: '量天尺',
     panel: 'distance',
-    summary: '丈量巴威与西湖圣地的距离'
+    summary: '丈量巴威与天命人的距离'
   },
   {
     key: 'xihu-map',
-    label: '西湖阵图',
+    label: '天命阵图',
     panel: 'risk',
-    summary: '查看杭州当前风险与护城状态'
+    summary: '查看杭州当前风险与天命人状态'
   },
   {
     key: 'wind-ruler',
@@ -203,29 +203,38 @@ export function deriveBaviRealm({ distanceKm, windSpeedMps, pressureHpa }) {
   };
 }
 
-export function deriveHangzhouRealm({ distanceKm, riskLevel, completedSupplies, totalSupplies }) {
+export function deriveHangzhouRealm({
+  distanceKm,
+  riskLevel,
+  completedSupplies,
+  totalSupplies,
+  timelineProgress = 0
+}) {
   const stability = totalSupplies > 0 ? Math.round((completedSupplies / totalSupplies) * 100) : 0;
-  let realm = HANGZHOU_REALMS[0];
+  const progress = clamp01(Number(timelineProgress) || 0);
+  let realmIndex = 0;
 
-  if (completedSupplies >= 1 || distanceKm <= 1000) {
-    realm = HANGZHOU_REALMS[1];
+  if (completedSupplies >= 1 || distanceKm <= 1000 || progress >= 0.18) {
+    realmIndex = Math.max(realmIndex, 1);
   }
 
-  if (distanceKm <= 700 || completedSupplies >= 3 || riskLevel === 'medium') {
-    realm = HANGZHOU_REALMS[2];
+  if (distanceKm <= 700 || completedSupplies >= 3 || riskLevel === 'medium' || progress >= 0.36) {
+    realmIndex = Math.max(realmIndex, 2);
   }
 
-  if (distanceKm <= 420 || (riskLevel === 'medium' && stability >= 80)) {
-    realm = HANGZHOU_REALMS[3];
+  if (distanceKm <= 420 || (riskLevel === 'medium' && stability >= 80) || progress >= 0.54) {
+    realmIndex = Math.max(realmIndex, 3);
   }
 
-  if (distanceKm <= 260 || riskLevel === 'high') {
-    realm = HANGZHOU_REALMS[4];
+  if (distanceKm <= 260 || riskLevel === 'high' || progress >= 0.72) {
+    realmIndex = Math.max(realmIndex, 4);
   }
 
-  if (distanceKm <= 140 && stability >= 80) {
-    realm = HANGZHOU_REALMS[5];
+  if ((distanceKm <= 140 && stability >= 80) || (riskLevel === 'high' && progress >= 0.9) || progress >= 0.94) {
+    realmIndex = Math.max(realmIndex, 5);
   }
+
+  const realm = HANGZHOU_REALMS[realmIndex];
 
   return {
     ...realm,
@@ -245,4 +254,8 @@ export function buildChecklistShareText(items) {
 
 function degreesToRadians(degrees) {
   return (degrees * Math.PI) / 180;
+}
+
+function clamp01(value) {
+  return Math.min(1, Math.max(0, value));
 }

@@ -63,23 +63,38 @@ test('derives Hangzhou realm from distance, risk, and defensive checklist progre
   });
 
   assert.equal(watchRealm.key, 'lunhai');
-  assert.equal(watchRealm.name, '轮海初开');
+  assert.equal(watchRealm.name, '轮海秘境');
   assert.equal(watchRealm.stage, 1);
   assert.equal(watchRealm.stability, 0);
   assert.equal(watchRealm.visualClass, 'realm-lunhai');
 
   assert.equal(
     deriveHangzhouRealm({ distanceKm: 650, riskLevel: 'medium', completedSupplies: 3, totalSupplies: 5 }).name,
-    '四极镇城'
+    '四极秘境'
   );
   assert.equal(
     deriveHangzhouRealm({ distanceKm: 390, riskLevel: 'medium', completedSupplies: 5, totalSupplies: 5 }).name,
-    '化龙守望'
+    '化龙秘境'
   );
   assert.equal(
     deriveHangzhouRealm({ distanceKm: 220, riskLevel: 'high', completedSupplies: 5, totalSupplies: 5 }).name,
-    '仙台临战'
+    '仙台秘境'
   );
+});
+
+test('derives Hangzhou realm from forecast timeline progress', () => {
+  const base = {
+    distanceKm: 1200,
+    riskLevel: 'watch',
+    completedSupplies: 0,
+    totalSupplies: 5
+  };
+
+  assert.equal(deriveHangzhouRealm({ ...base, timelineProgress: 0.2 }).name, '道宫秘境');
+  assert.equal(deriveHangzhouRealm({ ...base, timelineProgress: 0.4 }).name, '四极秘境');
+  assert.equal(deriveHangzhouRealm({ ...base, timelineProgress: 0.6 }).name, '化龙秘境');
+  assert.equal(deriveHangzhouRealm({ ...base, timelineProgress: 0.8 }).name, '仙台秘境');
+  assert.equal(deriveHangzhouRealm({ ...base, timelineProgress: 0.96 }).name, '帝关临战');
 });
 
 test('imperial artifacts define map-first controls and safety tools', () => {
@@ -108,5 +123,5 @@ test('realms include readable introductions and action meaning', () => {
   assert.equal(typeof hangzhou.description, 'string');
   assert.equal(typeof hangzhou.advice, 'string');
   assert.match(bavi.description, /巴威|台风|风/);
-  assert.match(hangzhou.description, /杭州|西湖|防台/);
+  assert.match(hangzhou.description, /天命人|防台|预报/);
 });
