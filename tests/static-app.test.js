@@ -9,6 +9,10 @@ test('html shell contains required app regions and dependencies', async () => {
   assert.match(html, /id="status-panel"/);
   assert.match(html, /id="timeline"/);
   assert.match(html, /id="supply-list"/);
+  assert.match(html, /id="hangzhou-squad"/);
+  assert.match(html, /id="bavi-player"/);
+  assert.match(html, /杭州小队/);
+  assert.match(html, /巴威选手/);
   assert.match(html, /leaflet\.css/);
   assert.match(html, /leaflet\.js/);
   assert.match(html, /script\.js/);
@@ -21,4 +25,6 @@ test('script reads the normalized JSON and renders core sections', async () => {
   assert.match(js, /renderStatus/);
   assert.match(js, /renderTimeline/);
   assert.match(js, /renderChecklist/);
+  assert.match(js, /balcony-index/);
+  assert.match(js, /takeout-index/);
 });

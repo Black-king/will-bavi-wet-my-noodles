@@ -20,9 +20,14 @@ const els = {
   moodLabel: document.querySelector('#storm-mood-label'),
   riskLabel: document.querySelector('#risk-label'),
   riskSummary: document.querySelector('#risk-summary'),
+  heroSummary: document.querySelector('#hero-summary'),
+  cityBanter: document.querySelector('#city-banter'),
   distanceValue: document.querySelector('#distance-value'),
   stormLevel: document.querySelector('#storm-level'),
+  stormMove: document.querySelector('#storm-move'),
   windPressure: document.querySelector('#wind-pressure'),
+  balconyIndex: document.querySelector('#balcony-index'),
+  takeoutIndex: document.querySelector('#takeout-index'),
   updatedAt: document.querySelector('#updated-at'),
   dataFreshness: document.querySelector('#data-freshness'),
   timeline: document.querySelector('#timeline'),
@@ -71,11 +76,16 @@ function renderStatus() {
   els.riskSummary.textContent = `${risk.headline}。${risk.summary}`;
   els.distanceValue.textContent = `${Math.round(distanceKm)} km`;
   els.stormLevel.textContent = latest.level;
+  els.stormMove.textContent = latest.movement;
   els.windPressure.textContent = `${latest.windSpeedMps} m/s · ${latest.pressureHpa} hPa`;
   els.updatedAt.textContent = appState.data.meta.displayUpdatedAt;
   els.dataFreshness.textContent = appState.data.meta.dataFreshness;
   els.avatar.dataset.mood = mood;
   els.moodLabel.textContent = moodText(mood);
+  els.heroSummary.textContent = heroSummaryText(distanceKm, risk.level);
+  els.cityBanter.textContent = cityBanterText(distanceKm, risk.level);
+  els.balconyIndex.textContent = balconyIndexText(distanceKm, latest.windSpeedMps);
+  els.takeoutIndex.textContent = takeoutIndexText(distanceKm, latest.windSpeedMps);
 
   updateShareText();
 }
@@ -116,12 +126,12 @@ function renderMap() {
     icon: L.divIcon({
       className: '',
       html: '<div class="hangzhou-marker" aria-label="杭州"></div>',
-      iconSize: [20, 20],
-      iconAnchor: [10, 10]
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
     })
   })
     .addTo(appState.map)
-    .bindPopup('<strong>杭州</strong><br>本页默认观察点');
+    .bindPopup('<strong>杭州小队</strong><br>西湖阵地，观察巴威走位');
 
   appState.stormMarker = L.marker(toLatLon(active), {
     icon: stormIcon(),
@@ -264,25 +274,79 @@ function stormIcon() {
   return L.divIcon({
     className: '',
     html: '<div class="storm-marker" aria-label="台风中心"></div>',
-    iconSize: [34, 34],
-    iconAnchor: [17, 17]
+    iconSize: [42, 42],
+    iconAnchor: [21, 21]
   });
 }
 
 function pointPopup(point) {
   const typeLabel = point.type === 'observed' ? '实况' : '预报';
 
-  return `<strong>巴威 ${point.label}</strong><br>${typeLabel} · ${point.level}<br>${point.windSpeedMps} m/s · ${point.pressureHpa} hPa`;
+  return `<strong>巴威选手 ${point.label}</strong><br>${typeLabel} · ${point.level}<br>${point.windSpeedMps} m/s · ${point.pressureHpa} hPa`;
 }
 
 function moodText(mood) {
   const copy = {
-    alert: '巴威正在蓄力',
-    angry: '巴威进入暴躁模式',
+    alert: '巴威正在热身',
+    angry: '巴威开始摆脸色',
     furious: '巴威火力全开'
   };
 
   return copy[mood] || copy.alert;
+}
+
+function heroSummaryText(distanceKm, riskLevel) {
+  const distance = Math.round(distanceKm);
+
+  if (riskLevel === 'high') {
+    return `巴威离杭州约 ${distance} km，杭州小队进入认真防守，阳台杂物请立刻归队。`;
+  }
+
+  if (riskLevel === 'medium') {
+    return `巴威离杭州约 ${distance} km，暂时不像直冲脸，但杭州小队已经把伞翻出来了。`;
+  }
+
+  return `巴威离杭州约 ${distance} km，目前还在远处表演转圈，杭州先保持围观。`;
+}
+
+function cityBanterText(distanceKm, riskLevel) {
+  if (riskLevel === 'high') {
+    return '杭州小队：别看西湖很淡定，阳台已经开始点名了。';
+  }
+
+  if (riskLevel === 'medium') {
+    return '杭州小队：先把窗户检查一下，别等风来帮你装修。';
+  }
+
+  if (distanceKm > 1000) {
+    return '杭州小队：巴威还远，西湖边先端起茶杯观察走位。';
+  }
+
+  return '杭州小队：距离不算贴脸，但防台清单可以先勾起来。';
+}
+
+function balconyIndexText(distanceKm, windSpeedMps) {
+  if (distanceKm <= 300 || windSpeedMps >= 50) {
+    return '花盆撤退';
+  }
+
+  if (distanceKm <= 800 || windSpeedMps >= 36) {
+    return '提前收衣';
+  }
+
+  return '先看一眼';
+}
+
+function takeoutIndexText(distanceKm, windSpeedMps) {
+  if (distanceKm <= 250 || windSpeedMps >= 50) {
+    return '骑手辛苦';
+  }
+
+  if (distanceKm <= 700 || windSpeedMps >= 36) {
+    return '谨慎下单';
+  }
+
+  return '普通模式';
 }
 
 function showToast(message) {

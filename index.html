@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="台风巴威：杭州生存指南，用杭州视角查看台风路径、距离、风险指数和防台物资清单。"
+      content="台风巴威：杭州生存指南，用滑稽的杭州 VS 台风视角查看路径、距离、风险指数和防台清单。"
     />
-    <title>台风巴威：杭州生存指南</title>
+    <title>杭州，巴威来了没？</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -18,60 +18,93 @@
   </head>
   <body>
     <main class="app-shell">
-      <header class="hero">
-        <div class="hero__copy">
-          <p class="eyebrow">杭州视角 · 实时路径演示</p>
-          <h1>台风巴威：杭州生存指南</h1>
-          <p class="hero__summary">
-            看它现在在哪、离杭州多远、今天该不该把阳台收一收。
+      <header class="battle-hero">
+        <section class="city-card character-card" id="hangzhou-squad">
+          <div class="card-label">杭州小队</div>
+          <div class="hangzhou-illustration" aria-hidden="true">
+            <div class="lake"></div>
+            <div class="bridge"></div>
+            <div class="pagoda">杭</div>
+            <div class="snack-ticket">葱包桧儿已就位</div>
+          </div>
+          <h2>西湖边先别慌</h2>
+          <p id="city-banter">杭州正在观察巴威的走位，阳台和窗户进入待命状态。</p>
+        </section>
+
+        <section class="hero-copy">
+          <p class="eyebrow">实时路径演示 · 杭州生活版</p>
+          <h1>杭州，巴威来了没？</h1>
+          <p class="hero__summary" id="hero-summary">
+            正在读取台风位置，先把伞和充电宝放到同一个抽屉。
           </p>
-        </div>
-        <aside class="storm-avatar" aria-label="巴威状态角色">
-          <div class="storm-avatar__eye storm-avatar__eye--left"></div>
-          <div class="storm-avatar__eye storm-avatar__eye--right"></div>
-          <div class="storm-avatar__mouth"></div>
-          <span id="storm-mood-label">正在读取巴威状态</span>
-        </aside>
+          <div class="headline-strip" id="status-panel" aria-live="polite">
+            <div class="headline-pill headline-pill--risk">
+              <span>抗台姿势</span>
+              <strong id="risk-label">读取中</strong>
+            </div>
+            <div class="headline-pill">
+              <span>巴威离杭州</span>
+              <strong id="distance-value">-- km</strong>
+            </div>
+            <div class="headline-pill">
+              <span>当前强度</span>
+              <strong id="storm-level">--</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="storm-card character-card" id="bavi-player">
+          <div class="card-label">巴威选手</div>
+          <aside class="storm-avatar" aria-label="巴威状态角色">
+            <div class="storm-avatar__eye storm-avatar__eye--left"></div>
+            <div class="storm-avatar__eye storm-avatar__eye--right"></div>
+            <div class="storm-avatar__mouth"></div>
+            <span id="storm-mood-label">正在读取巴威状态</span>
+          </aside>
+          <div class="storm-stats">
+            <p id="wind-pressure">-- m/s · -- hPa</p>
+            <p>移动方向：<span id="storm-move">--</span></p>
+          </div>
+        </section>
       </header>
 
-      <section class="status-grid" id="status-panel" aria-live="polite">
-        <article class="metric metric--primary">
-          <span>杭州抗台指数</span>
-          <strong id="risk-label">读取中</strong>
-          <p id="risk-summary">正在载入台风数据。</p>
+      <section class="comic-metrics" aria-label="杭州生活指数">
+        <article class="comic-ticket">
+          <span>阳台危险指数</span>
+          <strong id="balcony-index">--</strong>
+          <p>花盆、拖把、晾衣架有没有开始开会？</p>
         </article>
-        <article class="metric">
-          <span>距离杭州</span>
-          <strong id="distance-value">-- km</strong>
-          <p id="distance-note">按台风中心到杭州中心点估算。</p>
+        <article class="comic-ticket">
+          <span>外卖配送难度</span>
+          <strong id="takeout-index">--</strong>
+          <p>能不能点夜宵，先看巴威脸色。</p>
         </article>
-        <article class="metric">
-          <span>当前强度</span>
-          <strong id="storm-level">--</strong>
-          <p id="wind-pressure">-- m/s · -- hPa</p>
-        </article>
-        <article class="metric">
+        <article class="comic-ticket">
           <span>数据时间</span>
           <strong id="updated-at">--</strong>
           <p id="data-freshness">等待数据源更新。</p>
         </article>
       </section>
 
-      <section class="workspace" aria-label="台风路径和防台工具">
+      <section class="battle-stage" aria-label="台风路径和防台工具">
         <div class="map-panel">
+          <div class="map-title">
+            <span>巴威行军路线</span>
+            <strong id="active-point-label">--</strong>
+          </div>
           <div id="map" aria-label="台风巴威路径地图"></div>
           <div class="map-legend" aria-label="地图图例">
-            <span><i class="legend-line legend-line--observed"></i> 实况路径</span>
-            <span><i class="legend-line legend-line--forecast"></i> 预报路径</span>
-            <span><i class="legend-dot"></i> 杭州</span>
+            <span><i class="legend-line legend-line--observed"></i> 已走路线</span>
+            <span><i class="legend-line legend-line--forecast"></i> 猜测走位</span>
+            <span><i class="legend-dot"></i> 杭州阵地</span>
           </div>
         </div>
 
-        <aside class="control-panel">
-          <section class="panel-section">
+        <aside class="battle-tools">
+          <section class="sticky-note timeline-note">
             <div class="section-heading">
-              <span>时间轴</span>
-              <strong id="active-point-label">--</strong>
+              <span>战况回放</span>
+              <strong>拖一拖</strong>
             </div>
             <input id="timeline" type="range" min="0" value="0" step="1" />
             <div class="timeline-meta">
@@ -81,9 +114,9 @@
             <p id="active-point-detail" class="body-note">拖动查看巴威怎么走过来。</p>
           </section>
 
-          <section class="panel-section">
+          <section class="receipt-note">
             <div class="section-heading">
-              <span>防台物资</span>
+              <span>杭州备战小票</span>
               <strong>勾一勾</strong>
             </div>
             <div id="supply-list" class="supply-list"></div>
@@ -95,11 +128,12 @@
             ></textarea>
           </section>
 
-          <section class="panel-section panel-section--compact">
+          <section class="fine-print">
             <div class="section-heading">
-              <span>数据说明</span>
-              <strong>请核对</strong>
+              <span>认真一秒</span>
+              <strong>别乱来</strong>
             </div>
+            <p id="risk-summary" class="body-note">正在载入台风数据。</p>
             <p id="source-note" class="body-note"></p>
             <p id="disclaimer" class="body-note"></p>
           </section>
