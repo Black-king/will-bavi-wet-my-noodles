@@ -143,6 +143,8 @@ function renderMap() {
 
   const bounds = L.latLngBounds([...observed, ...forecast, [hangzhou.lat, hangzhou.lon]]);
   appState.map.fitBounds(bounds, { padding: [32, 32] });
+  refreshMapSize();
+  window.addEventListener('resize', refreshMapSize);
 }
 
 function renderTimeline() {
@@ -355,4 +357,10 @@ function showToast(message) {
   window.setTimeout(() => {
     els.toast.classList.remove('is-visible');
   }, 3600);
+}
+
+function refreshMapSize() {
+  window.requestAnimationFrame(() => {
+    appState.map?.invalidateSize();
+  });
 }

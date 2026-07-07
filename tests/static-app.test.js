@@ -28,3 +28,14 @@ test('script reads the normalized JSON and renders core sections', async () => {
   assert.match(js, /balcony-index/);
   assert.match(js, /takeout-index/);
 });
+
+test('map container has stable sizing and Leaflet receives a size refresh', async () => {
+  const [js, css] = await Promise.all([
+    readFile(new URL('../script.js', import.meta.url), 'utf8'),
+    readFile(new URL('../style.css', import.meta.url), 'utf8')
+  ]);
+
+  assert.match(css, /\.map-panel[\s\S]*height:\s*640px/);
+  assert.match(css, /#map[\s\S]*height:\s*640px/);
+  assert.match(js, /invalidateSize/);
+});
