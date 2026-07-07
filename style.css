@@ -1,26 +1,62 @@
 :root {
   color-scheme: dark;
-  --void: #05070d;
+
+  /* ── 色彩 ── */
+  --void: #04060b;
   --void-soft: #0a111a;
-  --ink: #e9f0ec;
+  --ink: #ecf2ee;
   --muted: #9aa9a7;
+  --paper: #fff8df;
   --gold: #d8b768;
   --gold-strong: #f2d98a;
+  --gold-dim: rgba(216, 183, 104, 0.32);
   --cyan: #79d8d0;
   --storm: #dc6247;
   --storm-deep: #3d1214;
+  --vermilion: #c2402a;
   --panel: rgba(7, 13, 20, 0.74);
   --panel-strong: rgba(8, 15, 24, 0.9);
-  --line: rgba(216, 183, 104, 0.32);
+  --line: var(--gold-dim);
   --glass-line: rgba(255, 255, 255, 0.13);
-  --radius: 8px;
+
+  /* ── 氛围（境界驱动，见文件尾） ── */
+  --atmo-tint: transparent;
+  --atmo-vignette: 0.45;
+  --atmo-pulse: 10s;
+
+  /* ── 形状与间距 ── */
+  --radius-s: 6px;
+  --radius: 10px;
+  --radius-l: 16px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
   --shadow: 0 24px 80px rgba(0, 0, 0, 0.44);
-  font-family:
-    "Microsoft YaHei",
-    "PingFang SC",
-    "Hiragino Sans GB",
-    system-ui,
-    sans-serif;
+
+  /* ── 动效令牌 ── */
+  --dur-quick: 160ms;
+  --dur-base: 320ms;
+  --dur-slow: 700ms;
+  --dur-ritual: 1400ms;
+  --dur-breakthrough: 3200ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-ritual: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── 字体 ── */
+  --font-display: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", serif;
+  --font-body: "LXGW WenKai Lite", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  --fs-hero: clamp(1.9rem, 3.2vw, 3.2rem);
+  --fs-title: clamp(1.12rem, 1.6vw, 1.48rem);
+  --fs-num: clamp(1.05rem, 1.4vw, 1.35rem);
+  --fs-body: 0.86rem;
+  --fs-small: 0.74rem;
+  --fs-micro: 0.68rem;
+
+  font-family: var(--font-body);
 }
 
 * {
@@ -37,7 +73,7 @@ body {
   min-height: 100dvh;
   color: var(--ink);
   background:
-    linear-gradient(135deg, rgba(11, 18, 25, 0.96), rgba(5, 7, 13, 0.98)),
+    linear-gradient(135deg, rgba(11, 18, 25, 0.96), rgba(4, 6, 11, 0.98)),
     linear-gradient(90deg, rgba(216, 183, 104, 0.055), transparent 34%, rgba(121, 216, 208, 0.055)),
     var(--void);
 }
@@ -52,6 +88,56 @@ button {
   cursor: pointer;
 }
 
+/* ═══════════ 全局氛围层（境界驱动） ═══════════ */
+
+#atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 800;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 45%, transparent 52%, rgba(0, 0, 0, var(--atmo-vignette)) 100%);
+  transition: background var(--dur-ritual) var(--ease-ritual);
+}
+
+#atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--atmo-tint);
+  mix-blend-mode: soft-light;
+  animation: atmo-breathe var(--atmo-pulse) ease-in-out infinite;
+  transition: background-color var(--dur-ritual) var(--ease-ritual);
+}
+
+#atmosphere::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20vmax;
+  height: 20vmax;
+  border: 2px solid rgba(242, 217, 138, 0.5);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.2);
+}
+
+body[data-realm-shift="true"] #atmosphere::after {
+  animation: realm-ripple var(--dur-ritual) var(--ease-ritual) both;
+}
+
+#fx-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 850;
+  width: 100vw;
+  height: 100dvh;
+  pointer-events: none;
+}
+
+/* ═══════════ 外层框架 ═══════════ */
+
 .app-shell {
   width: 100%;
   max-width: none;
@@ -61,7 +147,7 @@ button {
 
 .battle-stage {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
+  grid-template-columns: minmax(0, 1fr) 344px;
   gap: 12px;
   align-items: start;
 }
@@ -71,13 +157,18 @@ button {
   height: calc(100dvh - 20px);
   min-height: 720px;
   overflow: hidden;
-  border: 1px solid rgba(216, 183, 104, 0.32);
+  border: 1px solid var(--gold-dim);
   border-radius: var(--radius);
   background:
     radial-gradient(circle at 50% 46%, rgba(121, 216, 208, 0.12), transparent 36%),
     linear-gradient(180deg, rgba(18, 32, 46, 0.88), var(--void));
   box-shadow: var(--shadow);
   isolation: isolate;
+  transition: filter var(--dur-slow) var(--ease-out);
+}
+
+body[data-realm-shift="true"] .map-panel {
+  filter: brightness(1.12);
 }
 
 .map-panel::before,
@@ -89,18 +180,24 @@ button {
   pointer-events: none;
 }
 
+/* 雷达网格 + 开卷扫掠 */
 .map-panel::before {
   background:
     linear-gradient(90deg, rgba(216, 183, 104, 0.055) 1px, transparent 1px),
     linear-gradient(rgba(216, 183, 104, 0.045) 1px, transparent 1px);
   background-size: 44px 44px;
   mask-image: radial-gradient(circle at 50% 52%, transparent 28%, #000 82%);
+  opacity: 0;
+}
+
+body.is-awakened .map-panel::before {
+  animation: map-unveil var(--dur-ritual) var(--ease-ritual) both;
 }
 
 .map-panel::after {
   background:
-    linear-gradient(180deg, rgba(5, 7, 13, 0.52), transparent 20%, transparent 68%, rgba(5, 7, 13, 0.74)),
-    radial-gradient(circle at center, transparent 48%, rgba(5, 7, 13, 0.74));
+    linear-gradient(180deg, rgba(4, 6, 11, 0.52), transparent 20%, transparent 68%, rgba(4, 6, 11, 0.74)),
+    radial-gradient(circle at center, transparent 48%, rgba(4, 6, 11, 0.74));
 }
 
 #map {
@@ -109,6 +206,8 @@ button {
   min-height: 720px;
   background: var(--void);
 }
+
+/* ═══════════ Leaflet 基础 ═══════════ */
 
 .leaflet-container {
   position: relative;
@@ -134,6 +233,23 @@ button {
 
 .leaflet-tile {
   filter: brightness(0.54) saturate(0.72) contrast(1.08) hue-rotate(172deg);
+  transition: filter var(--dur-ritual) var(--ease-ritual);
+}
+
+body[data-bavi-realm="bavi-tianzun"] .leaflet-tile {
+  filter: brightness(0.5) saturate(0.66) contrast(1.1) hue-rotate(168deg);
+}
+
+body[data-bavi-realm="guixu-shadow"] .leaflet-tile {
+  filter: brightness(0.46) saturate(0.62) contrast(1.12) hue-rotate(162deg) sepia(0.08);
+}
+
+body[data-bavi-realm="guixu-pressure"] .leaflet-tile {
+  filter: brightness(0.42) saturate(0.6) contrast(1.15) hue-rotate(158deg) sepia(0.14);
+}
+
+body.is-divining .leaflet-tile {
+  filter: brightness(0.44) saturate(0.5) contrast(1.1) hue-rotate(172deg);
 }
 
 .leaflet-control-zoom a {
@@ -150,14 +266,25 @@ button {
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.42);
 }
 
+.leaflet-popup-content-wrapper {
+  border-radius: var(--radius-s);
+}
+
+.realm-popup .leaflet-popup-content strong {
+  font-family: var(--font-display);
+  color: var(--paper);
+}
+
+/* ═══════════ 玻璃面板基底（纸纹 + 玻璃） ═══════════ */
+
 .realm-panel,
 .artifact-panel,
 .map-route-panel,
-.distance-readout,
-.side-card {
+.distance-readout {
   border: 1px solid var(--glass-line);
   border-radius: var(--radius);
   background:
+    repeating-linear-gradient(0deg, rgba(255, 248, 223, 0.016) 0 1px, transparent 1px 3px),
     linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
     var(--panel);
   backdrop-filter: blur(20px) saturate(150%);
@@ -165,81 +292,121 @@ button {
   box-shadow: var(--shadow);
 }
 
+/* ═══════════ Hero 面板 ═══════════ */
+
 .realm-panel {
   position: absolute;
   top: 14px;
   left: 14px;
   z-index: 620;
   width: min(360px, calc(100% - 112px));
-  padding: 13px;
+  padding: var(--space-4);
+  border-top: 1px solid rgba(242, 217, 138, 0.4);
 }
 
 .realm-panel__kicker,
-.side-card__label,
 .route-panel__head span,
 .section-heading span {
-  margin: 0 0 8px;
+  margin: 0 0 var(--space-2);
   color: var(--gold-strong);
-  font-size: 0.78rem;
-  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  letter-spacing: 0.14em;
 }
 
 .realm-panel h1 {
+  position: relative;
   margin: 0;
-  color: #fff8df;
-  font-size: clamp(1.75rem, 3.25vw, 3.1rem);
-  line-height: 1;
-  letter-spacing: 0;
+  padding-bottom: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-hero);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: 0.06em;
   white-space: nowrap;
+  background: linear-gradient(160deg, var(--paper) 20%, var(--gold-strong) 55%, var(--gold) 90%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.realm-panel h1::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: min(100%, 15em);
+  height: 5px;
+  background:
+    radial-gradient(circle at 18%, var(--gold-strong) 0 2.5px, transparent 3px),
+    linear-gradient(90deg, var(--gold), rgba(216, 183, 104, 0.06));
+  background-repeat: no-repeat;
+  background-position: 0 center, 0 center;
+  background-size: 100% 5px, 100% 1px;
 }
 
 .realm-panel__summary {
   max-width: 34rem;
-  margin: 8px 0 0;
+  margin: var(--space-2) 0 0;
   color: var(--muted);
-  font-size: 0.84rem;
-  line-height: 1.45;
+  font-size: var(--fs-body);
+  line-height: 1.5;
 }
 
 .realm-grid {
-  display: none;
+  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 7px;
-  margin-top: 10px;
+  margin-top: var(--space-3);
 }
 
 .realm-grid article,
 .life-grid article {
   min-width: 0;
-  padding: 8px;
+  padding: var(--space-2);
   border: 1px solid rgba(216, 183, 104, 0.22);
-  border-radius: var(--radius);
+  border-radius: var(--radius-s);
   background: rgba(255, 255, 255, 0.055);
+  transition: border-color var(--dur-base) var(--ease-out);
+}
+
+.realm-grid article:hover,
+.life-grid article:hover {
+  border-color: rgba(242, 217, 138, 0.5);
 }
 
 .realm-grid span,
 .life-grid span {
   display: block;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.1em;
 }
 
 .realm-grid strong,
 .life-grid strong {
   display: block;
-  margin-top: 4px;
+  margin-top: var(--space-1);
   overflow-wrap: anywhere;
-  color: #fff8df;
+  color: var(--paper);
+  font-family: var(--font-display);
   font-size: clamp(0.92rem, 1.1vw, 1.12rem);
+  font-weight: 700;
+}
+
+#distance-value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
 .realm-grid small,
 .realm-lore {
   display: block;
   margin-top: 5px;
-  color: rgba(233, 240, 236, 0.64);
-  font-size: 0.68rem;
-  line-height: 1.35;
+  color: rgba(236, 242, 238, 0.64);
+  font-size: var(--fs-micro);
+  line-height: 1.4;
 }
 
 .realm-grid small {
@@ -250,7 +417,7 @@ button {
 }
 
 .realm-lore {
-  padding-top: 8px;
+  padding-top: var(--space-2);
   border-top: 1px solid rgba(216, 183, 104, 0.16);
 }
 
@@ -258,7 +425,7 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 10px;
+  margin-top: var(--space-3);
 }
 
 .status-row span,
@@ -266,14 +433,28 @@ button {
   display: inline-flex;
   min-height: 26px;
   align-items: center;
-  padding: 4px 8px;
+  padding: 4px 9px;
   border: 1px solid rgba(216, 183, 104, 0.28);
   border-radius: 999px;
   background: rgba(216, 183, 104, 0.12);
   color: var(--gold-strong);
-  font-size: 0.72rem;
-  font-weight: 800;
+  font-size: var(--fs-small);
+  font-weight: 700;
 }
+
+#updated-at,
+#storm-level {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-micro);
+}
+
+/* 数字更新闪光 */
+.is-updated {
+  animation: num-flash var(--dur-base) var(--ease-out);
+}
+
+/* ═══════════ 法宝坞 ═══════════ */
 
 .artifact-dock {
   position: absolute;
@@ -291,7 +472,7 @@ button {
   place-items: center;
   padding: 7px;
   border: 1px solid rgba(216, 183, 104, 0.28);
-  border-radius: var(--radius);
+  border-radius: var(--radius-s);
   background:
     linear-gradient(135deg, rgba(216, 183, 104, 0.16), rgba(121, 216, 208, 0.045)),
     rgba(7, 13, 20, 0.82);
@@ -299,9 +480,10 @@ button {
   text-align: center;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
   transition:
-    transform 160ms ease,
-    border-color 160ms ease,
-    background 160ms ease;
+    transform var(--dur-quick) var(--ease-spring),
+    border-color var(--dur-quick) var(--ease-out),
+    box-shadow var(--dur-quick) var(--ease-out),
+    background var(--dur-quick) var(--ease-out);
 }
 
 .artifact-button:hover,
@@ -310,43 +492,62 @@ button {
   background:
     linear-gradient(135deg, rgba(216, 183, 104, 0.28), rgba(121, 216, 208, 0.08)),
     rgba(8, 15, 24, 0.92);
-  transform: translateY(-1px);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.28),
+    0 0 18px rgba(242, 217, 138, 0.22);
+  transform: translateY(-2px);
+}
+
+.artifact-button:active {
+  transform: translateY(0) scale(0.97);
 }
 
 .artifact-button span {
-  color: #fff8df;
-  font-size: 0.78rem;
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: var(--fs-small);
   font-weight: 900;
   line-height: 1.15;
+  letter-spacing: 0.08em;
 }
 
 .artifact-button small {
   display: none;
   color: var(--muted);
-  font-size: 0.68rem;
+  font-size: var(--fs-micro);
   line-height: 1.3;
 }
 
 .artifact-panel {
   position: absolute;
   right: 96px;
-  bottom: 168px;
+  bottom: 178px;
   z-index: 620;
   width: min(320px, calc(100% - 124px));
   padding: 11px;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+body.is-divining .artifact-panel,
+body.is-divining .realm-panel__summary {
+  opacity: 0.5;
 }
 
 .artifact-panel span {
   color: var(--gold-strong);
+  font-family: var(--font-display);
   font-weight: 900;
+  letter-spacing: 0.12em;
 }
 
 .artifact-panel p {
   margin: 6px 0 0;
   color: var(--muted);
   font-size: 0.82rem;
-  line-height: 1.45;
+  line-height: 1.5;
 }
+
+/* ═══════════ 虚空盘（推演条） ═══════════ */
 
 .map-route-panel {
   position: absolute;
@@ -355,8 +556,26 @@ button {
   left: 14px;
   z-index: 620;
   display: grid;
-  gap: 6px;
-  padding: 10px 12px;
+  gap: 7px;
+  padding: 12px 14px;
+  overflow: hidden;
+}
+
+body.is-divining .map-route-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(242, 217, 138, 0.1) 48%,
+    rgba(242, 217, 138, 0.2) 50%,
+    rgba(242, 217, 138, 0.1) 52%,
+    transparent 70%
+  );
+  background-size: 220% 100%;
+  pointer-events: none;
+  animation: divine-sweep 1.6s linear infinite;
 }
 
 .route-panel__head {
@@ -368,7 +587,14 @@ button {
 
 .route-panel__head strong {
   display: block;
-  color: #fff8df;
+  color: var(--paper);
+  font-family: var(--font-display);
+  letter-spacing: 0.1em;
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.route-panel__head strong[data-phase="forecast"] {
+  color: var(--cyan);
 }
 
 .route-panel__head p,
@@ -376,7 +602,31 @@ button {
   margin: 0;
   color: var(--muted);
   font-size: 0.8rem;
-  line-height: 1.35;
+  line-height: 1.4;
+}
+
+#active-point-label {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-small);
+}
+
+.timeline-track {
+  position: relative;
+}
+
+.timeline-ticks {
+  position: absolute;
+  right: 10px;
+  bottom: -3px;
+  left: 10px;
+  height: 5px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(216, 183, 104, 0.4) 0 1px,
+    transparent 1px calc(100% / 24)
+  );
+  pointer-events: none;
 }
 
 #timeline {
@@ -384,31 +634,55 @@ button {
   height: 18px;
   accent-color: var(--gold);
   border-radius: 999px;
-  background:
-    linear-gradient(
-      90deg,
-      var(--gold) 0 var(--timeline-progress, 0%),
-      rgba(255, 255, 255, 0.18) var(--timeline-progress, 0%) 100%
-    );
+  background: linear-gradient(
+    90deg,
+    var(--gold) 0 var(--timeline-progress, 0%),
+    rgba(255, 255, 255, 0.18) var(--timeline-progress, 0%) var(--timeline-forecast-start, 100%),
+    rgba(121, 216, 208, 0.32) var(--timeline-forecast-start, 100%) 100%
+  );
   appearance: none;
 }
 
 #timeline::-webkit-slider-thumb {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #fff8df;
-  border-radius: 50%;
-  background: var(--gold);
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--paper);
+  background: linear-gradient(160deg, var(--gold-strong), var(--gold));
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
   box-shadow: 0 0 0 8px rgba(216, 183, 104, 0.16);
   appearance: none;
+  transition: box-shadow var(--dur-quick) var(--ease-out);
+}
+
+#timeline::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 12px rgba(216, 183, 104, 0.24);
+}
+
+#timeline::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--paper);
+  border-radius: 4px;
+  background: linear-gradient(160deg, var(--gold-strong), var(--gold));
+  box-shadow: 0 0 0 8px rgba(216, 183, 104, 0.16);
+}
+
+body.is-divining #timeline::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 10px rgba(216, 183, 104, 0.22),
+    0 0 22px rgba(242, 217, 138, 0.6);
 }
 
 .timeline-meta {
   display: flex;
   justify-content: space-between;
   color: var(--muted);
-  font-size: 0.74rem;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-small);
 }
+
+/* ═══════════ 量天尺读数 / 突破横幅 ═══════════ */
 
 .distance-readout {
   display: none;
@@ -419,6 +693,7 @@ button {
   width: fit-content;
   padding: 8px 10px;
   color: var(--gold-strong);
+  font-family: var(--font-mono);
   font-size: 0.82rem;
   font-weight: 900;
 }
@@ -430,8 +705,8 @@ button {
   z-index: 700;
   display: grid;
   gap: 6px;
-  width: min(420px, calc(100% - 36px));
-  padding: 20px;
+  width: min(440px, calc(100% - 36px));
+  padding: 24px;
   border: 1px solid rgba(242, 217, 138, 0.72);
   border-radius: var(--radius);
   background:
@@ -446,69 +721,175 @@ button {
   transform: translate(-50%, -44%) scale(0.96);
 }
 
+/* 朱红印角 */
+.breakthrough-banner::after {
+  content: "敕";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border: 1px solid var(--vermilion);
+  border-radius: 3px;
+  color: var(--vermilion);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 900;
+  opacity: 0.85;
+}
+
 .breakthrough-banner.is-visible {
-  animation: breakthrough-flare 3200ms ease both;
+  animation: breakthrough-flare var(--dur-breakthrough) ease both;
 }
 
 .breakthrough-banner span {
   color: var(--cyan);
+  font-family: var(--font-display);
   font-size: 0.8rem;
   font-weight: 900;
+  letter-spacing: 0.3em;
 }
 
 .breakthrough-banner strong {
-  color: #fff8df;
+  color: var(--paper);
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 4vw, 2.6rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
 }
 
 .breakthrough-banner p {
   margin: 0;
   color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
 }
 
+/* ═══════════ 侧栏：纪事卷 ═══════════ */
+
 .battle-tools {
+  position: relative;
   display: grid;
-  gap: 12px;
+  gap: 0;
   max-height: calc(100dvh - 24px);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
   overflow: auto;
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius);
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 248, 223, 0.014) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)),
+    var(--panel-strong);
+  box-shadow: var(--shadow);
   scrollbar-color: rgba(216, 183, 104, 0.38) transparent;
+  scrollbar-width: thin;
+}
+
+/* 卷轴书脊 */
+.battle-tools::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: 7px;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(216, 183, 104, 0.55) 8%,
+    rgba(216, 183, 104, 0.25) 50%,
+    rgba(216, 183, 104, 0.55) 92%,
+    transparent
+  );
+  pointer-events: none;
 }
 
 .side-card {
-  padding: 13px;
+  position: relative;
+  padding: var(--space-4) var(--space-2) var(--space-4) 44px;
+  border: 0;
+  background: transparent;
+}
+
+/* 云纹分隔 */
+.side-card + .side-card {
+  border-top: 1px solid transparent;
+  border-image: radial-gradient(circle at 50%, rgba(216, 183, 104, 0.5), transparent 72%) 1;
+}
+
+/* 竖排朱红印章标签 */
+.side-card__label {
+  position: absolute;
+  top: var(--space-4);
+  left: 2px;
+  padding: 8px 4px;
+  border: 1px solid rgba(194, 64, 42, 0.65);
+  border-radius: 3px;
+  background: rgba(194, 64, 42, 0.1);
+  color: #e8836b;
+  font-family: var(--font-display);
+  font-size: var(--fs-micro);
+  font-weight: 900;
+  letter-spacing: 0.24em;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  transition:
+    box-shadow var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+
+.side-card:hover .side-card__label {
+  box-shadow: 0 0 14px rgba(194, 64, 42, 0.3);
 }
 
 .side-card h2 {
-  margin: 0 0 8px;
-  color: #fff8df;
-  font-size: clamp(1.08rem, 1.6vw, 1.45rem);
-  line-height: 1.12;
+  margin: 0 0 var(--space-2);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: var(--fs-title);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
 }
 
 .side-card p {
   margin: 6px 0 0;
   color: var(--muted);
-  font-size: 0.84rem;
-  line-height: 1.45;
+  font-size: var(--fs-body);
+  line-height: 1.55;
 }
 
-.side-card--storm {
-  background:
-    radial-gradient(circle at 80% 0%, rgba(220, 98, 71, 0.22), transparent 42%),
-    var(--panel-strong);
+#wind-pressure {
+  color: var(--gold-strong);
+  font-family: var(--font-mono);
+  font-size: var(--fs-num);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
 }
 
-.side-card--city {
-  background:
-    radial-gradient(circle at 0% 0%, rgba(121, 216, 208, 0.18), transparent 44%),
-    var(--panel-strong);
+.side-card--storm .side-card__label {
+  border-color: rgba(220, 98, 71, 0.7);
+  background: rgba(220, 98, 71, 0.12);
+  color: #ef8a70;
+}
+
+.side-card--city .side-card__label {
+  border-color: rgba(121, 216, 208, 0.55);
+  background: rgba(121, 216, 208, 0.08);
+  color: var(--cyan);
 }
 
 .life-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 10px;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.life-grid strong {
+  font-family: var(--font-display);
 }
 
 .section-heading {
@@ -521,31 +902,70 @@ button {
 .section-heading strong,
 #supply-progress {
   color: var(--gold-strong);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
+
+#supply-progress[data-done="true"] {
+  color: var(--paper);
+  text-shadow: 0 0 12px rgba(242, 217, 138, 0.8);
+}
+
+/* 五灯全亮时印章常亮 */
+.side-card--checklist:has(#supply-progress[data-done="true"]) .side-card__label {
+  color: var(--gold-strong);
+  border-color: rgba(242, 217, 138, 0.8);
+  background: rgba(216, 183, 104, 0.14);
+  box-shadow: 0 0 16px rgba(242, 217, 138, 0.4);
+}
+
+/* ═══════════ 道宫五灯清单 ═══════════ */
 
 .supply-list {
   display: grid;
   grid-template-columns: 1fr;
   gap: 6px;
-  margin-top: 10px;
+  margin-top: var(--space-3);
 }
 
 .supply-item {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
-  padding: 7px;
+  padding: 8px;
   border: 1px solid rgba(216, 183, 104, 0.16);
-  border-radius: var(--radius);
+  border-radius: var(--radius-s);
   background: rgba(255, 255, 255, 0.045);
   color: var(--ink);
   font-size: 0.8rem;
+  transition: border-color var(--dur-base) var(--ease-out);
 }
 
+.supply-item:hover {
+  border-color: rgba(242, 217, 138, 0.55);
+}
+
+/* 灯式勾选框 */
 .supply-item input {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--gold);
+  width: 18px;
+  height: 18px;
+  flex: none;
+  margin: 0;
+  border: 1px solid rgba(216, 183, 104, 0.5);
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(216, 183, 104, 0.12), transparent 70%);
+  appearance: none;
+  cursor: pointer;
+  transition:
+    background var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+
+.supply-item input:checked {
+  border-color: var(--gold-strong);
+  background: radial-gradient(circle at center, var(--paper) 0 22%, var(--gold) 48%, rgba(216, 183, 104, 0.2) 78%);
+  box-shadow: 0 0 12px rgba(242, 217, 138, 0.65);
+  animation: lamp-ignite 500ms var(--ease-spring);
 }
 
 .supply-item input:checked + span {
@@ -555,26 +975,33 @@ button {
 
 .share-preview {
   display: grid;
-  gap: 8px;
-  margin-top: 12px;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
 }
 
 .share-preview span {
   color: var(--gold-strong);
+  font-family: var(--font-display);
   font-size: 0.8rem;
   font-weight: 900;
+  letter-spacing: 0.12em;
 }
 
 .share-text {
   width: 100%;
-  min-height: 88px;
+  min-height: 44px;
   resize: vertical;
   border: 1px solid rgba(216, 183, 104, 0.18);
-  border-radius: var(--radius);
+  border-radius: var(--radius-s);
   background: rgba(0, 0, 0, 0.22);
   color: var(--ink);
   padding: 10px;
   line-height: 1.5;
+}
+
+.data-badge {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
 }
 
 .data-badge[data-mode="live"] {
@@ -582,6 +1009,8 @@ button {
   border-color: rgba(121, 216, 208, 0.4);
   background: rgba(121, 216, 208, 0.11);
 }
+
+/* ═══════════ Toast ═══════════ */
 
 .toast {
   position: fixed;
@@ -591,15 +1020,16 @@ button {
   max-width: min(420px, calc(100% - 28px));
   padding: 12px 14px;
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-s);
   background: var(--panel-strong);
   color: var(--ink);
   box-shadow: var(--shadow);
   opacity: 0;
   transform: translateY(10px);
   transition:
-    opacity 180ms ease,
-    transform 180ms ease;
+    opacity var(--dur-quick) var(--ease-out),
+    transform var(--dur-quick) var(--ease-out);
 }
 
 .toast.is-visible {
@@ -607,18 +1037,14 @@ button {
   transform: translateY(0);
 }
 
+/* ═══════════ 路径与图层效果 ═══════════ */
+
 .observed-path {
   filter: drop-shadow(0 0 9px rgba(216, 183, 104, 0.46));
 }
 
 .forecast-path {
   filter: drop-shadow(0 0 10px rgba(121, 216, 208, 0.38));
-}
-
-.forecast-mist {
-  stroke-linecap: round;
-  filter: blur(14px) drop-shadow(0 0 28px rgba(121, 216, 208, 0.24));
-  animation: mist-breathe 6s ease-in-out infinite;
 }
 
 .distance-ruler-line {
@@ -635,8 +1061,10 @@ button {
   border-radius: 999px;
   background: rgba(8, 12, 18, 0.9);
   color: var(--gold-strong);
+  font-family: var(--font-mono);
   font-size: 0.8rem;
   font-weight: 900;
+  font-variant-numeric: tabular-nums;
   box-shadow: 0 0 24px rgba(216, 183, 104, 0.22);
 }
 
@@ -644,6 +1072,30 @@ button {
   filter: drop-shadow(0 0 18px rgba(216, 183, 104, 0.34));
   animation: wind-ring-breathe 4.5s ease-in-out infinite;
 }
+
+/* 每日点位标签 */
+.day-label {
+  padding: 2px 7px;
+  border: 1px solid var(--gold-dim);
+  border-radius: 999px;
+  background: rgba(8, 12, 18, 0.88);
+  color: var(--gold-strong);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+.day-label--forecast {
+  border-color: rgba(121, 216, 208, 0.4);
+  color: var(--cyan);
+}
+
+.day-label::before {
+  display: none;
+}
+
+/* ═══════════ 西湖圣地标记 ═══════════ */
 
 .hangzhou-marker {
   position: relative;
@@ -663,7 +1115,8 @@ button {
   border: 1px solid rgba(242, 217, 138, 0.74);
   border-radius: 50%;
   background: rgba(10, 17, 26, 0.92);
-  color: #fff8df;
+  color: var(--paper);
+  font-family: var(--font-display);
   box-shadow:
     0 0 18px rgba(242, 217, 138, 0.44),
     0 0 46px rgba(121, 216, 208, 0.2);
@@ -698,6 +1151,27 @@ button {
   animation-duration: 8s;
 }
 
+/* 八瓣莲台 */
+.hangzhou-marker__lotus {
+  position: absolute;
+  inset: 34px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(242, 217, 138, 0.22) 0deg 20deg,
+    transparent 20deg 45deg
+  );
+  mask-image: radial-gradient(circle at center, #000 30%, transparent 72%);
+  opacity: 0.55;
+  animation: array-rotate 30s linear infinite reverse;
+}
+
+.realm-hualong .hangzhou-marker__lotus,
+.realm-xiantai .hangzhou-marker__lotus,
+.realm-diguan .hangzhou-marker__lotus {
+  opacity: 1;
+}
+
 .realm-hualong .hangzhou-marker__array,
 .realm-xiantai .hangzhou-marker__array,
 .realm-diguan .hangzhou-marker__array {
@@ -709,39 +1183,111 @@ button {
   animation: array-pulse 2.3s ease-in-out infinite;
 }
 
+/* ═══════════ 巴威标记（视觉核心） ═══════════ */
+
 .bavi-marker {
   position: relative;
   display: grid;
-  width: 86px;
-  height: 86px;
+  width: 120px;
+  height: 120px;
   place-items: center;
   transform-origin: center;
   animation: bavi-hover 4.8s ease-in-out infinite;
 }
 
+/* 尾迹 */
+.bavi-marker__wake {
+  position: absolute;
+  inset: 18px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse 70% 40% at 66% 60%, rgba(220, 98, 71, 0.35), transparent 72%);
+  filter: blur(6px);
+  transform: rotate(var(--wake-angle, 45deg)) scale(1.5);
+  animation: wake-breathe 4s ease-in-out infinite;
+}
+
+/* 三层旋转云臂 */
+.bavi-marker__arms {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.bavi-marker__arms--outer {
+  inset: 0;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 18deg,
+    rgba(220, 98, 71, 0.42) 40deg 92deg,
+    transparent 116deg 138deg,
+    rgba(220, 98, 71, 0.36) 160deg 212deg,
+    transparent 236deg 258deg,
+    rgba(220, 98, 71, 0.4) 280deg 332deg,
+    transparent 356deg
+  );
+  mask-image: radial-gradient(circle at center, transparent 34%, #000 48%, #000 74%, transparent 92%);
+  filter: blur(1.5px);
+  animation: vortex-spin 9s linear infinite;
+}
+
+.bavi-marker__arms--mid {
+  inset: 14px;
+  background: conic-gradient(
+    from 90deg,
+    transparent 0 30deg,
+    rgba(121, 216, 208, 0.28) 52deg 110deg,
+    transparent 134deg 210deg,
+    rgba(121, 216, 208, 0.24) 232deg 290deg,
+    transparent 314deg
+  );
+  mask-image: radial-gradient(circle at center, transparent 26%, #000 42%, #000 78%, transparent 94%);
+  animation: arm-spin-reverse 6s linear infinite;
+}
+
+/* 内层旋涡（保留 __vortex 名称） */
 .bavi-marker__vortex {
   position: absolute;
-  inset: 0;
+  inset: 26px;
   border-radius: 50%;
   background:
-    radial-gradient(circle at center, rgba(255, 248, 223, 0.86) 0 5%, transparent 6%),
+    radial-gradient(circle at center, rgba(255, 248, 223, 0.86) 0 6%, transparent 8%),
     conic-gradient(
       from 20deg,
       rgba(220, 98, 71, 0.05),
-      rgba(220, 98, 71, 0.78),
-      rgba(242, 217, 138, 0.1),
+      rgba(220, 98, 71, 0.82),
+      rgba(242, 217, 138, 0.12),
       rgba(20, 31, 45, 0.92),
       rgba(220, 98, 71, 0.05)
     );
   box-shadow:
     0 0 28px rgba(220, 98, 71, 0.32),
     0 0 66px rgba(0, 0, 0, 0.42);
-  animation: vortex-spin 5.8s linear infinite;
+  animation: vortex-spin 3.5s linear infinite;
+}
+
+/* 符文环 */
+.bavi-marker__sigil {
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed var(--gold-dim);
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(242, 217, 138, 0.85) 0 2deg,
+    transparent 2deg 88deg,
+    rgba(242, 217, 138, 0.85) 88deg 92deg,
+    transparent 92deg 178deg,
+    rgba(242, 217, 138, 0.85) 178deg 182deg,
+    transparent 182deg 268deg,
+    rgba(242, 217, 138, 0.85) 268deg 272deg,
+    transparent 272deg
+  );
+  mask-image: radial-gradient(circle at center, transparent 88%, #000 90%, #000 96%, transparent 98%);
+  animation: sigil-rotate 24s linear infinite;
 }
 
 .bavi-marker__ring {
   position: absolute;
-  inset: 11px;
+  inset: 34px;
   border: 1px solid rgba(242, 217, 138, 0.42);
   border-radius: 50%;
   animation: vortex-pulse 2.8s ease-in-out infinite;
@@ -749,25 +1295,203 @@ button {
 
 .bavi-marker__eye {
   z-index: 2;
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
   border: 1px solid rgba(255, 248, 223, 0.9);
   border-radius: 50%;
-  background: #fff8df;
+  background: var(--paper);
   box-shadow:
     0 0 18px rgba(255, 248, 223, 0.78),
     0 0 42px rgba(220, 98, 71, 0.48);
 }
 
+/* 轨道金粒 */
+.bavi-marker__motes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bavi-marker__motes i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--gold-strong);
+  box-shadow: 0 0 6px rgba(242, 217, 138, 0.9);
+  animation: mote-orbit calc(5s + var(--i) * 1.3s) linear infinite;
+  animation-delay: calc(var(--i) * -1.7s);
+}
+
+/* ── 风速形态映射（data-mood） ── */
+
+.bavi-marker[data-mood="alert"] {
+  transform: scale(0.8);
+}
+
+.bavi-marker[data-mood="alert"] .bavi-marker__arms--outer,
+.bavi-marker[data-mood="alert"] .bavi-marker__arms--mid {
+  opacity: 0.35;
+}
+
+.bavi-marker[data-mood="alert"] .bavi-marker__vortex {
+  animation-duration: 4.9s;
+  background:
+    radial-gradient(circle at center, rgba(255, 248, 223, 0.86) 0 6%, transparent 8%),
+    conic-gradient(
+      from 20deg,
+      rgba(121, 216, 208, 0.08),
+      rgba(121, 216, 208, 0.6),
+      rgba(242, 217, 138, 0.14),
+      rgba(20, 31, 45, 0.92),
+      rgba(121, 216, 208, 0.08)
+    );
+}
+
+.bavi-marker[data-mood="furious"] {
+  transform: scale(1.15);
+}
+
+.bavi-marker[data-mood="furious"] .bavi-marker__arms--outer {
+  animation-duration: 5.4s;
+  filter: blur(1.5px) saturate(1.35);
+}
+
+.bavi-marker[data-mood="furious"] .bavi-marker__arms--mid {
+  animation-duration: 3.6s;
+}
+
+.bavi-marker[data-mood="furious"] .bavi-marker__vortex {
+  animation-duration: 2.1s;
+}
+
+.bavi-marker[data-mood="furious"] .bavi-marker__eye {
+  box-shadow:
+    0 0 20px rgba(255, 248, 223, 0.85),
+    0 0 56px rgba(220, 98, 71, 0.85);
+}
+
+.bavi-marker[data-mood="furious"] .bavi-marker__sigil {
+  border-color: rgba(194, 64, 42, 0.55);
+  filter: hue-rotate(-24deg) saturate(1.4);
+}
+
+.bavi-marker[data-mood="furious"] .bavi-marker__motes i {
+  animation-duration: calc(2.6s + var(--i) * 0.7s);
+}
+
+/* 境界追加风味 */
 .bavi-guixu-shadow .bavi-marker__vortex,
 .bavi-guixu-pressure .bavi-marker__vortex {
-  animation-duration: 3.6s;
+  animation-duration: 2.4s;
 }
 
 .bavi-guixu-pressure .bavi-marker__ring {
   border-color: rgba(220, 98, 71, 0.78);
   box-shadow: 0 0 28px rgba(220, 98, 71, 0.38);
 }
+
+/* 推演拖动时尾迹增强 */
+body.is-divining .bavi-marker__wake {
+  opacity: 1;
+  animation: none;
+}
+
+/* ═══════════ 境界氛围档位 ═══════════ */
+
+body[data-bavi-realm="sea-omen"] {
+  --atmo-tint: transparent;
+  --atmo-vignette: 0.45;
+  --atmo-pulse: 10s;
+}
+
+body[data-bavi-realm="east-sea-lord"] {
+  --atmo-tint: rgba(121, 216, 208, 0.05);
+  --atmo-vignette: 0.5;
+  --atmo-pulse: 8s;
+}
+
+body[data-bavi-realm="bavi-tianzun"] {
+  --atmo-tint: rgba(220, 98, 71, 0.06);
+  --atmo-vignette: 0.58;
+  --atmo-pulse: 6s;
+}
+
+body[data-bavi-realm="guixu-shadow"] {
+  --atmo-tint: rgba(220, 98, 71, 0.11);
+  --atmo-vignette: 0.66;
+  --atmo-pulse: 4.5s;
+}
+
+body[data-bavi-realm="guixu-pressure"] {
+  --atmo-tint: rgba(194, 64, 42, 0.16);
+  --atmo-vignette: 0.74;
+  --atmo-pulse: 3s;
+}
+
+body[data-bavi-realm="guixu-shadow"] .realm-panel,
+body[data-bavi-realm="guixu-pressure"] .realm-panel {
+  border-color: rgba(220, 98, 71, 0.4);
+}
+
+/* ═══════════ 入场编排 ═══════════ */
+
+.realm-panel,
+.artifact-dock,
+.map-route-panel,
+.battle-tools .side-card {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+
+body.is-awakened .realm-panel,
+body.is-awakened .artifact-dock,
+body.is-awakened .map-route-panel,
+body.is-awakened .battle-tools .side-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+body.is-awakened .realm-panel {
+  transition-delay: 120ms, 120ms, 0ms;
+}
+
+body.is-awakened .artifact-dock {
+  transition-delay: 240ms, 240ms, 0ms;
+}
+
+body.is-awakened .map-route-panel {
+  transition-delay: 360ms, 360ms, 0ms;
+}
+
+body.is-awakened .battle-tools .side-card:nth-child(1) {
+  transition-delay: 480ms, 480ms, 0ms;
+}
+
+body.is-awakened .battle-tools .side-card:nth-child(2) {
+  transition-delay: 600ms, 600ms, 0ms;
+}
+
+body.is-awakened .battle-tools .side-card:nth-child(3) {
+  transition-delay: 720ms, 720ms, 0ms;
+}
+
+body.is-awakened .battle-tools .side-card:nth-child(4) {
+  transition-delay: 840ms, 840ms, 0ms;
+}
+
+/* 推演中面板降噪要覆盖入场 transition-delay */
+body.is-divining .artifact-panel {
+  transition-delay: 0ms;
+}
+
+/* ═══════════ Keyframes ═══════════ */
 
 @keyframes array-rotate {
   to {
@@ -796,6 +1520,45 @@ button {
   }
 }
 
+@keyframes arm-spin-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes sigil-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes mote-orbit {
+  0% {
+    transform: rotate(0deg) translateX(calc(44px + var(--i) * 4px)) scale(1);
+    opacity: 0.9;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+
+  100% {
+    transform: rotate(360deg) translateX(calc(44px + var(--i) * 4px)) scale(0.6);
+    opacity: 0.9;
+  }
+}
+
+@keyframes wake-breathe {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
 @keyframes vortex-pulse {
   0%,
   100% {
@@ -812,22 +1575,11 @@ button {
 @keyframes bavi-hover {
   0%,
   100% {
-    transform: translateY(0);
+    translate: 0 0;
   }
 
   50% {
-    transform: translateY(-4px);
-  }
-}
-
-@keyframes mist-breathe {
-  0%,
-  100% {
-    opacity: 0.18;
-  }
-
-  50% {
-    opacity: 0.34;
+    translate: 0 -4px;
   }
 }
 
@@ -869,6 +1621,80 @@ button {
   }
 }
 
+@keyframes atmo-breathe {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes realm-ripple {
+  0% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(5);
+  }
+}
+
+@keyframes divine-sweep {
+  0% {
+    background-position: 120% 0;
+  }
+
+  100% {
+    background-position: -120% 0;
+  }
+}
+
+@keyframes lamp-ignite {
+  0% {
+    transform: scale(0.6);
+    box-shadow: 0 0 0 0 rgba(242, 217, 138, 0.9);
+  }
+
+  60% {
+    transform: scale(1.25);
+    box-shadow: 0 0 0 10px rgba(242, 217, 138, 0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes map-unveil {
+  0% {
+    opacity: 0;
+    mask-position: 0 -60%;
+  }
+
+  100% {
+    opacity: 1;
+    mask-position: 0 0;
+  }
+}
+
+@keyframes num-flash {
+  0% {
+    color: var(--paper);
+    text-shadow: 0 0 14px rgba(242, 217, 138, 0.9);
+  }
+
+  100% {
+    text-shadow: none;
+  }
+}
+
+/* ═══════════ 响应式 ═══════════ */
+
 @media (max-width: 1180px) {
   .battle-stage {
     grid-template-columns: 1fr;
@@ -876,7 +1702,6 @@ button {
 
   .battle-tools {
     max-height: none;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -923,6 +1748,7 @@ button {
   .artifact-button {
     min-height: 42px;
     padding: 7px;
+    border-radius: 999px;
   }
 
   .artifact-button small {
@@ -947,10 +1773,153 @@ button {
   }
 
   .battle-tools {
-    grid-template-columns: 1fr;
-    padding: 10px;
+    border-radius: 0;
+    padding: 10px 10px 10px 16px;
   }
 }
+
+/* ═══════════ 巴威晋阶横幅变体 ═══════════ */
+
+.breakthrough-banner[data-variant="bavi"] {
+  border-color: rgba(220, 98, 71, 0.78);
+  background:
+    radial-gradient(circle at center, rgba(220, 98, 71, 0.2), transparent 58%),
+    rgba(17, 8, 8, 0.94);
+  box-shadow:
+    0 0 0 1px rgba(220, 98, 71, 0.22),
+    0 28px 90px rgba(0, 0, 0, 0.62);
+}
+
+.breakthrough-banner[data-variant="bavi"]::after {
+  content: "威";
+  border-color: var(--storm);
+  color: var(--storm);
+}
+
+.breakthrough-banner[data-variant="bavi"] span {
+  color: var(--storm);
+}
+
+.breakthrough-banner[data-variant="bavi"] strong {
+  background: linear-gradient(160deg, #ffe4d4 20%, var(--storm) 70%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ═══════════ 杭州六境差异特效 ═══════════ */
+
+/* 轮海初开：仅外环微光，观察态 */
+.realm-lunhai .hangzhou-marker__array--mid,
+.realm-lunhai .hangzhou-marker__array--core,
+.realm-lunhai .hangzhou-marker__lotus {
+  opacity: 0.25;
+}
+
+.realm-lunhai .hangzhou-marker__array {
+  border-color: rgba(242, 217, 138, 0.4);
+}
+
+/* 道宫点灯：青色灯环亮起 */
+.realm-daogong .hangzhou-marker__array--mid {
+  border-color: rgba(121, 216, 208, 0.9);
+  box-shadow: 0 0 18px rgba(121, 216, 208, 0.35);
+}
+
+/* 四极镇城：金环稳固加粗 */
+.realm-siji .hangzhou-marker__array {
+  border-width: 2px;
+  box-shadow: 0 0 22px rgba(242, 217, 138, 0.28);
+}
+
+/* 化龙守望：莲台全开 + 阵环加速 */
+.realm-hualong .hangzhou-marker__array {
+  animation-duration: 10s;
+}
+
+.realm-hualong .hangzhou-marker__array--mid {
+  animation-duration: 7s;
+}
+
+/* 仙台临战：核心脉冲 + 全阵金辉（脉冲已有），追加外圈光晕 */
+.realm-xiantai .hangzhou-marker__array {
+  animation-duration: 7s;
+  box-shadow: 0 0 40px rgba(242, 217, 138, 0.45);
+}
+
+/* 帝关开阵：朱红警戒环 + 最快转速 */
+.realm-diguan .hangzhou-marker__array {
+  border-color: rgba(194, 64, 42, 0.85);
+  box-shadow: 0 0 44px rgba(194, 64, 42, 0.5);
+  animation-duration: 5s;
+}
+
+.realm-diguan .hangzhou-marker strong {
+  border-color: rgba(194, 64, 42, 0.9);
+  box-shadow:
+    0 0 22px rgba(194, 64, 42, 0.6),
+    0 0 52px rgba(242, 217, 138, 0.3);
+}
+
+/* ═══════════ 巴威五称号差异特效 ═══════════ */
+
+/* 海上异象：稀薄青灰，符文环几乎不可见 */
+.bavi-sea-omen .bavi-marker__arms {
+  opacity: 0.3;
+  filter: saturate(0.5) hue-rotate(60deg);
+}
+
+.bavi-sea-omen .bavi-marker__sigil {
+  opacity: 0.25;
+}
+
+.bavi-sea-omen .bavi-marker__eye {
+  box-shadow: 0 0 12px rgba(255, 248, 223, 0.5);
+}
+
+/* 东海风君：青色风场成形 */
+.bavi-east-sea .bavi-marker__arms--outer {
+  filter: blur(1.5px) hue-rotate(96deg) saturate(0.85);
+}
+
+.bavi-east-sea .bavi-marker__sigil {
+  border-color: rgba(121, 216, 208, 0.45);
+}
+
+/* 巴威天尊：风暴橙全形态 + 金色符文环高亮（默认形态即此，补符文辉光） */
+.bavi-tianzun .bavi-marker__sigil {
+  filter: drop-shadow(0 0 6px rgba(242, 217, 138, 0.7));
+}
+
+/* 归墟帝影：深红压暗 + 旋涡加速（加速已有） */
+.bavi-guixu-shadow .bavi-marker__arms {
+  filter: blur(1px) saturate(1.3) brightness(0.85);
+}
+
+.bavi-guixu-shadow .bavi-marker__eye {
+  box-shadow:
+    0 0 18px rgba(255, 248, 223, 0.78),
+    0 0 52px rgba(220, 98, 71, 0.7);
+}
+
+/* 归墟压境：朱红警戒 + 外环脉冲 + 尾迹全开 */
+.bavi-guixu-pressure .bavi-marker__sigil {
+  border-color: rgba(194, 64, 42, 0.7);
+  filter: hue-rotate(-24deg) saturate(1.5);
+  animation-duration: 10s;
+}
+
+.bavi-guixu-pressure .bavi-marker__wake {
+  opacity: 1;
+  background: radial-gradient(ellipse 78% 46% at 66% 60%, rgba(194, 64, 42, 0.5), transparent 74%);
+}
+
+.bavi-guixu-pressure .bavi-marker__arms--outer {
+  animation-duration: 4.6s;
+  filter: blur(1.5px) saturate(1.5);
+}
+
+/* ═══════════ 无动效偏好 ═══════════ */
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -960,5 +1929,14 @@ button {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .realm-panel,
+  .artifact-dock,
+  .map-route-panel,
+  .battle-tools .side-card {
+    opacity: 1;
+    transform: none;
   }
 }

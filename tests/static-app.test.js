@@ -29,7 +29,6 @@ test('script wires realms, imperial artifacts, map overlays, and timeline effect
   assert.match(js, /getImperialArtifacts/);
   assert.match(js, /renderArtifactDock/);
   assert.match(js, /renderDistanceRuler/);
-  assert.match(js, /renderForecastMist/);
   assert.match(js, /triggerBreakthrough/);
   assert.match(js, /L\.divIcon/);
   assert.match(js, /L\.polyline/);
@@ -44,7 +43,6 @@ test('css provides premium dark map staging and advanced effects', async () => {
   assert.match(css, /\.artifact-dock/);
   assert.match(css, /\.hangzhou-marker__array/);
   assert.match(css, /\.bavi-marker__vortex/);
-  assert.match(css, /\.forecast-mist/);
   assert.match(css, /\.distance-ruler-label/);
   assert.match(css, /@keyframes array-rotate/);
   assert.match(css, /@keyframes vortex-spin/);
@@ -79,16 +77,41 @@ test('desktop layout keeps map HUD compact instead of covering the stage', async
 
   assert.match(css, /\.app-shell[\s\S]*width:\s*100%/);
   assert.doesNotMatch(css, /\.app-shell[\s\S]*width:\s*min\(1680px,\s*100%\)/);
-  assert.match(css, /\.battle-stage[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*300px/);
+  assert.match(css, /\.battle-stage[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*344px/);
   assert.match(css, /\.map-panel[\s\S]*height:\s*calc\(100dvh - 20px\)/);
   assert.match(css, /\.realm-panel[\s\S]*width:\s*min\(360px,\s*calc\(100% - 112px\)\)/);
-  assert.match(css, /\.realm-panel h1[\s\S]*font-size:\s*clamp\(1\.75rem,\s*3\.25vw,\s*3\.1rem\)/);
+  assert.match(css, /\.realm-panel h1[\s\S]*font-size:\s*var\(--fs-hero\)/);
   assert.match(css, /\.realm-panel h1[\s\S]*white-space:\s*nowrap/);
-  assert.match(css, /\.realm-grid[\s\S]*display:\s*none/);
+  assert.match(css, /\.realm-grid[\s\S]*display:\s*grid/);
   assert.match(css, /\.distance-readout[\s\S]*display:\s*none/);
   assert.match(css, /\.artifact-dock[\s\S]*width:\s*72px/);
   assert.match(css, /\.artifact-button small[\s\S]*display:\s*none/);
-  assert.match(css, /\.side-card h2[\s\S]*font-size:\s*clamp\(1\.08rem,\s*1\.6vw,\s*1\.45rem\)/);
+  assert.match(css, /\.side-card h2[\s\S]*font-size:\s*var\(--fs-title\)/);
+});
+
+test('overhauled presentation layer ships atmosphere, particles, and motion tokens', async () => {
+  const [html, css, js] = await Promise.all([
+    readFile(new URL('../index.html', import.meta.url), 'utf8'),
+    readFile(new URL('../style.css', import.meta.url), 'utf8'),
+    readFile(new URL('../script.js', import.meta.url), 'utf8')
+  ]);
+
+  assert.match(html, /id="atmosphere"/);
+  assert.match(html, /id="fx-canvas"/);
+  assert.match(html, /class="timeline-ticks"/);
+  assert.match(html, /fonts\.loli\.net/);
+  assert.match(css, /--dur-ritual/);
+  assert.match(css, /--font-display/);
+  assert.match(css, /@keyframes lamp-ignite/);
+  assert.match(css, /@keyframes mote-orbit/);
+  assert.match(css, /data-mood="furious"/);
+  assert.match(css, /body\.is-divining/);
+  assert.match(css, /body\.is-awakened/);
+  assert.match(js, /data-mood/);
+  assert.match(js, /is-awakened/);
+  assert.match(js, /is-divining/);
+  assert.match(js, /animateNumber/);
+  assert.match(js, /fx-particles\.js/);
 });
 
 test('realm introductions are rendered in the HUD and side panels', async () => {

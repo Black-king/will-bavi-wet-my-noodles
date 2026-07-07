@@ -237,16 +237,10 @@ export function getImperialArtifacts() {
   return IMPERIAL_ARTIFACTS.map((artifact) => ({ ...artifact }));
 }
 
-export function buildChecklistShareText(items, status) {
+export function buildChecklistShareText(items) {
   const supplyText = items.length > 0 ? items.join('、') : '还没勾选物资';
 
-  return [
-    `杭州抗台指数：${status.riskLabel}`,
-    `巴威距离杭州约 ${Math.round(status.distanceKm)} km`,
-    `我已准备：${supplyText}`,
-    `更新时间：${status.updatedAt}`,
-    '正式预警请以气象部门发布为准。'
-  ].join('\n');
+  return `我已准备：${supplyText}`;
 }
 
 function degreesToRadians(degrees) {

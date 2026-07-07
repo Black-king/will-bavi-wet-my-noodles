@@ -1,0 +1,140 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - region "巴威与杭州地图主舞台" [ref=e3]:
+      - generic [ref=e4]:
+        - generic "台风巴威路径地图" [ref=e5]:
+          - generic:
+            - generic:
+              - button "西湖圣地" [ref=e7] [cursor=pointer]:
+                - generic "西湖圣地" [ref=e8]:
+                  - strong [ref=e13]: 杭
+              - button "巴威中心" [ref=e14] [cursor=pointer]:
+                - generic "巴威中心" [ref=e15]
+            - generic:
+              - tooltip "2日8时"
+              - tooltip "3日2时"
+              - tooltip "4日2时"
+              - tooltip "5日2时"
+              - tooltip "6日2时"
+              - tooltip "7日2时"
+              - tooltip "8日11时"
+              - tooltip "9日11时"
+              - tooltip "10日11时"
+              - tooltip "11日23时"
+              - tooltip "12日23时"
+            - generic:
+              - button "2198 km":
+                - generic: 2198 km
+          - generic:
+            - generic [ref=e24]:
+              - button "Zoom in" [ref=e25] [cursor=pointer]: +
+              - button "Zoom out" [ref=e26] [cursor=pointer]: −
+            - generic [ref=e27]:
+              - link "Leaflet" [ref=e28] [cursor=pointer]:
+                - /url: https://leafletjs.com
+                - img [ref=e29]
+                - text: Leaflet
+              - text: "| © OpenStreetMap © CARTO, © 高德地图"
+        - generic [ref=e33]:
+          - paragraph [ref=e34]: 巴威 BAVI | 归墟帝影
+          - heading "西湖圣地守城录" [level=1] [ref=e35]
+          - paragraph [ref=e36]: 阳台和门窗先检查一遍。
+          - generic [ref=e37]:
+            - article [ref=e38]:
+              - generic [ref=e39]: 西湖圣地
+              - strong [ref=e40]: 四极镇城
+              - generic [ref=e41]: 杭州护城大阵展开四极阵脚，说明风雨影响需要认真看待。
+            - article [ref=e42]:
+              - generic [ref=e43]: 巴威称号
+              - strong [ref=e44]: 归墟帝影
+              - generic [ref=e45]: 台风强度很高，风场压迫感强，是当前最需要关注的巴威状态。
+            - article [ref=e46]:
+              - generic [ref=e47]: 量天尺
+              - strong [ref=e48]: 2198 km
+          - generic [ref=e49]:
+            - generic [ref=e50]: 中等
+            - generic [ref=e51]: SuperTY
+            - generic [ref=e52]: 07-07 23:00 | 实况点
+        - navigation "帝兵工具" [ref=e53]:
+          - button "量天尺" [ref=e54] [cursor=pointer]:
+            - generic [ref=e55]: 量天尺
+          - button "西湖阵图" [ref=e56] [cursor=pointer]:
+            - generic [ref=e57]: 西湖阵图
+          - button "风圈尺" [ref=e58] [cursor=pointer]:
+            - generic [ref=e59]: 风圈尺
+          - button "道宫五灯" [ref=e60] [cursor=pointer]:
+            - generic [ref=e61]: 道宫五灯
+          - button "虚空盘" [ref=e62] [cursor=pointer]:
+            - generic [ref=e63]: 虚空盘
+          - button "天机镜" [ref=e64] [cursor=pointer]:
+            - generic [ref=e65]: 天机镜
+        - complementary [ref=e66]:
+          - text: 量天尺
+          - paragraph [ref=e67]: 巴威中心距西湖圣地约 2198 km，连线见地图量天尺。
+        - region "天机推演" [ref=e68]:
+          - generic [ref=e69]:
+            - generic [ref=e70]:
+              - text: 虚空盘
+              - strong [ref=e71]: 最近实况
+            - paragraph [ref=e72]: 07-07 23:00 | 实况
+          - slider [ref=e74]: "45"
+          - generic [ref=e75]:
+            - generic [ref=e76]: 07-02 08:00
+            - generic [ref=e77]: 07-12 23:00
+          - paragraph [ref=e78]: SuperTY，58 m/s，中心距杭州约 2198 km，移动方向 W。
+        - status:
+          - generic: 天机有变
+          - strong: 西湖圣地破境
+          - paragraph: 境界突破会在关键距离触发。
+          - text: 敕
+      - complementary "地图辅助信息" [ref=e79]:
+        - generic [ref=e80]:
+          - generic [ref=e81]: 归墟帝影
+          - heading "巴威 BAVI" [level=2] [ref=e82]
+          - paragraph [ref=e83]: 58 m/s | 925 hPa
+          - paragraph [ref=e84]: 移动方向：W
+          - paragraph [ref=e85]: 归墟帝影威压很强，减少不必要外出。
+          - paragraph [ref=e86]: 归墟帝影：最大风速达到 56 m/s 以上，或中心气压降至 930 hPa 附近。
+        - generic [ref=e87]:
+          - generic [ref=e88]: 西湖圣地
+          - heading "四极镇城，阳台阵眼和门窗先检查一遍。" [level=2] [ref=e89]
+          - paragraph [ref=e90]: 按实况中心到杭州中心点直线估算
+          - generic "杭州生活指数" [ref=e91]:
+            - article [ref=e92]:
+              - generic [ref=e93]: 阳台阵眼
+              - strong [ref=e94]: 立即收阵
+            - article [ref=e95]:
+              - generic [ref=e96]: 外卖天路
+              - strong [ref=e97]: 不宜冒险
+        - generic [ref=e98]:
+          - generic [ref=e99]: 道宫五灯
+          - generic [ref=e100]:
+            - generic [ref=e101]: 防台准备
+            - strong [ref=e102]: 0 / 5
+          - generic [ref=e103]:
+            - generic [ref=e104]:
+              - checkbox "1. 照明电力" [ref=e105] [cursor=pointer]
+              - generic [ref=e106]: 1. 照明电力
+            - generic [ref=e107]:
+              - checkbox "2. 饮水食物" [ref=e108] [cursor=pointer]
+              - generic [ref=e109]: 2. 饮水食物
+            - generic [ref=e110]:
+              - checkbox "3. 常用药" [ref=e111] [cursor=pointer]
+              - generic [ref=e112]: 3. 常用药
+            - generic [ref=e113]:
+              - checkbox "4. 门窗检查" [ref=e114] [cursor=pointer]
+              - generic [ref=e115]: 4. 门窗检查
+            - generic [ref=e116]:
+              - checkbox "5. 阳台收纳" [ref=e117] [cursor=pointer]
+              - generic [ref=e118]: 5. 阳台收纳
+          - generic [ref=e119]:
+            - generic [ref=e120]: 传讯玉简
+            - textbox "防台分享文案" [ref=e121]: 我已准备：还没勾选物资
+        - generic [ref=e122]:
+          - generic [ref=e123]: 天机镜
+          - paragraph [ref=e124]: 提前准备，留意风雨变化。巴威仍可能给杭州带来风雨影响，适合把防台准备提前做完。
+          - paragraph [ref=e125]: GitHub Actions 已接入 QWeather，页面展示最近一次成功更新的数据。
+          - paragraph [ref=e126]: 页面会保留最近一次成功更新；如果数据延迟，请先按更保守的方式安排出行和备灾。
+          - paragraph [ref=e127]: 本页面用于互动展示和生活提醒，正式预警、避险指引和灾害信息请以气象部门及政府部门发布为准。
+          - generic [ref=e128]: 实时数据 | 抓取 2026年-07-08 02:34
+  - status [ref=e129]

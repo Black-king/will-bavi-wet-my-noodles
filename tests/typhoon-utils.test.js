@@ -43,15 +43,8 @@ test('maps typhoon mood to wind intensity', () => {
 });
 
 test('builds share text from checked supplies', () => {
-  const text = buildChecklistShareText(['充电宝', '饮用水'], {
-    riskLabel: '较高',
-    distanceKm: 520,
-    updatedAt: '2026-07-07 18:00'
-  });
-
-  assert.match(text, /杭州抗台指数：较高/);
-  assert.match(text, /距离杭州约 520 km/);
-  assert.match(text, /充电宝、饮用水/);
+  assert.equal(buildChecklistShareText(['充电宝', '饮用水']), '我已准备：充电宝、饮用水');
+  assert.equal(buildChecklistShareText([]), '我已准备：还没勾选物资');
 });
 
 test('derives Bavi realm from intensity and Hangzhou distance', () => {

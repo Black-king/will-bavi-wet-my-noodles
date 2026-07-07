@@ -8,20 +8,28 @@ import {
   haversineDistanceKm,
   typhoonMood
 } from './src/typhoon-utils.js';
+import { initFx } from './src/fx-particles.js';
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fx = initFx(document.querySelector('#fx-canvas'), { prefersReducedMotion });
 
 const appState = {
   data: null,
   map: null,
   hangzhouMarker: null,
   stormMarker: null,
+  stormIconKey: '',
+  hangzhouIconKey: '',
+  lastDistanceKm: null,
+  lastPanAt: 0,
   rulerLine: null,
   rulerLabel: null,
-  forecastMist: null,
   windLayers: [],
   activePanel: 'distance',
   selectedIndex: 0,
   timelineDragging: false,
   lastRealmKey: '',
+  lastBaviRealmKey: '',
   checkedSupplies: new Set(),
   windVisible: false
 };
@@ -35,6 +43,7 @@ const els = {
   baviRealm: document.querySelector('#bavi-realm'),
   baviRealmDesc: document.querySelector('#bavi-realm-desc'),
   breakthroughBanner: document.querySelector('#breakthrough-banner'),
+  breakthroughKicker: document.querySelector('#breakthrough-kicker'),
   breakthroughTitle: document.querySelector('#breakthrough-title'),
   breakthroughDetail: document.querySelector('#breakthrough-detail'),
   cityBanter: document.querySelector('#city-banter'),
@@ -82,6 +91,7 @@ async function init() {
     appState.data = await response.json();
     appState.selectedIndex = latestObservedIndex(appState.data.track);
     appState.lastRealmKey = currentRealms().hangzhou.key;
+    appState.lastBaviRealmKey = currentRealms().bavi.key;
 
     renderDataMode();
     renderArtifactDock();
@@ -90,7 +100,11 @@ async function init() {
     renderChecklist();
     renderNotes();
     renderStatus();
+    document.body.classList.add('is-awakened');
+    fx.setAmbient(baviAmbientLevel());
+    fx.emitBurst(window.innerWidth / 2, window.innerHeight * 0.4, { count: 18, spread: 1.6 });
   } catch (error) {
+    document.body.classList.add('is-awakened');
     showToast(error.message || '台风数据读取失败，请稍后重试。');
     setText(els.riskSummary, '数据读取失败，请检查 data/typhoon-bavi.json 是否存在。');
   }
@@ -120,7 +134,9 @@ function renderArtifactDock() {
       if (artifact.panel === 'wind') {
         appState.windVisible = !appState.windVisible;
         renderWindCircles(activePoint());
-        if (appState.windVisible) {
+        if (appState.windVisible && appState.windLayers.length === 0) {
+          showToast(`${activePoint().label} 这个时点没有风圈数据，拖动时间轴到临近登陆的实况点再试。`);
+        } else if (appState.windVisible) {
           focusWindCircles();
         }
       }
@@ -147,8 +163,6 @@ function renderMap() {
     scrollWheelZoom: true
   }).setView([hangzhou.lat, hangzhou.lon], 5);
 
-  appState.map.createPane('mistPane');
-  appState.map.getPane('mistPane').style.zIndex = 360;
   appState.map.createPane('rulerPane');
   appState.map.getPane('rulerPane').style.zIndex = 470;
 
@@ -167,13 +181,12 @@ function renderMap() {
     .on('tileerror', hideBrokenTile)
     .addTo(appState.map);
 
-  renderForecastMist();
   renderTrackLines();
   renderTrackPoints();
   renderHangzhouMarker();
 
   appState.stormMarker = L.marker(toLatLon(active), {
-    icon: baviIcon(currentRealms().bavi),
+    icon: baviIcon(currentRealms().bavi, active),
     zIndexOffset: 900
   }).addTo(appState.map);
   bindHoverPopup(appState.stormMarker, pointPopup(active));
@@ -211,29 +224,13 @@ function renderTrackLines() {
   }
 }
 
-function renderForecastMist() {
-  const forecast = appState.data.track.filter((point) => point.type === 'forecast').map(toLatLon);
-
-  if (forecast.length < 2) {
-    return;
-  }
-
-  appState.forecastMist = L.polyline(forecast, {
-    pane: 'mistPane',
-    className: 'forecast-mist',
-    color: '#77c7d9',
-    weight: 54,
-    opacity: 0.24,
-    lineCap: 'round',
-    smoothFactor: 0.8
-  }).addTo(appState.map);
-}
-
 function renderTrackPoints() {
+  const seenDays = new Set();
+
   appState.data.track.forEach((point, index) => {
     const isObserved = point.type === 'observed';
 
-    L.circleMarker(toLatLon(point), {
+    const marker = L.circleMarker(toLatLon(point), {
       radius: index === appState.selectedIndex ? 7 : 4,
       color: isObserved ? '#efd48a' : '#8fdcff',
       weight: 2,
@@ -243,7 +240,29 @@ function renderTrackPoints() {
     })
       .addTo(appState.map)
       .bindPopup(pointPopup(point), { closeButton: false });
+
+    const dayLabel = dayMarkLabel(point);
+    if (dayLabel && !seenDays.has(dayLabel.day)) {
+      seenDays.add(dayLabel.day);
+      marker.bindTooltip(dayLabel.text, {
+        permanent: true,
+        direction: 'top',
+        offset: [0, -6],
+        className: `day-label ${isObserved ? 'day-label--observed' : 'day-label--forecast'}`
+      });
+    }
   });
+}
+
+function dayMarkLabel(point) {
+  const match = String(point.label || '').match(/^(\d{2})-(\d{2})\s+(\d{2}):/);
+
+  if (!match) {
+    return null;
+  }
+
+  const [, month, day, hour] = match;
+  return { day: `${month}-${day}`, text: `${Number(day)}日${Number(hour)}时` };
 }
 
 function renderHangzhouMarker() {
@@ -265,6 +284,7 @@ function renderTimeline() {
   els.timeline.value = String(appState.selectedIndex);
   setText(els.timelineStart, track[0].label);
   setText(els.timelineEnd, track[track.length - 1].label);
+  updateForecastSplit();
   updateActivePoint(activePoint(), false);
   updateTimelineProgress();
 
@@ -273,6 +293,7 @@ function renderTimeline() {
   });
   els.timeline.addEventListener('pointerdown', (event) => {
     appState.timelineDragging = true;
+    document.body.classList.add('is-divining');
     els.timeline.setPointerCapture?.(event.pointerId);
     setTimelineFromClientX(event.clientX, true);
   });
@@ -285,10 +306,20 @@ function renderTimeline() {
   });
   window.addEventListener('pointerup', () => {
     appState.timelineDragging = false;
+    document.body.classList.remove('is-divining');
   });
   window.addEventListener('pointercancel', () => {
     appState.timelineDragging = false;
+    document.body.classList.remove('is-divining');
   });
+}
+
+function updateForecastSplit() {
+  const { track } = appState.data;
+  const firstForecast = track.findIndex((point) => point.type === 'forecast');
+  const ratio = firstForecast < 0 ? 1 : firstForecast / Math.max(1, track.length - 1);
+
+  els.timeline.style.setProperty('--timeline-forecast-start', `${(ratio * 100).toFixed(1)}%`);
 }
 
 function setSelectedTimelineIndex(index, allowBreakthrough) {
@@ -327,6 +358,8 @@ function renderChecklist() {
     checkbox.addEventListener('change', () => {
       if (checkbox.checked) {
         appState.checkedSupplies.add(item);
+        const rect = checkbox.getBoundingClientRect();
+        fx.emitBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, { count: 12 });
       } else {
         appState.checkedSupplies.delete(item);
       }
@@ -377,15 +410,16 @@ function renderStatus() {
   setText(els.hangzhouRealmDesc, hangzhou.description);
   setText(els.riskLabel, risk.label);
   setText(els.riskSummary, `${risk.headline}。${risk.summary}`);
-  setText(els.distanceValue, `${Math.round(distanceKm)} km`);
+  animateDistance(els.distanceValue, distanceKm, (km) => `${km} km`);
   setText(els.distanceReadout, `量天尺：${Math.round(distanceKm)} km`);
+  appState.lastDistanceKm = distanceKm;
   setText(els.stormLevel, point.level);
   setText(els.stormMove, point.movement || '待确认');
   setText(els.windPressure, `${point.windSpeedMps} m/s | ${point.pressureHpa} hPa`);
   setText(els.updatedAt, selectedPointTimeLabel(point));
   setText(els.dataFreshness, appState.data.meta.dataFreshness);
   setText(els.stormMoodLabel, moodText(typhoonMood(point.windSpeedMps), bavi.name));
-  setText(els.realmLore, `${bavi.name}：${bavi.basis} ${hangzhou.name}：${hangzhou.advice}`);
+  setText(els.realmLore, `${bavi.name}：${bavi.basis}`);
   setText(els.heroSummary, heroSummaryText(distanceKm, bavi, hangzhou));
   setText(els.cityBanter, cityBanterText(hangzhou, risk.level));
   setText(els.balconyIndex, balconyIndexText(distanceKm, point.windSpeedMps));
@@ -393,6 +427,7 @@ function renderStatus() {
   setText(els.distanceNote, distanceNoteText(point));
   document.body.dataset.hangzhouRealm = hangzhou.key;
   document.body.dataset.baviRealm = bavi.key;
+  fx.setAmbient(baviAmbientLevel(bavi.key));
 
   updateShareText();
   renderArtifactPanel();
@@ -498,10 +533,12 @@ function renderDistanceRuler(point) {
 
 function updateActivePoint(point, allowBreakthrough) {
   const previousRealmKey = appState.lastRealmKey;
+  const previousBaviRealmKey = appState.lastBaviRealmKey;
   const { bavi, hangzhou } = currentRealms(point);
 
   setText(els.activePointLabel, `${point.label} | ${point.type === 'observed' ? '实况' : '天机推演'}`);
   setText(els.timelineCurrentLabel, point.type === 'observed' ? '最近实况' : '预报推演');
+  els.timelineCurrentLabel.dataset.phase = point.type === 'observed' ? 'observed' : 'forecast';
   setText(
     els.activePointDetail,
     `${point.level}，${point.windSpeedMps} m/s，中心距杭州约 ${Math.round(
@@ -511,10 +548,15 @@ function updateActivePoint(point, allowBreakthrough) {
 
   if (appState.stormMarker) {
     appState.stormMarker.setLatLng(toLatLon(point));
-    appState.stormMarker.setIcon(baviIcon(bavi));
+    const iconKey = `${bavi.visualClass}|${typhoonMood(point.windSpeedMps)}`;
+    if (iconKey !== appState.stormIconKey) {
+      appState.stormMarker.setIcon(baviIcon(bavi, point));
+      appState.stormIconKey = iconKey;
+    }
     appState.stormMarker.setPopupContent(pointPopup(point));
   }
 
+  followActivePoint(point);
   updateHangzhouMarker(hangzhou);
   renderWindCircles(point);
   renderDistanceRuler(point);
@@ -522,9 +564,12 @@ function updateActivePoint(point, allowBreakthrough) {
 
   if (allowBreakthrough && previousRealmKey && previousRealmKey !== hangzhou.key) {
     triggerBreakthrough(hangzhou, point);
+  } else if (allowBreakthrough && previousBaviRealmKey && previousBaviRealmKey !== bavi.key) {
+    triggerBaviBreakthrough(bavi, point);
   }
 
   appState.lastRealmKey = hangzhou.key;
+  appState.lastBaviRealmKey = bavi.key;
 }
 
 function updateSupplyProgress() {
@@ -540,8 +585,69 @@ function updateHangzhouMarker(realm = currentRealms().hangzhou) {
     return;
   }
 
-  appState.hangzhouMarker.setIcon(hangzhouIcon(realm));
+  if (realm.visualClass !== appState.hangzhouIconKey) {
+    appState.hangzhouMarker.setIcon(hangzhouIcon(realm));
+    appState.hangzhouIconKey = realm.visualClass;
+  }
   appState.hangzhouMarker.setPopupContent(hangzhouPopup(realm));
+}
+
+function followActivePoint(point) {
+  if (!appState.map || prefersReducedMotion) {
+    return;
+  }
+
+  const target = L.latLng(toLatLon(point));
+  if (appState.map.getBounds().pad(-0.18).contains(target)) {
+    return;
+  }
+
+  const now = Date.now();
+  if (appState.timelineDragging && now - appState.lastPanAt < 150) {
+    return;
+  }
+
+  appState.lastPanAt = now;
+  appState.map.panTo(target, { animate: true, duration: 0.6, easeLinearity: 0.3 });
+}
+
+function animateDistance(element, targetKm, format) {
+  const from = appState.lastDistanceKm;
+  const to = Math.round(targetKm);
+
+  if (prefersReducedMotion || from === null || Math.round(from) === to) {
+    setText(element, format(to));
+    return;
+  }
+
+  animateNumber(element, Math.round(from), to, format);
+}
+
+function animateNumber(element, from, to, format, duration = 700) {
+  const start = performance.now();
+
+  function frame(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    setText(element, format(Math.round(from + (to - from) * eased)));
+    if (t < 1) {
+      window.requestAnimationFrame(frame);
+    }
+  }
+
+  window.requestAnimationFrame(frame);
+}
+
+function baviAmbientLevel(key = document.body.dataset.baviRealm) {
+  const levels = {
+    'sea-omen': 0,
+    'east-sea-lord': 1,
+    'bavi-tianzun': 1,
+    'guixu-shadow': 2,
+    'guixu-pressure': 3
+  };
+
+  return levels[key] ?? 1;
 }
 
 function updateTimelineProgress() {
@@ -557,15 +663,7 @@ function updateShareText() {
     return;
   }
 
-  const latest = getLatestObservedPoint(appState.data.track);
-  const distanceKm = haversineDistanceKm(appState.data.hangzhou, latest);
-  const risk = classifyHangzhouRisk({ distanceKm, windSpeedMps: latest.windSpeedMps });
-
-  els.shareText.value = buildChecklistShareText([...appState.checkedSupplies], {
-    riskLabel: risk.label,
-    distanceKm,
-    updatedAt: appState.data.meta.displayUpdatedAt
-  });
+  els.shareText.value = buildChecklistShareText([...appState.checkedSupplies]);
 }
 
 function renderArtifactPanel() {
@@ -581,7 +679,7 @@ function renderArtifactPanel() {
   const panels = {
     distance: {
       title: '量天尺',
-      body: `巴威中心距西湖圣地约 ${Math.round(distanceKm)} km。${bavi.name}：${bavi.basis}`
+      body: `巴威中心距西湖圣地约 ${Math.round(distanceKm)} km，连线见地图量天尺。`
     },
     risk: {
       title: '西湖阵图',
@@ -599,7 +697,7 @@ function renderArtifactPanel() {
     },
     timeline: {
       title: '虚空盘',
-      body: `当前推演点：${point.label}。拖动底部时间轴，可查看实况路径与预报迷雾。`
+      body: `当前推演点：${point.label}。拖动底部时间轴，可查看实况路径与预报推演。`
     },
     trust: {
       title: '天机镜',
@@ -623,17 +721,41 @@ function updateArtifactDockState() {
 }
 
 function triggerBreakthrough(realm, point) {
-  setText(els.breakthroughTitle, `西湖圣地破境：${realm.name}`);
-  setText(
-    els.breakthroughDetail,
-    `依据：距杭州 ${Math.round(haversineDistanceKm(appState.data.hangzhou, point))} km | 最大风速 ${
+  showBreakthroughBanner({
+    variant: 'hangzhou',
+    kicker: '天机有变',
+    title: `西湖圣地破境：${realm.name}`,
+    detail: `依据：距杭州 ${Math.round(haversineDistanceKm(appState.data.hangzhou, point))} km | 最大风速 ${
       point.windSpeedMps
-    } m/s`
-  );
+    } m/s`,
+    palette: ['#f2d98a', '#d8b768', '#fff8df']
+  });
+}
+
+function triggerBaviBreakthrough(realm, point) {
+  showBreakthroughBanner({
+    variant: 'bavi',
+    kicker: '归墟异动',
+    title: `巴威晋阶：${realm.name}`,
+    detail: `依据：最大风速 ${point.windSpeedMps} m/s | 中心气压 ${point.pressureHpa} hPa`,
+    palette: ['#dc6247', '#c2402a', '#f2d98a']
+  });
+}
+
+function showBreakthroughBanner({ variant, kicker, title, detail, palette }) {
+  els.breakthroughBanner.dataset.variant = variant;
+  setText(els.breakthroughKicker, kicker);
+  setText(els.breakthroughTitle, title);
+  setText(els.breakthroughDetail, detail);
   els.breakthroughBanner.classList.remove('is-visible');
   void els.breakthroughBanner.offsetWidth;
   els.breakthroughBanner.classList.add('is-visible');
+  document.body.dataset.realmShift = 'true';
+  fx.emitBurst(window.innerWidth / 2, window.innerHeight / 2, { count: 26, spread: 2.2, palette });
 
+  window.setTimeout(() => {
+    delete document.body.dataset.realmShift;
+  }, 1400);
   window.setTimeout(() => {
     els.breakthroughBanner.classList.remove('is-visible');
   }, 3200);
@@ -696,6 +818,7 @@ function hangzhouIcon(realm) {
         <div class="hangzhou-marker__array"></div>
         <div class="hangzhou-marker__array hangzhou-marker__array--mid"></div>
         <div class="hangzhou-marker__array hangzhou-marker__array--core"></div>
+        <div class="hangzhou-marker__lotus"></div>
         <strong>杭</strong>
       </div>
     `,
@@ -704,18 +827,27 @@ function hangzhouIcon(realm) {
   });
 }
 
-function baviIcon(realm) {
+function baviIcon(realm, point = activePoint()) {
+  const mood = typhoonMood(point.windSpeedMps);
+
   return L.divIcon({
     className: '',
     html: `
-      <div class="bavi-marker ${realm.visualClass}" aria-label="巴威中心">
+      <div class="bavi-marker ${realm.visualClass}" data-mood="${mood}" aria-label="巴威中心">
+        <div class="bavi-marker__wake"></div>
+        <div class="bavi-marker__arms bavi-marker__arms--outer"></div>
+        <div class="bavi-marker__arms bavi-marker__arms--mid"></div>
         <div class="bavi-marker__vortex"></div>
+        <div class="bavi-marker__sigil"></div>
         <div class="bavi-marker__ring"></div>
         <div class="bavi-marker__eye"></div>
+        <div class="bavi-marker__motes">
+          <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i>
+        </div>
       </div>
     `,
-    iconSize: [86, 86],
-    iconAnchor: [43, 43]
+    iconSize: [120, 120],
+    iconAnchor: [60, 60]
   });
 }
 
@@ -754,7 +886,7 @@ function moodText(mood, baviRealm) {
 }
 
 function heroSummaryText(distanceKm, bavi, hangzhou) {
-  return `${bavi.name}距西湖圣地约 ${Math.round(distanceKm)} km。杭州当前境界：${hangzhou.name}。`;
+  return hangzhou.advice;
 }
 
 function cityBanterText(hangzhouRealm, riskLevel) {
@@ -794,10 +926,9 @@ function takeoutIndexText(distanceKm, windSpeedMps) {
 }
 
 function distanceNoteText(point) {
-  const sourceLabel = appState.data.meta.dataMode?.includes('qweather-live') ? '实时数据' : '示例数据';
-  const typeLabel = point.type === 'observed' ? '实况中心坐标' : '预报中心坐标';
+  const typeLabel = point.type === 'observed' ? '实况中心' : '预报中心';
 
-  return `${sourceLabel} | 按${typeLabel}到杭州中心点估算`;
+  return `按${typeLabel}到杭州中心点直线估算`;
 }
 
 function setText(element, value) {
