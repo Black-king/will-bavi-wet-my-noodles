@@ -73,3 +73,15 @@ test('safety and data trust remain visible inside the map experience', async () 
   assert.match(js, /renderNotes/);
   assert.match(js, /dataFreshness/);
 });
+
+test('desktop layout keeps map HUD compact instead of covering the stage', async () => {
+  const css = await readFile(new URL('../style.css', import.meta.url), 'utf8');
+
+  assert.match(css, /\.battle-stage[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*300px/);
+  assert.match(css, /\.realm-panel[\s\S]*width:\s*min\(410px,\s*calc\(100% - 112px\)\)/);
+  assert.match(css, /\.realm-panel h1[\s\S]*font-size:\s*clamp\(1\.75rem,\s*3\.25vw,\s*3\.1rem\)/);
+  assert.match(css, /\.realm-panel h1[\s\S]*white-space:\s*nowrap/);
+  assert.match(css, /\.artifact-dock[\s\S]*width:\s*72px/);
+  assert.match(css, /\.artifact-button small[\s\S]*display:\s*none/);
+  assert.match(css, /\.side-card h2[\s\S]*font-size:\s*clamp\(1\.08rem,\s*1\.6vw,\s*1\.45rem\)/);
+});
