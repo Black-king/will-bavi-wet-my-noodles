@@ -23,6 +23,7 @@ const els = {
   heroSummary: document.querySelector('#hero-summary'),
   cityBanter: document.querySelector('#city-banter'),
   distanceValue: document.querySelector('#distance-value'),
+  distanceNote: document.querySelector('#distance-note'),
   stormLevel: document.querySelector('#storm-level'),
   stormMove: document.querySelector('#storm-move'),
   windPressure: document.querySelector('#wind-pressure'),
@@ -37,6 +38,10 @@ const els = {
   timelineEnd: document.querySelector('#timeline-end'),
   activePointLabel: document.querySelector('#active-point-label'),
   activePointDetail: document.querySelector('#active-point-detail'),
+  routeDataMode: document.querySelector('#route-data-mode'),
+  observedRouteDetail: document.querySelector('#observed-route-detail'),
+  forecastRouteDetail: document.querySelector('#forecast-route-detail'),
+  activeCoordDetail: document.querySelector('#active-coord-detail'),
   supplyList: document.querySelector('#supply-list'),
   supplyProgress: document.querySelector('#supply-progress'),
   shareText: document.querySelector('#share-text'),
@@ -79,6 +84,10 @@ function renderStatus() {
   els.riskLabel.textContent = risk.label;
   els.riskSummary.textContent = `${risk.headline}。${risk.summary}`;
   els.distanceValue.textContent = `${Math.round(distanceKm)} km`;
+  els.distanceValue.title = `按台风中心坐标 ${formatCoordinate(latest.lat, 'N')} ${formatCoordinate(
+    latest.lon,
+    'E'
+  )} 到杭州中心点估算`;
   els.stormLevel.textContent = latest.level;
   els.stormMove.textContent = latest.movement;
   els.windPressure.textContent = `${latest.windSpeedMps} m/s · ${latest.pressureHpa} hPa`;
@@ -91,6 +100,7 @@ function renderStatus() {
   els.balconyIndex.textContent = balconyIndexText(distanceKm, latest.windSpeedMps);
   els.takeoutIndex.textContent = takeoutIndexText(distanceKm, latest.windSpeedMps);
 
+  renderDistanceNote(latest);
   updateShareText();
 }
 
@@ -102,19 +112,27 @@ function renderDataMode() {
   if (isLive) {
     els.dataModeLabel.textContent = '实时数据';
     els.dataModeLabel.dataset.mode = 'live';
-    els.dataFreshness.textContent = `QWeather 已接入，最近更新：${appState.data.meta.displayUpdatedAt}`;
+    els.dataFreshness.textContent = `实时数据已接入，最近更新：${appState.data.meta.displayUpdatedAt}`;
     return;
   }
 
   if (isSample) {
     els.dataModeLabel.textContent = '示例数据';
     els.dataModeLabel.dataset.mode = 'sample';
-    els.dataFreshness.textContent = '当前是示例数据，不代表实时台风预警。QWeather Actions 跑通后会自动切换为实时更新。';
+    els.dataFreshness.textContent = '当前是示例数据，不代表实时台风预警；接入实时数据后会自动更新。';
     return;
   }
 
   els.dataModeLabel.textContent = '数据待确认';
   els.dataModeLabel.dataset.mode = 'stale';
+}
+
+function renderDistanceNote(point) {
+  const mode = appState.data.meta.dataMode || '';
+  const sourceLabel = mode.includes('qweather-live') ? '实时数据' : '示例数据';
+  const typeLabel = point.type === 'observed' ? '实况中心坐标' : '预报中心坐标';
+
+  els.distanceNote.textContent = `${sourceLabel} · 按${typeLabel}到杭州中心点估算`;
 }
 
 function renderMap() {
@@ -135,6 +153,16 @@ function renderMap() {
 
   const observed = track.filter((point) => point.type === 'observed').map(toLatLon);
   const forecast = track.filter((point) => point.type === 'forecast').map(toLatLon);
+  const pointStyle = {
+    observed: {
+      color: '#17242a',
+      fillColor: '#ff6b4a'
+    },
+    forecast: {
+      color: '#17242a',
+      fillColor: '#ffe074'
+    }
+  };
 
   L.polyline(observed, {
     color: '#ff6b4a',
@@ -148,6 +176,20 @@ function renderMap() {
     dashArray: '8 10',
     lineCap: 'round'
   }).addTo(appState.map);
+
+  track.forEach((point, index) => {
+    const style = pointStyle[point.type] || pointStyle.observed;
+
+    L.circleMarker(toLatLon(point), {
+      radius: index === appState.selectedIndex ? 7 : 5,
+      color: style.color,
+      weight: 2,
+      fillColor: style.fillColor,
+      fillOpacity: 0.92
+    })
+      .addTo(appState.map)
+      .bindPopup(pointPopup(point));
+  });
 
   L.marker([hangzhou.lat, hangzhou.lon], {
     icon: L.divIcon({
@@ -182,12 +224,14 @@ function renderTimeline() {
   els.timelineStart.textContent = track[0].label;
   els.timelineEnd.textContent = track[track.length - 1].label;
   updateActivePoint(track[appState.selectedIndex]);
+  renderRouteData(track[appState.selectedIndex]);
   updateTimelineProgress();
 
   els.timeline.addEventListener('input', (event) => {
     appState.selectedIndex = Number(event.target.value);
     const point = track[appState.selectedIndex];
     updateActivePoint(point);
+    renderRouteData(point);
     updateTimelineProgress();
 
     if (appState.stormMarker) {
@@ -239,9 +283,12 @@ function updateSupplyProgress() {
 }
 
 function renderNotes() {
-  const sourceNames = appState.data.sources.map((source) => source.name).join('、');
-  els.sourceNote.textContent = `数据源规划：${sourceNames}。${appState.data.meta.sourceNote}`;
-  els.disclaimer.textContent = appState.data.disclaimer;
+  const mode = appState.data.meta.dataMode || '';
+  const isLive = mode.includes('qweather-live');
+  els.sourceNote.textContent = isLive
+    ? '页面会保留最近一次成功更新；如果数据延迟，请先按偏保守的方式安排出行和备灾。'
+    : '当前用演示数据预览交互效果，不作为实时台风预警，请勿据此做出高风险出行决定。';
+  els.disclaimer.textContent = '正式预警、停课停运、交通调整和避险指引，请以气象部门及政府部门发布为准。';
 }
 
 function renderWindCircles(point) {
@@ -287,6 +334,31 @@ function updateActivePoint(point) {
   )} km，移动方向 ${point.movement}。`;
 }
 
+function renderRouteData(activePoint) {
+  const track = appState.data.track;
+  const observed = track.filter((point) => point.type === 'observed');
+  const forecast = track.filter((point) => point.type === 'forecast');
+  const typeLabel = activePoint.type === 'observed' ? '实况点' : '预报点';
+
+  els.routeDataMode.textContent = typeLabel;
+  els.observedRouteDetail.textContent = summarizeRouteSegment(observed, '暂无实况数据');
+  els.forecastRouteDetail.textContent = summarizeRouteSegment(forecast, '暂无预报数据');
+  els.activeCoordDetail.textContent = `${formatCoordinate(activePoint.lat, 'N')} ${formatCoordinate(
+    activePoint.lon,
+    'E'
+  )}`;
+}
+
+function summarizeRouteSegment(points, fallback) {
+  if (!points.length) {
+    return fallback;
+  }
+
+  const start = points[0];
+  const end = points[points.length - 1];
+  return `${points.length} 点，${start.label} 至 ${end.label}`;
+}
+
 function updateTimelineProgress() {
   const max = Number(els.timeline.max || 0);
   const value = Number(els.timeline.value || 0);
@@ -320,19 +392,36 @@ function toLatLon(point) {
   return [point.lat, point.lon];
 }
 
+function formatCoordinate(value, suffix) {
+  return `${Number(value).toFixed(1)}°${suffix}`;
+}
+
 function stormIcon() {
   return L.divIcon({
     className: '',
-    html: '<div class="storm-marker" aria-label="台风中心"></div>',
-    iconSize: [42, 42],
-    iconAnchor: [21, 21]
+    html: `
+      <div class="storm-marker" aria-label="台风中心">
+        <div class="storm-marker__aura"></div>
+        <div class="storm-marker__ring"></div>
+        <div class="storm-marker__face">
+          <span class="storm-marker__brow storm-marker__brow--left"></span>
+          <span class="storm-marker__brow storm-marker__brow--right"></span>
+          <span class="storm-marker__eye storm-marker__eye--left"></span>
+          <span class="storm-marker__eye storm-marker__eye--right"></span>
+          <span class="storm-marker__mouth"></span>
+        </div>
+      </div>
+    `,
+    iconSize: [72, 72],
+    iconAnchor: [36, 36]
   });
 }
 
 function pointPopup(point) {
   const typeLabel = point.type === 'observed' ? '实况' : '预报';
+  const coordinate = `${formatCoordinate(point.lat, 'N')} ${formatCoordinate(point.lon, 'E')}`;
 
-  return `<strong>巴威选手 ${point.label}</strong><br>${typeLabel} · ${point.level}<br>${point.windSpeedMps} m/s · ${point.pressureHpa} hPa`;
+  return `<strong>巴威选手 ${point.label}</strong><br>${typeLabel} · ${point.level}<br>${coordinate}<br>${point.windSpeedMps} m/s · ${point.pressureHpa} hPa`;
 }
 
 function moodText(mood) {

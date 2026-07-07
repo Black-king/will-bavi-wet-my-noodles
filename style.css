@@ -261,6 +261,14 @@ h1 {
   line-height: 1;
 }
 
+.metric-note {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
 .headline-pill--risk strong {
   color: #fffaf1;
 }
@@ -517,10 +525,9 @@ h1 {
   right: 14px;
   bottom: 14px;
   z-index: 600;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 8px;
-  max-width: calc(100% - 28px);
+  width: min(360px, calc(100% - 28px));
   padding: 10px;
   border: 3px solid var(--line);
   border-radius: var(--radius);
@@ -530,11 +537,66 @@ h1 {
   font-weight: 900;
 }
 
+.legend-heading,
+.legend-items,
 .map-legend span {
   display: inline-flex;
   gap: 6px;
   align-items: center;
+}
+
+.legend-heading {
+  justify-content: space-between;
+}
+
+.legend-heading span {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.legend-heading strong {
+  padding: 3px 8px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--lake);
+  color: var(--line);
+  font-size: 0.78rem;
+}
+
+.legend-items {
+  flex-wrap: wrap;
+  padding-bottom: 7px;
+  border-bottom: 2px dashed rgba(23, 36, 42, 0.22);
+}
+
+.map-legend span {
   white-space: nowrap;
+}
+
+.route-data-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  margin: 0;
+}
+
+.route-data-grid div {
+  display: grid;
+  grid-template-columns: 62px 1fr;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.route-data-grid dt {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.route-data-grid dd {
+  margin: 0;
+  color: var(--line);
+  font-size: 0.82rem;
+  line-height: 1.35;
 }
 
 .legend-line {
@@ -734,7 +796,64 @@ h1 {
 }
 
 .fine-print {
-  background: #e4fbf4;
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, rgba(255, 250, 241, 0.96), rgba(222, 248, 241, 0.94)),
+    radial-gradient(circle at 100% 0%, rgba(114, 214, 203, 0.35), transparent 34%),
+    #fffaf1;
+}
+
+.fine-print::before {
+  position: absolute;
+  top: -22px;
+  right: -18px;
+  width: 84px;
+  height: 84px;
+  content: "";
+  border: 3px solid var(--line);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, transparent 38%, rgba(255, 224, 116, 0.78) 39% 52%, transparent 53%),
+    conic-gradient(from 20deg, rgba(255, 113, 79, 0.8), rgba(114, 214, 203, 0.8), rgba(255, 224, 116, 0.78), rgba(255, 113, 79, 0.8));
+  opacity: 0.2;
+}
+
+.trust-note .section-heading {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 10px;
+}
+
+.trust-note .section-heading strong {
+  background: var(--lake);
+  color: var(--line);
+}
+
+.trust-stack {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 8px;
+}
+
+.trust-item {
+  margin: 0;
+  padding: 10px 11px;
+  border: 2px solid rgba(23, 36, 42, 0.82);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 800;
+  line-height: 1.48;
+}
+
+.trust-item--primary {
+  background: #fffaf1;
+  color: var(--line);
+  font-size: 0.92rem;
+  box-shadow: 4px 4px 0 rgba(23, 36, 42, 0.1);
 }
 
 .section-heading {
@@ -910,27 +1029,111 @@ h1 {
   position: relative;
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
-  border: 3px solid var(--line);
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
+  filter: drop-shadow(0 14px 12px rgba(23, 36, 42, 0.32));
+  animation: storm-hover 2.8s ease-in-out infinite;
+}
+
+.storm-marker__aura,
+.storm-marker__ring,
+.storm-marker__face {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.storm-marker__aura {
+  inset: 1px;
+  border: 3px solid rgba(23, 36, 42, 0.62);
   background:
-    conic-gradient(from 20deg, #fffaf1, var(--storm), #ffe074, var(--lake), #fffaf1);
-  box-shadow: 0 0 0 8px rgba(255, 113, 79, 0.24);
-  animation: storm-spin 5s linear infinite;
+    radial-gradient(circle at center, rgba(255, 250, 241, 0.82) 0 18%, transparent 19%),
+    conic-gradient(from 0deg, rgba(255, 113, 79, 0), rgba(255, 113, 79, 0.5), rgba(255, 224, 116, 0.1), rgba(114, 214, 203, 0.46), rgba(255, 113, 79, 0));
+  opacity: 0.72;
+  animation: storm-pulse 1.8s ease-in-out infinite;
+}
+
+.storm-marker__ring {
+  inset: 8px;
+  border: 4px solid var(--line);
+  background:
+    radial-gradient(circle at center, transparent 34%, #fffaf1 35% 46%, transparent 47%),
+    conic-gradient(from 30deg, #ff714f 0 24%, #ffe074 24% 42%, #fffaf1 42% 52%, #74c9bf 52% 76%, #102a31 76% 82%, #ff714f 82% 100%);
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 250, 241, 0.28),
+    0 0 0 5px rgba(255, 113, 79, 0.16);
+  animation: storm-spin 1.65s linear infinite;
+}
+
+.storm-marker__face {
+  inset: 20px;
+  display: grid;
+  place-items: center;
+  border: 3px solid var(--line);
+  background:
+    radial-gradient(circle at 68% 28%, rgba(255, 250, 241, 0.26), transparent 22%),
+    var(--night);
+  box-shadow:
+    inset 0 -5px 0 rgba(0, 0, 0, 0.2),
+    0 2px 0 rgba(255, 250, 241, 0.24);
+  animation: storm-glare 2.4s ease-in-out infinite;
+}
+
+.storm-marker__eye,
+.storm-marker__brow,
+.storm-marker__mouth {
+  position: absolute;
+  z-index: 1;
+}
+
+.storm-marker__eye {
+  top: 11px;
+  width: 7px;
+  height: 9px;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: #fffaf1;
+  box-shadow: inset -2px -1px 0 rgba(114, 214, 203, 0.55);
+  animation: storm-eye 2.4s ease-in-out infinite;
+}
+
+.storm-marker__eye--left {
+  left: 9px;
+}
+
+.storm-marker__eye--right {
+  right: 9px;
+  animation-delay: 0.12s;
+}
+
+.storm-marker__brow {
+  top: 8px;
+  width: 11px;
+  height: 3px;
+  border-radius: 999px;
+  background: #ffe074;
+}
+
+.storm-marker__brow--left {
+  left: 6px;
+  transform: rotate(20deg);
+}
+
+.storm-marker__brow--right {
+  right: 6px;
+  transform: rotate(-20deg);
+}
+
+.storm-marker__mouth {
+  bottom: 8px;
+  width: 18px;
+  height: 8px;
+  border-top: 4px solid #ff714f;
+  border-radius: 40px 40px 0 0;
 }
 
 .battle-tools .city-card {
   display: none;
-}
-
-.storm-marker::before {
-  content: "";
-  width: 16px;
-  height: 16px;
-  border: 3px solid #fffaf1;
-  border-radius: 50%;
-  background: var(--night);
 }
 
 .hangzhou-marker {
@@ -957,6 +1160,60 @@ h1 {
 @keyframes storm-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes storm-hover {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  46% {
+    transform: translateY(-5px) scale(1.04);
+  }
+
+  62% {
+    transform: translateY(1px) scale(0.98);
+  }
+}
+
+@keyframes storm-pulse {
+  0%,
+  100% {
+    transform: scale(0.88);
+    opacity: 0.38;
+  }
+
+  50% {
+    transform: scale(1.12);
+    opacity: 0.78;
+  }
+}
+
+@keyframes storm-glare {
+  0%,
+  100% {
+    transform: rotate(-5deg) scale(1);
+  }
+
+  45% {
+    transform: rotate(7deg) scale(1.08);
+  }
+}
+
+@keyframes storm-eye {
+  0%,
+  100% {
+    transform: translateX(0) scaleY(1);
+  }
+
+  40% {
+    transform: translateX(2px) scaleY(0.82);
+  }
+
+  64% {
+    transform: translateX(-1px) scaleY(1.1);
   }
 }
 

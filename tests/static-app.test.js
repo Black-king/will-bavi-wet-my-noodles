@@ -53,6 +53,65 @@ test('supply checklist is styled as a compact task card instead of a large form'
   assert.match(css, /\.share-preview/);
 });
 
+test('safety note is user-facing and does not expose implementation source names', async () => {
+  const [html, js, css] = await Promise.all([
+    readFile(new URL('../index.html', import.meta.url), 'utf8'),
+    readFile(new URL('../script.js', import.meta.url), 'utf8'),
+    readFile(new URL('../style.css', import.meta.url), 'utf8')
+  ]);
+
+  assert.match(html, /class="fine-print trust-note"/);
+  assert.match(html, /class="trust-stack"/);
+  assert.doesNotMatch(js, /Tropical Cyclone API|中央气象台台风网|数据源规划|sourceNames/);
+  assert.match(css, /\.trust-stack/);
+  assert.match(css, /\.trust-item--primary/);
+});
+
+test('map legend exposes exact route data instead of only symbolic labels', async () => {
+  const [html, js, css] = await Promise.all([
+    readFile(new URL('../index.html', import.meta.url), 'utf8'),
+    readFile(new URL('../script.js', import.meta.url), 'utf8'),
+    readFile(new URL('../style.css', import.meta.url), 'utf8')
+  ]);
+
+  assert.match(html, /id="observed-route-detail"/);
+  assert.match(html, /id="forecast-route-detail"/);
+  assert.match(html, /id="active-coord-detail"/);
+  assert.match(js, /renderRouteData/);
+  assert.match(js, /L\.circleMarker/);
+  assert.match(js, /formatCoordinate/);
+  assert.match(css, /\.route-data-grid/);
+});
+
+test('distance metric is presented as an estimate with data-mode context', async () => {
+  const [html, js, css] = await Promise.all([
+    readFile(new URL('../index.html', import.meta.url), 'utf8'),
+    readFile(new URL('../script.js', import.meta.url), 'utf8'),
+    readFile(new URL('../style.css', import.meta.url), 'utf8')
+  ]);
+
+  assert.match(html, /id="distance-note"/);
+  assert.match(html, /估算距离/);
+  assert.match(js, /renderDistanceNote/);
+  assert.match(js, /中心坐标/);
+  assert.match(js, /示例数据/);
+  assert.match(css, /\.metric-note/);
+});
+
+test('storm center marker is a comic character with layered motion', async () => {
+  const [js, css] = await Promise.all([
+    readFile(new URL('../script.js', import.meta.url), 'utf8'),
+    readFile(new URL('../style.css', import.meta.url), 'utf8')
+  ]);
+
+  assert.match(js, /storm-marker__face/);
+  assert.match(js, /storm-marker__eye/);
+  assert.match(js, /iconSize:\s*\[72,\s*72\]/);
+  assert.match(css, /\.storm-marker__ring/);
+  assert.match(css, /@keyframes storm-hover/);
+  assert.match(css, /@keyframes storm-glare/);
+});
+
 test('map container has stable sizing and Leaflet receives a size refresh', async () => {
   const [js, css] = await Promise.all([
     readFile(new URL('../script.js', import.meta.url), 'utf8'),

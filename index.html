@@ -33,8 +33,9 @@
               <strong id="risk-label">读取中</strong>
             </div>
             <div class="headline-pill">
-              <span>巴威离杭州</span>
+              <span>估算距离</span>
               <strong id="distance-value">-- km</strong>
+              <p id="distance-note" class="metric-note">等待台风中心坐标。</p>
             </div>
             <div class="headline-pill">
               <span>当前强度</span>
@@ -42,10 +43,30 @@
             </div>
           </div>
           <div id="map" aria-label="台风巴威路径地图"></div>
-          <div class="map-legend" aria-label="地图图例">
-            <span><i class="legend-line legend-line--observed"></i> 已走路线</span>
-            <span><i class="legend-line legend-line--forecast"></i> 猜测走位</span>
-            <span><i class="legend-dot"></i> 杭州阵地</span>
+          <div class="map-legend" aria-label="路径数据和地图图例">
+            <div class="legend-heading">
+              <span>路径数据</span>
+              <strong id="route-data-mode">读取中</strong>
+            </div>
+            <div class="legend-items">
+              <span><i class="legend-line legend-line--observed"></i> 实况路径</span>
+              <span><i class="legend-line legend-line--forecast"></i> 预报路径</span>
+              <span><i class="legend-dot"></i> 杭州阵地</span>
+            </div>
+            <dl class="route-data-grid">
+              <div>
+                <dt>实况段</dt>
+                <dd id="observed-route-detail">--</dd>
+              </div>
+              <div>
+                <dt>预报段</dt>
+                <dd id="forecast-route-detail">--</dd>
+              </div>
+              <div>
+                <dt>当前中心</dt>
+                <dd id="active-coord-detail">--</dd>
+              </div>
+            </dl>
           </div>
         </div>
 
@@ -133,14 +154,16 @@
             <h2>西湖边先别慌</h2>
           </section>
 
-          <section class="fine-print">
+          <section class="fine-print trust-note">
             <div class="section-heading">
-              <span>认真一秒</span>
-              <strong>别乱来</strong>
+              <span>安全提示</span>
+              <strong>先看官方</strong>
             </div>
-            <p id="risk-summary" class="body-note">正在载入台风数据。</p>
-            <p id="source-note" class="body-note"></p>
-            <p id="disclaimer" class="body-note"></p>
+            <div class="trust-stack">
+              <p id="risk-summary" class="trust-item trust-item--primary">正在载入台风数据。</p>
+              <p id="source-note" class="trust-item"></p>
+              <p id="disclaimer" class="trust-item"></p>
+            </div>
           </section>
         </aside>
       </section>
