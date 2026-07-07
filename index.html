@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="台风巴威：杭州生存指南，用杭州视角查看台风路径、距离、风险指数和防台物资清单。"
+    />
+    <title>台风巴威：杭州生存指南</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIINfQZc+3E8tq9pbdhScxXgkXbHCnLDr0I="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="hero">
+        <div class="hero__copy">
+          <p class="eyebrow">杭州视角 · 实时路径演示</p>
+          <h1>台风巴威：杭州生存指南</h1>
+          <p class="hero__summary">
+            看它现在在哪、离杭州多远、今天该不该把阳台收一收。
+          </p>
+        </div>
+        <aside class="storm-avatar" aria-label="巴威状态角色">
+          <div class="storm-avatar__eye storm-avatar__eye--left"></div>
+          <div class="storm-avatar__eye storm-avatar__eye--right"></div>
+          <div class="storm-avatar__mouth"></div>
+          <span id="storm-mood-label">正在读取巴威状态</span>
+        </aside>
+      </header>
+
+      <section class="status-grid" id="status-panel" aria-live="polite">
+        <article class="metric metric--primary">
+          <span>杭州抗台指数</span>
+          <strong id="risk-label">读取中</strong>
+          <p id="risk-summary">正在载入台风数据。</p>
+        </article>
+        <article class="metric">
+          <span>距离杭州</span>
+          <strong id="distance-value">-- km</strong>
+          <p id="distance-note">按台风中心到杭州中心点估算。</p>
+        </article>
+        <article class="metric">
+          <span>当前强度</span>
+          <strong id="storm-level">--</strong>
+          <p id="wind-pressure">-- m/s · -- hPa</p>
+        </article>
+        <article class="metric">
+          <span>数据时间</span>
+          <strong id="updated-at">--</strong>
+          <p id="data-freshness">等待数据源更新。</p>
+        </article>
+      </section>
+
+      <section class="workspace" aria-label="台风路径和防台工具">
+        <div class="map-panel">
+          <div id="map" aria-label="台风巴威路径地图"></div>
+          <div class="map-legend" aria-label="地图图例">
+            <span><i class="legend-line legend-line--observed"></i> 实况路径</span>
+            <span><i class="legend-line legend-line--forecast"></i> 预报路径</span>
+            <span><i class="legend-dot"></i> 杭州</span>
+          </div>
+        </div>
+
+        <aside class="control-panel">
+          <section class="panel-section">
+            <div class="section-heading">
+              <span>时间轴</span>
+              <strong id="active-point-label">--</strong>
+            </div>
+            <input id="timeline" type="range" min="0" value="0" step="1" />
+            <div class="timeline-meta">
+              <span id="timeline-start">--</span>
+              <span id="timeline-end">--</span>
+            </div>
+            <p id="active-point-detail" class="body-note">拖动查看巴威怎么走过来。</p>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading">
+              <span>防台物资</span>
+              <strong>勾一勾</strong>
+            </div>
+            <div id="supply-list" class="supply-list"></div>
+            <textarea
+              id="share-text"
+              class="share-text"
+              readonly
+              aria-label="防台分享文案"
+            ></textarea>
+          </section>
+
+          <section class="panel-section panel-section--compact">
+            <div class="section-heading">
+              <span>数据说明</span>
+              <strong>请核对</strong>
+            </div>
+            <p id="source-note" class="body-note"></p>
+            <p id="disclaimer" class="body-note"></p>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

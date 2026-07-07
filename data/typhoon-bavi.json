@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "currentStormName": "巴威",
+    "englishName": "Bavi",
+    "stormId": "2026-BAVI-SAMPLE",
+    "year": 2026,
+    "basin": "NP",
+    "isActive": true,
+    "isLiveLike": true,
+    "dataMode": "sample-normalized",
+    "updatedAt": "2026-07-07T18:00:00+08:00",
+    "displayUpdatedAt": "2026-07-07 18:00",
+    "dataFreshness": "示例数据，等待接入 QWeather 或其他授权数据源",
+    "sourceNote": "首版用于验证交互和数据结构，不作为正式气象预警依据。"
+  },
+  "hangzhou": {
+    "name": "杭州",
+    "lat": 30.2741,
+    "lon": 120.1551
+  },
+  "sources": [
+    {
+      "name": "QWeather Tropical Cyclone API",
+      "role": "planned-primary",
+      "url": "https://dev.qweather.com/docs/api/tropical-cyclone/storm-list/"
+    },
+    {
+      "name": "中央气象台台风网",
+      "role": "authority-reference",
+      "url": "https://typhoon.nmc.cn/web.html"
+    }
+  ],
+  "track": [
+    {
+      "type": "observed",
+      "time": "2026-07-06T08:00:00+08:00",
+      "label": "07-06 08:00",
+      "lat": 14.4,
+      "lon": 146.2,
+      "level": "强台风",
+      "windSpeedMps": 45,
+      "pressureHpa": 950,
+      "movement": "西北偏西",
+      "windRadiiKm": {
+        "r7": 320,
+        "r10": 150,
+        "r12": 80
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-06T20:00:00+08:00",
+      "label": "07-06 20:00",
+      "lat": 15.6,
+      "lon": 143.9,
+      "level": "超强台风",
+      "windSpeedMps": 58,
+      "pressureHpa": 925,
+      "movement": "西北偏西",
+      "windRadiiKm": {
+        "r7": 360,
+        "r10": 180,
+        "r12": 90
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-07T08:00:00+08:00",
+      "label": "07-07 08:00",
+      "lat": 17.2,
+      "lon": 140.8,
+      "level": "超强台风",
+      "windSpeedMps": 60,
+      "pressureHpa": 920,
+      "movement": "西北",
+      "windRadiiKm": {
+        "r7": 380,
+        "r10": 190,
+        "r12": 100
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-07T18:00:00+08:00",
+      "label": "07-07 18:00",
+      "lat": 18.7,
+      "lon": 137.4,
+      "level": "超强台风",
+      "windSpeedMps": 56,
+      "pressureHpa": 930,
+      "movement": "西北",
+      "windRadiiKm": {
+        "r7": 360,
+        "r10": 180,
+        "r12": 90
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-08T18:00:00+08:00",
+      "label": "07-08 18:00",
+      "lat": 21.4,
+      "lon": 132.1,
+      "level": "强台风",
+      "windSpeedMps": 48,
+      "pressureHpa": 945,
+      "movement": "西北",
+      "windRadiiKm": {
+        "r7": 330,
+        "r10": 150,
+        "r12": 70
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-09T18:00:00+08:00",
+      "label": "07-09 18:00",
+      "lat": 24.2,
+      "lon": 127.8,
+      "level": "台风",
+      "windSpeedMps": 40,
+      "pressureHpa": 960,
+      "movement": "西北",
+      "windRadiiKm": {
+        "r7": 280,
+        "r10": 110,
+        "r12": 0
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-10T18:00:00+08:00",
+      "label": "07-10 18:00",
+      "lat": 27.0,
+      "lon": 124.4,
+      "level": "强热带风暴",
+      "windSpeedMps": 28,
+      "pressureHpa": 982,
+      "movement": "西北偏北",
+      "windRadiiKm": {
+        "r7": 180,
+        "r10": 0,
+        "r12": 0
+      }
+    }
+  ],
+  "checklist": [
+    "充电宝",
+    "饮用水",
+    "手电筒",
+    "常用药",
+    "窗户检查",
+    "阳台收纳",
+    "简易食品"
+  ],
+  "disclaimer": "本页面用于互动展示和生活提醒，正式预警请以气象部门发布为准。"
+}
