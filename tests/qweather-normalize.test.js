@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { generateKeyPairSync } from 'node:crypto';
 import {
   createQWeatherJwt,
+  normalizeQWeatherApiHost,
   normalizeQWeatherData,
   pickCurrentBaviStorm
 } from '../src/qweather-normalize.js';
@@ -39,6 +40,33 @@ test('pickCurrentBaviStorm prefers the active 2026 Bavi record over historical m
   ], 2026);
 
   assert.equal(storm.id, '2026-bavi');
+});
+
+test('normalizeQWeatherApiHost accepts console host values with or without protocol', () => {
+  assert.equal(normalizeQWeatherApiHost('abc123.def.qweatherapi.com'), 'https://abc123.def.qweatherapi.com/');
+  assert.equal(normalizeQWeatherApiHost('https://abc123.def.qweatherapi.com'), 'https://abc123.def.qweatherapi.com/');
+  assert.equal(
+    normalizeQWeatherApiHost(' https://abc123.def.qweatherapi.com/v7/tropical/storm-list '),
+    'https://abc123.def.qweatherapi.com/'
+  );
+  assert.throws(() => normalizeQWeatherApiHost('not a host with spaces'), /Invalid QWEATHER_API_HOST/);
+});
+
+test('createQWeatherJwt can backdate iat for QWeather clock skew tolerance', () => {
+  const { privateKey } = generateKeyPairSync('ed25519');
+  const privateKeyPem = privateKey.export({ type: 'pkcs8', format: 'pem' });
+
+  const token = createQWeatherJwt({
+    projectId: 'PROJECT_123',
+    credentialId: 'CRED_456',
+    privateKeyPem,
+    nowSeconds: 1783420770,
+    ttlSeconds: 900
+  });
+  const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString('utf8'));
+
+  assert.equal(payload.iat, 1783420770);
+  assert.equal(payload.exp, 1783421670);
 });
 
 test('normalizeQWeatherData keeps the frontend JSON contract stable', () => {

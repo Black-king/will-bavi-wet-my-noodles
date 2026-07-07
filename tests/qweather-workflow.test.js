@@ -8,6 +8,8 @@ test('QWeather update script reads credentials from environment only', async () 
   assert.match(script, /QWEATHER_PROJECT_ID/);
   assert.match(script, /QWEATHER_CREDENTIAL_ID/);
   assert.match(script, /QWEATHER_PRIVATE_KEY/);
+  assert.match(script, /normalizeQWeatherApiHost/);
+  assert.match(script, /Math\.floor\(Date\.now\(\) \/ 1000\) - 30/);
   assert.match(script, /data\/typhoon-bavi\.json/);
   assert.doesNotMatch(script, /CHPN57P5YJ/);
 });

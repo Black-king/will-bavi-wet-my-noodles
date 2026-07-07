@@ -29,6 +29,29 @@ export function createQWeatherJwt({
   return `${signingInput}.${signature}`;
 }
 
+export function normalizeQWeatherApiHost(value) {
+  const trimmed = String(value || '').trim();
+
+  if (!trimmed) {
+    throw new Error('Invalid QWEATHER_API_HOST: value is empty.');
+  }
+
+  const withProtocol = /^[a-z][a-z\d+.-]*:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  let url;
+
+  try {
+    url = new URL(withProtocol);
+  } catch {
+    throw new Error('Invalid QWEATHER_API_HOST: use the API Host from QWeather console, for example https://abc123.def.qweatherapi.com');
+  }
+
+  if (!['http:', 'https:'].includes(url.protocol) || !url.hostname.includes('.')) {
+    throw new Error('Invalid QWEATHER_API_HOST: use the API Host from QWeather console, for example https://abc123.def.qweatherapi.com');
+  }
+
+  return `${url.origin}/`;
+}
+
 export function pickCurrentBaviStorm(storms, year = new Date().getFullYear()) {
   const matches = asArray(storms).filter((storm) => {
     const nameText = [

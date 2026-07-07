@@ -5,6 +5,7 @@ import {
   extractForecastTrack,
   extractObservedTrack,
   extractStormList,
+  normalizeQWeatherApiHost,
   normalizeQWeatherData,
   pickCurrentBaviStorm
 } from '../src/qweather-normalize.js';
@@ -16,7 +17,8 @@ async function main() {
   const token = createQWeatherJwt({
     projectId: config.projectId,
     credentialId: config.credentialId,
-    privateKeyPem: config.privateKeyPem
+    privateKeyPem: config.privateKeyPem,
+    nowSeconds: Math.floor(Date.now() / 1000) - 30
   });
 
   const listPayload = await requestQWeatherJson(config, token, '/v7/tropical/storm-list', {
@@ -72,7 +74,7 @@ function readConfig(env) {
     projectId,
     credentialId,
     privateKeyPem,
-    apiHost: normalizeApiHost(env.QWEATHER_API_HOST || 'https://devapi.qweather.com'),
+    apiHost: normalizeQWeatherApiHost(env.QWEATHER_API_HOST || 'https://devapi.qweather.com'),
     basin: env.QWEATHER_BASIN || 'NP',
     year: Number(env.QWEATHER_YEAR || new Date().getFullYear()),
     dryRun: process.argv.includes('--dry-run')
@@ -103,10 +105,6 @@ async function requestQWeatherJson(config, token, pathname, params) {
   }
 
   return payload;
-}
-
-function normalizeApiHost(value) {
-  return value.endsWith('/') ? value : `${value}/`;
 }
 
 function requiredEnv(env, name) {
