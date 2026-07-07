@@ -69,9 +69,9 @@ QWEATHER_API_HOST
 - `QWEATHER_PRIVATE_KEY` 填 Ed25519 私钥 PEM 内容。可以整段粘贴；如果写成一行，脚本也支持 `\n` 换行。
 - `QWEATHER_API_HOST` 填 QWeather 控制台给你的 API Host；如果不填，脚本默认用 `https://devapi.qweather.com`。
 
-如果由 GitHub Actions 调 QWeather，QWeather 凭据的「应用限制」建议选「不限制」。因为 Actions 出口 IP 不固定，限制为 `bavi.20190220.xyz` 只适用于浏览器前端直接请求，不适用于服务端/CI 请求。
+如果由 GitHub Actions 调 QWeather，QWeather 凭据的「应用限制」建议选「不限制」。因为 Actions 出口 IP 不固定，域名限制只适用于浏览器前端直接请求，不适用于服务端/CI 请求。
 
-页面域名 `bavi.20190220.xyz` 只负责 GitHub Pages 访问；QWeather JWT 公钥不需要和这个域名绑定。公钥上传到 QWeather，私钥只放 GitHub Secrets。
+GitHub Pages 的自定义域名只负责页面访问；QWeather JWT 公钥不需要和页面域名绑定。公钥上传到 QWeather，私钥只放 GitHub Secrets。
 
 ## 免责声明
 

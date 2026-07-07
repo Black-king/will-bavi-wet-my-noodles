@@ -2,6 +2,8 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+.claude/
+.playwright-cli/
 .env
 .env.*
 qweather-private.pem
