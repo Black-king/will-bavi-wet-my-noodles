@@ -18,7 +18,7 @@ test('GitHub Actions workflow updates data without exposing QWeather secrets to 
   const workflow = await readFile(new URL('../.github/workflows/update-typhoon-data.yml', import.meta.url), 'utf8');
 
   assert.match(workflow, /workflow_dispatch:/);
-  assert.match(workflow, /cron: '0 \* \* \* \*'/);
+  assert.match(workflow, /cron: '17 \* \* \* \*'/);
   assert.match(workflow, /QWEATHER_PROJECT_ID: \$\{\{ secrets\.QWEATHER_PROJECT_ID \}\}/);
   assert.match(workflow, /QWEATHER_CREDENTIAL_ID: \$\{\{ secrets\.QWEATHER_CREDENTIAL_ID \}\}/);
   assert.match(workflow, /QWEATHER_PRIVATE_KEY: \$\{\{ secrets\.QWEATHER_PRIVATE_KEY \}\}/);

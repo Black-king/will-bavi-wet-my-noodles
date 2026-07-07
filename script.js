@@ -100,7 +100,8 @@ function renderDataMode() {
   const mode = appState.data.meta.dataMode || '';
   const isLive = mode.includes('qweather-live');
 
-  setText(els.dataModeLabel, isLive ? '实时数据' : '示例数据');
+  const fetchedLabel = appState.data.meta.displayUpdatedAt;
+  setText(els.dataModeLabel, isLive ? (fetchedLabel ? `实时数据 | 抓取 ${fetchedLabel}` : '实时数据') : '示例数据');
   els.dataModeLabel.dataset.mode = isLive ? 'live' : 'sample';
 }
 
