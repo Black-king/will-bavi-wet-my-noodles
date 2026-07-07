@@ -49,6 +49,30 @@ npm test
 
 这样不会在浏览器前端暴露 API Key，也能在接口失败时继续展示上一次成功缓存。
 
+## QWeather + GitHub Pages 配置
+
+当前仓库已加入 `.github/workflows/update-typhoon-data.yml`，每小时会运行一次，也可以在 GitHub Actions 页面手动触发。
+
+在仓库 `Settings -> Secrets and variables -> Actions` 添加这些 Repository secrets：
+
+```text
+QWEATHER_PROJECT_ID
+QWEATHER_CREDENTIAL_ID
+QWEATHER_PRIVATE_KEY
+QWEATHER_API_HOST
+```
+
+说明：
+
+- `QWEATHER_PROJECT_ID` 是 QWeather 项目 ID。
+- `QWEATHER_CREDENTIAL_ID` 是 JWT 凭据 ID，不是公钥 SHA-256。
+- `QWEATHER_PRIVATE_KEY` 填 Ed25519 私钥 PEM 内容。可以整段粘贴；如果写成一行，脚本也支持 `\n` 换行。
+- `QWEATHER_API_HOST` 填 QWeather 控制台给你的 API Host；如果不填，脚本默认用 `https://devapi.qweather.com`。
+
+如果由 GitHub Actions 调 QWeather，QWeather 凭据的「应用限制」建议选「不限制」。因为 Actions 出口 IP 不固定，限制为 `bavi.20190220.xyz` 只适用于浏览器前端直接请求，不适用于服务端/CI 请求。
+
+页面域名 `bavi.20190220.xyz` 只负责 GitHub Pages 访问；QWeather JWT 公钥不需要和这个域名绑定。公钥上传到 QWeather，私钥只放 GitHub Secrets。
+
 ## 免责声明
 
 本页面用于互动展示和生活提醒。正式预警、避险指引和灾害信息请以气象部门及政府部门发布为准。

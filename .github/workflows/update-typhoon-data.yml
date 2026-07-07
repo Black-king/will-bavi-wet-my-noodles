@@ -1,0 +1,42 @@
+name: Update typhoon data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch QWeather typhoon data
+        run: node scripts/update-qweather-data.js
+        env:
+          QWEATHER_PROJECT_ID: ${{ secrets.QWEATHER_PROJECT_ID }}
+          QWEATHER_CREDENTIAL_ID: ${{ secrets.QWEATHER_CREDENTIAL_ID }}
+          QWEATHER_PRIVATE_KEY: ${{ secrets.QWEATHER_PRIVATE_KEY }}
+          QWEATHER_API_HOST: ${{ secrets.QWEATHER_API_HOST }}
+          QWEATHER_BASIN: NP
+          QWEATHER_YEAR: '2026'
+
+      - name: Test static app contract
+        run: node --test tests/*.test.js
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/typhoon-bavi.json
+          git diff --cached --quiet || git commit -m "chore: update typhoon data"
+          git push
