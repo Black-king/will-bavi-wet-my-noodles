@@ -1,6 +1,6 @@
 import { createPrivateKey, sign } from 'node:crypto';
 
-const DEFAULT_CHECKLIST = ['充电宝', '饮用水', '手电筒', '常用药', '窗户检查', '阳台收纳', '简易食品'];
+const DEFAULT_CHECKLIST = ['照明电力', '饮水食物', '常用药', '门窗检查', '阳台收纳'];
 
 export function createQWeatherJwt({
   projectId,

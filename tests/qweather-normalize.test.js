@@ -33,9 +33,9 @@ test('createQWeatherJwt signs an EdDSA token with QWeather project claims', () =
 
 test('pickCurrentBaviStorm prefers the active 2026 Bavi record over historical matches', () => {
   const storm = pickCurrentBaviStorm([
-    { id: '2020-old', name: '巴威', year: 2020, isActive: false },
+    { id: '2020-old', name: '巴威', englishName: 'Bavi', year: 2020, isActive: false },
     { id: '2026-other', name: 'Other', year: 2026, isActive: true },
-    { id: '2026-bavi', name: 'Bavi', year: 2026, isActive: true }
+    { id: '2026-bavi', name: '巴威', englishName: 'Bavi', year: 2026, isActive: true }
   ], 2026);
 
   assert.equal(storm.id, '2026-bavi');
@@ -87,6 +87,6 @@ test('normalizeQWeatherData keeps the frontend JSON contract stable', () => {
   assert.equal(data.track[0].windRadiiKm.r7, 360);
   assert.equal(data.track[1].type, 'forecast');
   assert.equal(data.track[1].label, '07-08 18:00');
-  assert.equal(data.checklist.includes('充电宝'), true);
+  assert.deepEqual(data.checklist, ['照明电力', '饮水食物', '常用药', '门窗检查', '阳台收纳']);
   assert.match(data.disclaimer, /正式预警/);
 });

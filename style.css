@@ -37,9 +37,8 @@ body {
   min-height: 100dvh;
   color: var(--ink);
   background:
-    linear-gradient(135deg, rgba(9, 22, 34, 0.92), rgba(5, 7, 13, 0.98)),
-    radial-gradient(circle at 18% 14%, rgba(121, 216, 208, 0.18), transparent 28%),
-    radial-gradient(circle at 88% 10%, rgba(216, 183, 104, 0.14), transparent 30%),
+    linear-gradient(135deg, rgba(11, 18, 25, 0.96), rgba(5, 7, 13, 0.98)),
+    linear-gradient(90deg, rgba(216, 183, 104, 0.055), transparent 34%, rgba(121, 216, 208, 0.055)),
     var(--void);
 }
 
@@ -54,9 +53,10 @@ button {
 }
 
 .app-shell {
-  width: min(1680px, 100%);
-  margin: 0 auto;
-  padding: 12px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 10px;
 }
 
 .battle-stage {
@@ -68,8 +68,8 @@ button {
 
 .map-panel {
   position: relative;
-  height: min(calc(100dvh - 24px), 920px);
-  min-height: 680px;
+  height: calc(100dvh - 20px);
+  min-height: 720px;
   overflow: hidden;
   border: 1px solid rgba(216, 183, 104, 0.32);
   border-radius: var(--radius);
@@ -106,9 +106,8 @@ button {
 #map {
   width: 100%;
   height: 100%;
-  min-height: 680px;
+  min-height: 720px;
   background: var(--void);
-  filter: saturate(0.92) contrast(1.08);
 }
 
 .leaflet-container {
@@ -131,6 +130,10 @@ button {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.leaflet-tile {
+  filter: brightness(0.54) saturate(0.72) contrast(1.08) hue-rotate(172deg);
 }
 
 .leaflet-control-zoom a {
@@ -167,7 +170,7 @@ button {
   top: 14px;
   left: 14px;
   z-index: 620;
-  width: min(410px, calc(100% - 112px));
+  width: min(360px, calc(100% - 112px));
   padding: 13px;
 }
 
@@ -199,7 +202,7 @@ button {
 }
 
 .realm-grid {
-  display: grid;
+  display: none;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 7px;
   margin-top: 10px;
@@ -228,6 +231,27 @@ button {
   overflow-wrap: anywhere;
   color: #fff8df;
   font-size: clamp(0.92rem, 1.1vw, 1.12rem);
+}
+
+.realm-grid small,
+.realm-lore {
+  display: block;
+  margin-top: 5px;
+  color: rgba(233, 240, 236, 0.64);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.realm-grid small {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.realm-lore {
+  padding-top: 8px;
+  border-top: 1px solid rgba(216, 183, 104, 0.16);
 }
 
 .status-row {
@@ -357,7 +381,7 @@ button {
 
 #timeline {
   width: 100%;
-  height: 6px;
+  height: 18px;
   accent-color: var(--gold);
   border-radius: 999px;
   background:
@@ -370,8 +394,8 @@ button {
 }
 
 #timeline::-webkit-slider-thumb {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border: 2px solid #fff8df;
   border-radius: 50%;
   background: var(--gold);
@@ -387,6 +411,7 @@ button {
 }
 
 .distance-readout {
+  display: none;
   position: absolute;
   top: 212px;
   left: 14px;
@@ -616,7 +641,8 @@ button {
 }
 
 .wind-circle {
-  filter: drop-shadow(0 0 10px rgba(216, 183, 104, 0.16));
+  filter: drop-shadow(0 0 18px rgba(216, 183, 104, 0.34));
+  animation: wind-ring-breathe 4.5s ease-in-out infinite;
 }
 
 .hangzhou-marker {
@@ -808,6 +834,17 @@ button {
 @keyframes ruler-flow {
   to {
     stroke-dashoffset: -60;
+  }
+}
+
+@keyframes wind-ring-breathe {
+  0%,
+  100% {
+    opacity: 0.84;
+  }
+
+  50% {
+    opacity: 1;
   }
 }
 

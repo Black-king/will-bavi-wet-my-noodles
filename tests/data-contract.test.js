@@ -15,4 +15,6 @@ test('typhoon data exposes the fields the frontend needs', async () => {
   assert.ok(data.track.every((point) => typeof point.lat === 'number' && typeof point.lon === 'number'));
   assert.ok(data.hangzhou.lat);
   assert.ok(data.hangzhou.lon);
+  assert.equal(data.checklist.length, 5);
+  assert.deepEqual(data.checklist, ['照明电力', '饮水食物', '常用药', '门窗检查', '阳台收纳']);
 });

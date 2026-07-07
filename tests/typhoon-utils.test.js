@@ -62,16 +62,18 @@ test('derives Bavi realm from intensity and Hangzhou distance', () => {
 });
 
 test('derives Hangzhou realm from distance, risk, and defensive checklist progress', () => {
-  assert.deepEqual(
-    deriveHangzhouRealm({ distanceKm: 1200, riskLevel: 'watch', completedSupplies: 0, totalSupplies: 5 }),
-    {
-      key: 'lunhai',
-      name: '轮海初开',
-      stage: 1,
-      stability: 0,
-      visualClass: 'realm-lunhai'
-    }
-  );
+  const watchRealm = deriveHangzhouRealm({
+    distanceKm: 1200,
+    riskLevel: 'watch',
+    completedSupplies: 0,
+    totalSupplies: 5
+  });
+
+  assert.equal(watchRealm.key, 'lunhai');
+  assert.equal(watchRealm.name, '轮海初开');
+  assert.equal(watchRealm.stage, 1);
+  assert.equal(watchRealm.stability, 0);
+  assert.equal(watchRealm.visualClass, 'realm-lunhai');
 
   assert.equal(
     deriveHangzhouRealm({ distanceKm: 650, riskLevel: 'medium', completedSupplies: 3, totalSupplies: 5 }).name,
@@ -97,4 +99,21 @@ test('imperial artifacts define map-first controls and safety tools', () => {
   assert.equal(artifacts[0].label, '量天尺');
   assert.equal(artifacts[3].panel, 'checklist');
   assert.equal(artifacts.at(-1).panel, 'trust');
+});
+
+test('realms include readable introductions and action meaning', () => {
+  const bavi = deriveBaviRealm({ distanceKm: 560, windSpeedMps: 58, pressureHpa: 925 });
+  const hangzhou = deriveHangzhouRealm({
+    distanceKm: 390,
+    riskLevel: 'medium',
+    completedSupplies: 5,
+    totalSupplies: 5
+  });
+
+  assert.equal(typeof bavi.description, 'string');
+  assert.equal(typeof bavi.basis, 'string');
+  assert.equal(typeof hangzhou.description, 'string');
+  assert.equal(typeof hangzhou.advice, 'string');
+  assert.match(bavi.description, /巴威|台风|风/);
+  assert.match(hangzhou.description, /杭州|西湖|防台/);
 });
