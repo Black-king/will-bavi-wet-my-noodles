@@ -17,27 +17,17 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <main class="app-shell">
-      <header class="battle-hero">
-        <section class="city-card character-card" id="hangzhou-squad">
-          <div class="card-label">杭州小队</div>
-          <div class="hangzhou-illustration" aria-hidden="true">
-            <div class="lake"></div>
-            <div class="bridge"></div>
-            <div class="pagoda">杭</div>
-            <div class="snack-ticket">葱包桧儿已就位</div>
-          </div>
-          <h2>西湖边先别慌</h2>
-          <p id="city-banter">杭州正在观察巴威的走位，阳台和窗户进入待命状态。</p>
-        </section>
-
-        <section class="hero-copy">
-          <p class="eyebrow">实时路径演示 · 杭州生活版</p>
-          <h1>杭州，巴威来了没？</h1>
-          <p class="hero__summary" id="hero-summary">
-            正在读取台风位置，先把伞和充电宝放到同一个抽屉。
-          </p>
-          <div class="headline-strip" id="status-panel" aria-live="polite">
+    <main class="app-shell map-first-shell">
+      <section class="battle-stage" aria-label="台风路径和防台工具">
+        <div class="map-panel">
+          <header class="map-title">
+            <div>
+              <span>杭州，巴威来了没？</span>
+              <strong id="active-point-label">--</strong>
+            </div>
+            <p id="hero-summary">正在读取台风位置，先把伞和充电宝放到同一个抽屉。</p>
+          </header>
+          <div class="map-status-strip" id="status-panel" aria-live="polite">
             <div class="headline-pill headline-pill--risk">
               <span>抗台姿势</span>
               <strong id="risk-label">读取中</strong>
@@ -51,47 +41,6 @@
               <strong id="storm-level">--</strong>
             </div>
           </div>
-        </section>
-
-        <section class="storm-card character-card" id="bavi-player">
-          <div class="card-label">巴威选手</div>
-          <aside class="storm-avatar" aria-label="巴威状态角色">
-            <div class="storm-avatar__eye storm-avatar__eye--left"></div>
-            <div class="storm-avatar__eye storm-avatar__eye--right"></div>
-            <div class="storm-avatar__mouth"></div>
-            <span id="storm-mood-label">正在读取巴威状态</span>
-          </aside>
-          <div class="storm-stats">
-            <p id="wind-pressure">-- m/s · -- hPa</p>
-            <p>移动方向：<span id="storm-move">--</span></p>
-          </div>
-        </section>
-      </header>
-
-      <section class="comic-metrics" aria-label="杭州生活指数">
-        <article class="comic-ticket">
-          <span>阳台危险指数</span>
-          <strong id="balcony-index">--</strong>
-          <p>花盆、拖把、晾衣架有没有开始开会？</p>
-        </article>
-        <article class="comic-ticket">
-          <span>外卖配送难度</span>
-          <strong id="takeout-index">--</strong>
-          <p>能不能点夜宵，先看巴威脸色。</p>
-        </article>
-        <article class="comic-ticket">
-          <span>数据时间</span>
-          <strong id="updated-at">--</strong>
-          <p id="data-freshness">等待数据源更新。</p>
-        </article>
-      </section>
-
-      <section class="battle-stage" aria-label="台风路径和防台工具">
-        <div class="map-panel">
-          <div class="map-title">
-            <span>巴威行军路线</span>
-            <strong id="active-point-label">--</strong>
-          </div>
           <div id="map" aria-label="台风巴威路径地图"></div>
           <div class="map-legend" aria-label="地图图例">
             <span><i class="legend-line legend-line--observed"></i> 已走路线</span>
@@ -101,10 +50,33 @@
         </div>
 
         <aside class="battle-tools">
+          <header class="compact-brief">
+            <div>
+              <span class="eyebrow">杭州生活版</span>
+              <h1>台风巴威<br />杭州生存指南</h1>
+              <p id="city-banter">杭州正在观察巴威的走位，阳台和窗户进入待命状态。</p>
+            </div>
+            <div class="data-badge" id="data-mode-label">读取数据状态</div>
+          </header>
+
+          <section class="storm-card character-card" id="bavi-player">
+            <div class="card-label">巴威选手</div>
+            <aside class="storm-avatar" aria-label="巴威状态角色">
+              <div class="storm-avatar__eye storm-avatar__eye--left"></div>
+              <div class="storm-avatar__eye storm-avatar__eye--right"></div>
+              <div class="storm-avatar__mouth"></div>
+              <span id="storm-mood-label">正在读取巴威状态</span>
+            </aside>
+            <div class="storm-stats">
+              <p id="wind-pressure">-- m/s · -- hPa</p>
+              <p>移动方向：<span id="storm-move">--</span></p>
+            </div>
+          </section>
+
           <section class="sticky-note timeline-note">
             <div class="section-heading">
               <span>战况回放</span>
-              <strong>拖一拖</strong>
+              <strong id="timeline-current-label">最近实况</strong>
             </div>
             <input id="timeline" type="range" min="0" value="0" step="1" />
             <div class="timeline-meta">
@@ -114,18 +86,51 @@
             <p id="active-point-detail" class="body-note">拖动查看巴威怎么走过来。</p>
           </section>
 
+          <section class="comic-metrics" aria-label="杭州生活指数">
+            <article class="comic-ticket">
+              <span>阳台危险指数</span>
+              <strong id="balcony-index">--</strong>
+              <p>花盆、拖把、晾衣架有没有开始开会？</p>
+            </article>
+            <article class="comic-ticket">
+              <span>外卖配送难度</span>
+              <strong id="takeout-index">--</strong>
+              <p>能不能点夜宵，先看巴威脸色。</p>
+            </article>
+            <article class="comic-ticket">
+              <span>数据状态</span>
+              <strong id="updated-at">--</strong>
+              <p id="data-freshness">等待数据源更新。</p>
+            </article>
+          </section>
+
           <section class="receipt-note">
             <div class="section-heading">
               <span>杭州备战小票</span>
-              <strong>勾一勾</strong>
+              <strong id="supply-progress">0 / 0</strong>
             </div>
+            <p class="receipt-note__hint">像打卡一样把家里防台物资点亮。</p>
             <div id="supply-list" class="supply-list"></div>
-            <textarea
-              id="share-text"
-              class="share-text"
-              readonly
-              aria-label="防台分享文案"
-            ></textarea>
+            <label class="share-preview">
+              <span>可复制提醒</span>
+              <textarea
+                id="share-text"
+                class="share-text"
+                readonly
+                aria-label="防台分享文案"
+              ></textarea>
+            </label>
+          </section>
+
+          <section class="city-card character-card" id="hangzhou-squad">
+            <div class="card-label">杭州小队</div>
+            <div class="hangzhou-illustration" aria-hidden="true">
+              <div class="lake"></div>
+              <div class="bridge"></div>
+              <div class="pagoda">杭</div>
+              <div class="snack-ticket">葱包桧儿已就位</div>
+            </div>
+            <h2>西湖边先别慌</h2>
           </section>
 
           <section class="fine-print">

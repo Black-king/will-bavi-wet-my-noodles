@@ -30,12 +30,15 @@ const els = {
   takeoutIndex: document.querySelector('#takeout-index'),
   updatedAt: document.querySelector('#updated-at'),
   dataFreshness: document.querySelector('#data-freshness'),
+  dataModeLabel: document.querySelector('#data-mode-label'),
   timeline: document.querySelector('#timeline'),
+  timelineCurrentLabel: document.querySelector('#timeline-current-label'),
   timelineStart: document.querySelector('#timeline-start'),
   timelineEnd: document.querySelector('#timeline-end'),
   activePointLabel: document.querySelector('#active-point-label'),
   activePointDetail: document.querySelector('#active-point-detail'),
   supplyList: document.querySelector('#supply-list'),
+  supplyProgress: document.querySelector('#supply-progress'),
   shareText: document.querySelector('#share-text'),
   sourceNote: document.querySelector('#source-note'),
   disclaimer: document.querySelector('#disclaimer'),
@@ -56,6 +59,7 @@ async function init() {
     appState.selectedIndex = latestObservedIndex(appState.data.track);
 
     renderStatus();
+    renderDataMode();
     renderMap();
     renderTimeline();
     renderChecklist();
@@ -88,6 +92,29 @@ function renderStatus() {
   els.takeoutIndex.textContent = takeoutIndexText(distanceKm, latest.windSpeedMps);
 
   updateShareText();
+}
+
+function renderDataMode() {
+  const mode = appState.data.meta.dataMode || '';
+  const isLive = mode.includes('qweather-live');
+  const isSample = mode.includes('sample') || !isLive;
+
+  if (isLive) {
+    els.dataModeLabel.textContent = '实时数据';
+    els.dataModeLabel.dataset.mode = 'live';
+    els.dataFreshness.textContent = `QWeather 已接入，最近更新：${appState.data.meta.displayUpdatedAt}`;
+    return;
+  }
+
+  if (isSample) {
+    els.dataModeLabel.textContent = '示例数据';
+    els.dataModeLabel.dataset.mode = 'sample';
+    els.dataFreshness.textContent = '当前是示例数据，不代表实时台风预警。QWeather Actions 跑通后会自动切换为实时更新。';
+    return;
+  }
+
+  els.dataModeLabel.textContent = '数据待确认';
+  els.dataModeLabel.dataset.mode = 'stale';
 }
 
 function renderMap() {
@@ -155,11 +182,13 @@ function renderTimeline() {
   els.timelineStart.textContent = track[0].label;
   els.timelineEnd.textContent = track[track.length - 1].label;
   updateActivePoint(track[appState.selectedIndex]);
+  updateTimelineProgress();
 
   els.timeline.addEventListener('input', (event) => {
     appState.selectedIndex = Number(event.target.value);
     const point = track[appState.selectedIndex];
     updateActivePoint(point);
+    updateTimelineProgress();
 
     if (appState.stormMarker) {
       appState.stormMarker.setLatLng(toLatLon(point));
@@ -186,6 +215,7 @@ function renderChecklist() {
         appState.checkedSupplies.delete(item);
       }
 
+      updateSupplyProgress();
       updateShareText();
     });
 
@@ -196,7 +226,16 @@ function renderChecklist() {
     els.supplyList.append(label);
   });
 
+  updateSupplyProgress();
   updateShareText();
+}
+
+function updateSupplyProgress() {
+  const total = appState.data?.checklist.length || 0;
+  const checked = appState.checkedSupplies.size;
+
+  els.supplyProgress.textContent = `${checked} / ${total}`;
+  els.supplyProgress.dataset.done = checked === total && total > 0 ? 'true' : 'false';
 }
 
 function renderNotes() {
@@ -242,9 +281,18 @@ function updateActivePoint(point) {
   const typeLabel = point.type === 'observed' ? '实况' : '预报';
 
   els.activePointLabel.textContent = `${point.label} · ${typeLabel}`;
+  els.timelineCurrentLabel.textContent = point.type === 'observed' ? '最近实况' : '预报点';
   els.activePointDetail.textContent = `${point.level}，${point.windSpeedMps} m/s，中心距杭州约 ${Math.round(
     distanceKm
   )} km，移动方向 ${point.movement}。`;
+}
+
+function updateTimelineProgress() {
+  const max = Number(els.timeline.max || 0);
+  const value = Number(els.timeline.value || 0);
+  const progress = max > 0 ? (value / max) * 100 : 0;
+
+  els.timeline.style.setProperty('--timeline-progress', `${progress}%`);
 }
 
 function updateShareText() {

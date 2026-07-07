@@ -6,9 +6,13 @@ test('html shell contains required app regions and dependencies', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
   assert.match(html, /id="map"/);
+  assert.match(html, /class="app-shell map-first-shell"/);
   assert.match(html, /id="status-panel"/);
+  assert.match(html, /id="data-mode-label"/);
   assert.match(html, /id="timeline"/);
   assert.match(html, /id="supply-list"/);
+  assert.match(html, /id="supply-progress"/);
+  assert.match(html, /class="share-preview"/);
   assert.match(html, /id="hangzhou-squad"/);
   assert.match(html, /id="bavi-player"/);
   assert.match(html, /杭州小队/);
@@ -25,8 +29,28 @@ test('script reads the normalized JSON and renders core sections', async () => {
   assert.match(js, /renderStatus/);
   assert.match(js, /renderTimeline/);
   assert.match(js, /renderChecklist/);
+  assert.match(js, /updateSupplyProgress/);
   assert.match(js, /balcony-index/);
   assert.match(js, /takeout-index/);
+  assert.match(js, /renderDataMode/);
+  assert.match(js, /updateTimelineProgress/);
+});
+
+test('map-first layout makes the path map the primary first-screen surface', async () => {
+  const css = await readFile(new URL('../style.css', import.meta.url), 'utf8');
+
+  assert.match(css, /\.battle-stage[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*340px/);
+  assert.match(css, /\.map-panel[\s\S]*height:\s*min\(calc\(100dvh - 40px\),\s*780px\)/);
+  assert.match(css, /\.compact-brief[\s\S]*font-size:\s*clamp\(1\.5rem,\s*3vw,\s*2\.35rem\)/);
+});
+
+test('supply checklist is styled as a compact task card instead of a large form', async () => {
+  const css = await readFile(new URL('../style.css', import.meta.url), 'utf8');
+
+  assert.match(css, /\.receipt-note[\s\S]*background:[\s\S]*linear-gradient\(145deg/);
+  assert.match(css, /\.supply-list[\s\S]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(css, /\.supply-item input:checked \+ span/);
+  assert.match(css, /\.share-preview/);
 });
 
 test('map container has stable sizing and Leaflet receives a size refresh', async () => {
@@ -35,8 +59,8 @@ test('map container has stable sizing and Leaflet receives a size refresh', asyn
     readFile(new URL('../style.css', import.meta.url), 'utf8')
   ]);
 
-  assert.match(css, /\.map-panel[\s\S]*height:\s*640px/);
-  assert.match(css, /#map[\s\S]*height:\s*640px/);
+  assert.match(css, /\.map-panel[\s\S]*height:\s*min\(calc\(100dvh - 40px\),\s*780px\)/);
+  assert.match(css, /#map[\s\S]*height:\s*100%/);
   assert.match(js, /invalidateSize/);
   assert.match(js, /ResizeObserver/);
 });
