@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="台风巴威：杭州生存指南，用滑稽的杭州 VS 台风视角查看路径、距离、风险指数和防台清单。"
+      content="台风巴威：杭州生存指南，用地图主舞台展示巴威与西湖圣地的距离、路径、境界、风圈和防台准备。"
     />
-    <title>杭州，巴威来了没？</title>
+    <title>巴威临杭，西湖圣地守城录</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -18,152 +18,114 @@
   </head>
   <body>
     <main class="app-shell map-first-shell">
-      <section class="battle-stage" aria-label="台风路径和防台工具">
+      <section class="battle-stage" aria-label="巴威与杭州地图主舞台">
         <div class="map-panel">
-          <header class="map-title">
-            <div>
-              <span>杭州，巴威来了没？</span>
-              <strong id="active-point-label">--</strong>
-            </div>
-            <p id="hero-summary">正在读取台风位置，先把伞和充电宝放到同一个抽屉。</p>
-          </header>
-          <div class="map-status-strip" id="status-panel" aria-live="polite">
-            <div class="headline-pill headline-pill--risk">
-              <span>抗台姿势</span>
-              <strong id="risk-label">读取中</strong>
-            </div>
-            <div class="headline-pill">
-              <span>估算距离</span>
-              <strong id="distance-value">-- km</strong>
-              <p id="distance-note" class="metric-note">等待台风中心坐标。</p>
-            </div>
-            <div class="headline-pill">
-              <span>当前强度</span>
-              <strong id="storm-level">--</strong>
-            </div>
-          </div>
           <div id="map" aria-label="台风巴威路径地图"></div>
-          <div class="map-legend" aria-label="路径数据和地图图例">
-            <div class="legend-heading">
-              <span>路径数据</span>
-              <strong id="route-data-mode">读取中</strong>
-            </div>
-            <div class="legend-items">
-              <span><i class="legend-line legend-line--observed"></i> 实况路径</span>
-              <span><i class="legend-line legend-line--forecast"></i> 预报路径</span>
-              <span><i class="legend-dot"></i> 杭州阵地</span>
-            </div>
-            <dl class="route-data-grid">
-              <div>
-                <dt>实况段</dt>
-                <dd id="observed-route-detail">--</dd>
-              </div>
-              <div>
-                <dt>预报段</dt>
-                <dd id="forecast-route-detail">--</dd>
-              </div>
-              <div>
-                <dt>当前中心</dt>
-                <dd id="active-coord-detail">--</dd>
-              </div>
-            </dl>
-          </div>
-        </div>
 
-        <aside class="battle-tools">
-          <header class="compact-brief">
-            <div>
-              <span class="eyebrow">杭州生活版</span>
-              <h1>台风巴威<br />杭州生存指南</h1>
-              <p id="city-banter">杭州正在观察巴威的走位，阳台和窗户进入待命状态。</p>
+          <header class="realm-panel" id="realm-panel" aria-live="polite">
+            <p class="realm-panel__kicker">巴威 BAVI | 归墟帝影</p>
+            <h1>西湖圣地守城录</h1>
+            <p id="hero-summary" class="realm-panel__summary">
+              正在读取天机推演，正式预警请以气象部门发布为准。
+            </p>
+            <div class="realm-grid">
+              <article>
+                <span>西湖圣地</span>
+                <strong id="hangzhou-realm">轮海初开</strong>
+              </article>
+              <article>
+                <span>巴威称号</span>
+                <strong id="bavi-realm">归墟帝影</strong>
+              </article>
+              <article>
+                <span>量天尺</span>
+                <strong id="distance-value">-- km</strong>
+              </article>
             </div>
-            <div class="data-badge" id="data-mode-label">读取数据状态</div>
+            <div class="status-row" id="status-panel">
+              <span id="risk-label">读取中</span>
+              <span id="storm-level">--</span>
+              <span id="updated-at">--</span>
+            </div>
           </header>
 
-          <section class="storm-card character-card" id="bavi-player">
-            <div class="card-label">巴威选手</div>
-            <aside class="storm-avatar" aria-label="巴威状态角色">
-              <div class="storm-avatar__eye storm-avatar__eye--left"></div>
-              <div class="storm-avatar__eye storm-avatar__eye--right"></div>
-              <div class="storm-avatar__mouth"></div>
-              <span id="storm-mood-label">正在读取巴威状态</span>
-            </aside>
-            <div class="storm-stats">
-              <p id="wind-pressure">-- m/s · -- hPa</p>
-              <p>移动方向：<span id="storm-move">--</span></p>
-            </div>
-          </section>
+          <nav class="artifact-dock" id="artifact-dock" aria-label="帝兵工具"></nav>
 
-          <section class="sticky-note timeline-note">
-            <div class="section-heading">
-              <span>战况回放</span>
-              <strong id="timeline-current-label">最近实况</strong>
+          <aside class="artifact-panel" id="artifact-panel" aria-live="polite">
+            <span id="artifact-panel-title">天机镜</span>
+            <p id="artifact-panel-body">数据载入后，可查看距离、风险、风圈、清单和来源。</p>
+          </aside>
+
+          <section class="map-route-panel" aria-label="天机推演">
+            <div class="route-panel__head">
+              <div>
+                <span>虚空盘</span>
+                <strong id="timeline-current-label">最近实况</strong>
+              </div>
+              <p id="active-point-label">--</p>
             </div>
             <input id="timeline" type="range" min="0" value="0" step="1" />
             <div class="timeline-meta">
               <span id="timeline-start">--</span>
               <span id="timeline-end">--</span>
             </div>
-            <p id="active-point-detail" class="body-note">拖动查看巴威怎么走过来。</p>
+            <p id="active-point-detail">拖动时间轴，查看巴威逼近时杭州境界如何变化。</p>
           </section>
 
-          <section class="comic-metrics" aria-label="杭州生活指数">
-            <article class="comic-ticket">
-              <span>阳台危险指数</span>
-              <strong id="balcony-index">--</strong>
-              <p>花盆、拖把、晾衣架有没有开始开会？</p>
-            </article>
-            <article class="comic-ticket">
-              <span>外卖配送难度</span>
-              <strong id="takeout-index">--</strong>
-              <p>能不能点夜宵，先看巴威脸色。</p>
-            </article>
-            <article class="comic-ticket">
-              <span>数据状态</span>
-              <strong id="updated-at">--</strong>
-              <p id="data-freshness">等待数据源更新。</p>
-            </article>
+          <div class="distance-readout" id="distance-ruler-label">量天尺待命</div>
+
+          <div class="breakthrough-banner" id="breakthrough-banner" role="status" aria-live="polite">
+            <span>天机有变</span>
+            <strong id="breakthrough-title">西湖圣地破境</strong>
+            <p id="breakthrough-detail">境界突破会在关键距离触发。</p>
+          </div>
+        </div>
+
+        <aside class="battle-tools" aria-label="地图辅助信息">
+          <section class="side-card side-card--storm" id="bavi-player">
+            <div class="side-card__label">归墟帝影</div>
+            <h2>巴威 BAVI</h2>
+            <p id="wind-pressure">-- m/s | -- hPa</p>
+            <p>移动方向：<span id="storm-move">--</span></p>
+            <p id="storm-mood-label">正在读取巴威状态。</p>
           </section>
 
-          <section class="receipt-note">
+          <section class="side-card side-card--city" id="hangzhou-squad">
+            <div class="side-card__label">西湖圣地</div>
+            <h2 id="city-banter">杭州护城大阵待命。</h2>
+            <p id="distance-note">距离按台风中心与杭州中心点估算。</p>
+            <div class="life-grid" aria-label="杭州生活指数">
+              <article>
+                <span>阳台阵眼</span>
+                <strong id="balcony-index">--</strong>
+              </article>
+              <article>
+                <span>外卖天路</span>
+                <strong id="takeout-index">--</strong>
+              </article>
+            </div>
+          </section>
+
+          <section class="side-card side-card--checklist">
+            <div class="side-card__label">道宫五灯</div>
             <div class="section-heading">
-              <span>杭州备战小票</span>
+              <span>防台准备</span>
               <strong id="supply-progress">0 / 0</strong>
             </div>
-            <p class="receipt-note__hint">像打卡一样把家里防台物资点亮。</p>
             <div id="supply-list" class="supply-list"></div>
             <label class="share-preview">
-              <span>可复制提醒</span>
-              <textarea
-                id="share-text"
-                class="share-text"
-                readonly
-                aria-label="防台分享文案"
-              ></textarea>
+              <span>传讯玉简</span>
+              <textarea id="share-text" class="share-text" readonly aria-label="防台分享文案"></textarea>
             </label>
           </section>
 
-          <section class="city-card character-card" id="hangzhou-squad">
-            <div class="card-label">杭州小队</div>
-            <div class="hangzhou-illustration" aria-hidden="true">
-              <div class="lake"></div>
-              <div class="bridge"></div>
-              <div class="pagoda">杭</div>
-              <div class="snack-ticket">葱包桧儿已就位</div>
-            </div>
-            <h2>西湖边先别慌</h2>
-          </section>
-
-          <section class="fine-print trust-note">
-            <div class="section-heading">
-              <span>安全提示</span>
-              <strong>先看官方</strong>
-            </div>
-            <div class="trust-stack">
-              <p id="risk-summary" class="trust-item trust-item--primary">正在载入台风数据。</p>
-              <p id="source-note" class="trust-item"></p>
-              <p id="disclaimer" class="trust-item"></p>
-            </div>
+          <section class="side-card side-card--trust" id="trust-panel">
+            <div class="side-card__label">天机镜</div>
+            <p id="risk-summary">正在载入台风数据。</p>
+            <p id="data-freshness">等待数据源更新。</p>
+            <p id="source-note"></p>
+            <p id="disclaimer">正式预警、停课停运、交通调整和避险指引，请以气象部门及政府部门发布为准。</p>
+            <span class="data-badge" id="data-mode-label">读取数据状态</span>
           </section>
         </aside>
       </section>

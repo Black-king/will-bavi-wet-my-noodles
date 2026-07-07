@@ -1,10 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  buildChecklistShareText,
+  classifyHangzhouRisk,
+  deriveBaviRealm,
+  deriveHangzhouRealm,
+  getImperialArtifacts,
   getLatestObservedPoint,
   haversineDistanceKm,
-  classifyHangzhouRisk,
-  buildChecklistShareText,
   typhoonMood
 } from '../src/typhoon-utils.js';
 
@@ -49,4 +52,49 @@ test('builds share text from checked supplies', () => {
   assert.match(text, /杭州抗台指数：较高/);
   assert.match(text, /距离杭州约 520 km/);
   assert.match(text, /充电宝、饮用水/);
+});
+
+test('derives Bavi realm from intensity and Hangzhou distance', () => {
+  assert.equal(deriveBaviRealm({ distanceKm: 920, windSpeedMps: 28, pressureHpa: 982 }).name, '东海风君');
+  assert.equal(deriveBaviRealm({ distanceKm: 760, windSpeedMps: 48, pressureHpa: 945 }).name, '巴威天尊');
+  assert.equal(deriveBaviRealm({ distanceKm: 560, windSpeedMps: 58, pressureHpa: 925 }).name, '归墟帝影');
+  assert.equal(deriveBaviRealm({ distanceKm: 230, windSpeedMps: 42, pressureHpa: 960 }).name, '归墟压境');
+});
+
+test('derives Hangzhou realm from distance, risk, and defensive checklist progress', () => {
+  assert.deepEqual(
+    deriveHangzhouRealm({ distanceKm: 1200, riskLevel: 'watch', completedSupplies: 0, totalSupplies: 5 }),
+    {
+      key: 'lunhai',
+      name: '轮海初开',
+      stage: 1,
+      stability: 0,
+      visualClass: 'realm-lunhai'
+    }
+  );
+
+  assert.equal(
+    deriveHangzhouRealm({ distanceKm: 650, riskLevel: 'medium', completedSupplies: 3, totalSupplies: 5 }).name,
+    '四极镇城'
+  );
+  assert.equal(
+    deriveHangzhouRealm({ distanceKm: 390, riskLevel: 'medium', completedSupplies: 5, totalSupplies: 5 }).name,
+    '化龙守望'
+  );
+  assert.equal(
+    deriveHangzhouRealm({ distanceKm: 220, riskLevel: 'high', completedSupplies: 5, totalSupplies: 5 }).name,
+    '仙台临战'
+  );
+});
+
+test('imperial artifacts define map-first controls and safety tools', () => {
+  const artifacts = getImperialArtifacts();
+
+  assert.deepEqual(
+    artifacts.map((artifact) => artifact.key),
+    ['liangtianchi', 'xihu-map', 'wind-ruler', 'daogong-lamps', 'void-disk', 'tianji-mirror']
+  );
+  assert.equal(artifacts[0].label, '量天尺');
+  assert.equal(artifacts[3].panel, 'checklist');
+  assert.equal(artifacts.at(-1).panel, 'trust');
 });
