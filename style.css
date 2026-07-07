@@ -1154,7 +1154,13 @@ body.is-divining #timeline::-webkit-slider-thumb {
   transform-origin: center;
   /* --ward: 防护强度，由天命人境界类设定（轮海 0.3 → 帝关 1.0） */
   --ward: 0.5;
-  filter: drop-shadow(0 0 calc(8px + var(--ward) * 24px) rgba(242, 217, 138, calc(0.14 + var(--ward) * 0.24)));
+  --ward-primary: 242, 217, 138;
+  --ward-secondary: 121, 216, 208;
+  --ward-alert: 194, 64, 42;
+  --ward-ring: 10px;
+  filter:
+    drop-shadow(0 0 calc(8px + var(--ward) * 24px) rgba(var(--ward-primary), calc(0.14 + var(--ward) * 0.24)))
+    drop-shadow(0 0 calc(var(--ward-ring) + var(--ward) * 14px) rgba(var(--ward-secondary), calc(0.08 + var(--ward) * 0.16)));
   transition: filter var(--dur-base) var(--ease-out);
 }
 
@@ -1162,7 +1168,7 @@ body.is-divining #timeline::-webkit-slider-thumb {
 
 .hangzhou-marker__shield {
   position: absolute;
-  inset: -4px;
+  inset: calc(-4px - var(--ward-ring));
   z-index: 1;
   border-radius: 50%;
   opacity: 0;
@@ -1175,14 +1181,14 @@ body.is-divining #timeline::-webkit-slider-thumb {
     radial-gradient(
       circle at center,
       transparent 52%,
-      rgba(121, 216, 208, calc(0.05 + var(--ward) * 0.12)) 66%,
-      rgba(242, 217, 138, calc(0.08 + var(--ward) * 0.22)) 84%,
+      rgba(var(--ward-secondary), calc(0.05 + var(--ward) * 0.12)) 66%,
+      rgba(var(--ward-primary), calc(0.08 + var(--ward) * 0.22)) 84%,
       transparent 96%
     );
   box-shadow:
-    0 0 calc(18px + var(--ward) * 30px) rgba(242, 217, 138, calc(0.2 + var(--ward) * 0.35)),
-    inset 0 0 calc(14px + var(--ward) * 22px) rgba(121, 216, 208, calc(0.12 + var(--ward) * 0.2));
-  transform: scale(calc(0.86 + var(--ward) * 0.18));
+    0 0 calc(18px + var(--ward-ring) + var(--ward) * 30px) rgba(var(--ward-primary), calc(0.2 + var(--ward) * 0.35)),
+    inset 0 0 calc(14px + var(--ward) * 22px) rgba(var(--ward-secondary), calc(0.12 + var(--ward) * 0.2));
+  transform: scale(calc(0.82 + var(--ward) * 0.26));
   animation: shield-breathe calc(5s - var(--ward) * 2.4s) ease-in-out infinite;
 }
 
@@ -1190,7 +1196,7 @@ body.is-divining #timeline::-webkit-slider-thumb {
 .is-shielded .hangzhou-marker__shield--ward {
   background: none;
   box-shadow: none;
-  border: 1px dashed rgba(242, 217, 138, calc(0.25 + var(--ward) * 0.6));
+  border: 1px dashed rgba(var(--ward-primary), calc(0.25 + var(--ward) * 0.6));
   animation: array-rotate calc(26s - var(--ward) * 14s) linear infinite;
 }
 
@@ -1201,8 +1207,8 @@ body.is-divining #timeline::-webkit-slider-thumb {
 .is-fully-prepped {
   filter:
     drop-shadow(0 0 24px rgba(242, 217, 138, 0.72))
-    drop-shadow(0 0 54px rgba(121, 216, 208, 0.42))
-    drop-shadow(0 0 86px rgba(242, 217, 138, 0.28));
+    drop-shadow(0 0 54px rgba(var(--ward-secondary), 0.42))
+    drop-shadow(0 0 86px rgba(var(--ward-primary), 0.28));
 }
 
 .is-fully-prepped::before,
@@ -1214,7 +1220,7 @@ body.is-divining #timeline::-webkit-slider-thumb {
 }
 
 .is-fully-prepped::before {
-  inset: -34px;
+  inset: calc(-34px - var(--ward-ring));
   z-index: 0;
   border: 2px solid rgba(242, 217, 138, 0.72);
   background:
@@ -1224,11 +1230,11 @@ body.is-divining #timeline::-webkit-slider-thumb {
       transparent 0 18deg,
       rgba(242, 217, 138, 0.78) 18deg 22deg,
       transparent 22deg 92deg,
-      rgba(121, 216, 208, 0.64) 92deg 96deg,
+      rgba(var(--ward-secondary), 0.64) 92deg 96deg,
       transparent 96deg 180deg,
       rgba(242, 217, 138, 0.78) 180deg 184deg,
       transparent 184deg 270deg,
-      rgba(121, 216, 208, 0.64) 270deg 274deg,
+      rgba(var(--ward-secondary), 0.64) 270deg 274deg,
       transparent 274deg
     );
   box-shadow:
@@ -1238,12 +1244,12 @@ body.is-divining #timeline::-webkit-slider-thumb {
 }
 
 .is-fully-prepped::after {
-  inset: -18px;
+  inset: calc(-18px - var(--ward-ring) * 0.45);
   z-index: 2;
-  border: 1px solid rgba(121, 216, 208, 0.7);
-  background: radial-gradient(circle at center, transparent 54%, rgba(121, 216, 208, 0.2) 70%, transparent 82%);
+  border: 1px solid rgba(var(--ward-secondary), 0.7);
+  background: radial-gradient(circle at center, transparent 54%, rgba(var(--ward-secondary), 0.2) 70%, transparent 82%);
   box-shadow:
-    0 0 30px rgba(121, 216, 208, 0.42),
+    0 0 30px rgba(var(--ward-secondary), 0.42),
     0 0 58px rgba(242, 217, 138, 0.34);
   animation: full-prep-pulse 1.8s ease-in-out infinite reverse;
 }
@@ -1254,13 +1260,13 @@ body.is-divining #timeline::-webkit-slider-thumb {
     radial-gradient(
       circle at center,
       transparent 48%,
-      rgba(121, 216, 208, calc(0.18 + var(--ward) * 0.18)) 62%,
-      rgba(242, 217, 138, calc(0.28 + var(--ward) * 0.32)) 82%,
+      rgba(var(--ward-secondary), calc(0.18 + var(--ward) * 0.18)) 62%,
+      rgba(var(--ward-primary), calc(0.28 + var(--ward) * 0.32)) 82%,
       transparent 98%
     );
   box-shadow:
-    0 0 calc(38px + var(--ward) * 48px) rgba(242, 217, 138, calc(0.46 + var(--ward) * 0.28)),
-    0 0 calc(58px + var(--ward) * 68px) rgba(121, 216, 208, calc(0.24 + var(--ward) * 0.22)),
+    0 0 calc(38px + var(--ward-ring) + var(--ward) * 48px) rgba(var(--ward-primary), calc(0.46 + var(--ward) * 0.28)),
+    0 0 calc(58px + var(--ward-ring) + var(--ward) * 68px) rgba(var(--ward-secondary), calc(0.24 + var(--ward) * 0.22)),
     inset 0 0 calc(24px + var(--ward) * 32px) rgba(255, 248, 223, 0.28);
 }
 
@@ -1268,16 +1274,16 @@ body.is-divining #timeline::-webkit-slider-thumb {
   border-width: 2px;
   border-color: rgba(255, 248, 223, 0.92);
   box-shadow:
-    0 0 24px rgba(242, 217, 138, 0.78),
-    inset 0 0 22px rgba(121, 216, 208, 0.34);
+    0 0 24px rgba(var(--ward-primary), 0.78),
+    inset 0 0 22px rgba(var(--ward-secondary), 0.34);
   animation-duration: calc(14s - var(--ward) * 8s);
 }
 
 .is-fully-prepped .hangzhou-marker__array {
   border-color: rgba(255, 248, 223, 0.95);
   box-shadow:
-    0 0 28px rgba(242, 217, 138, 0.62),
-    0 0 58px rgba(121, 216, 208, 0.28);
+    0 0 28px rgba(var(--ward-primary), 0.62),
+    0 0 58px rgba(var(--ward-secondary), 0.28);
 }
 
 .is-fully-prepped strong {
@@ -1301,8 +1307,8 @@ body.is-divining #timeline::-webkit-slider-thumb {
   color: var(--paper);
   font-family: var(--font-display);
   box-shadow:
-    0 0 18px rgba(242, 217, 138, 0.44),
-    0 0 46px rgba(121, 216, 208, 0.2);
+    0 0 18px rgba(var(--ward-primary), 0.44),
+    0 0 46px rgba(var(--ward-secondary), 0.2);
 }
 
 .hangzhou-marker__array {
@@ -1314,7 +1320,7 @@ body.is-divining #timeline::-webkit-slider-thumb {
     conic-gradient(
       from 0deg,
       transparent 0 11deg,
-      rgba(242, 217, 138, 0.92) 11deg 13deg,
+      rgba(var(--ward-primary), 0.92) 11deg 13deg,
       transparent 13deg 36deg
     );
   mask-image: radial-gradient(circle at center, transparent 48%, #000 50%, #000 53%, transparent 55%);
@@ -1324,14 +1330,14 @@ body.is-divining #timeline::-webkit-slider-thumb {
 
 .hangzhou-marker__array--mid {
   inset: 14px;
-  border-color: rgba(121, 216, 208, 0.54);
+  border-color: rgba(var(--ward-secondary), 0.54);
   animation-duration: 12s;
   animation-direction: reverse;
 }
 
 .hangzhou-marker__array--core {
   inset: 28px;
-  border-color: rgba(242, 217, 138, 0.9);
+  border-color: rgba(var(--ward-primary), 0.9);
   animation-duration: 8s;
 }
 
@@ -1342,7 +1348,7 @@ body.is-divining #timeline::-webkit-slider-thumb {
   border-radius: 50%;
   background: repeating-conic-gradient(
     from 0deg,
-    rgba(242, 217, 138, 0.22) 0deg 20deg,
+    rgba(var(--ward-primary), 0.22) 0deg 20deg,
     transparent 20deg 45deg
   );
   mask-image: radial-gradient(circle at center, #000 30%, transparent 72%);
@@ -1359,7 +1365,7 @@ body.is-divining #timeline::-webkit-slider-thumb {
 .realm-hualong .hangzhou-marker__array,
 .realm-xiantai .hangzhou-marker__array,
 .realm-diguan .hangzhou-marker__array {
-  box-shadow: 0 0 34px rgba(242, 217, 138, 0.36);
+  box-shadow: 0 0 34px rgba(var(--ward-primary), 0.36);
 }
 
 .realm-xiantai strong,
@@ -1572,14 +1578,14 @@ body[data-bavi-realm="east-sea-lord"] {
 }
 
 body[data-bavi-realm="bavi-tianzun"] {
-  --atmo-tint: rgba(220, 98, 71, 0.06);
-  --atmo-vignette: 0.58;
+  --atmo-tint: rgba(242, 143, 76, 0.08);
+  --atmo-vignette: 0.56;
   --atmo-pulse: 6s;
 }
 
 body[data-bavi-realm="guixu-shadow"] {
-  --atmo-tint: rgba(220, 98, 71, 0.11);
-  --atmo-vignette: 0.66;
+  --atmo-tint: rgba(194, 64, 42, 0.15);
+  --atmo-vignette: 0.72;
   --atmo-pulse: 4.5s;
 }
 
@@ -2017,27 +2023,46 @@ body.is-divining .artifact-panel {
 
 /* 防护罩强度阶梯 */
 .realm-lunhai {
-  --ward: 0.3;
+  --ward: 0.22;
+  --ward-primary: 156, 176, 164;
+  --ward-secondary: 91, 142, 154;
+  --ward-ring: 2px;
 }
 
 .realm-daogong {
-  --ward: 0.44;
+  --ward: 0.38;
+  --ward-primary: 121, 216, 208;
+  --ward-secondary: 88, 154, 210;
+  --ward-ring: 8px;
 }
 
 .realm-siji {
-  --ward: 0.58;
+  --ward: 0.54;
+  --ward-primary: 216, 183, 104;
+  --ward-secondary: 242, 217, 138;
+  --ward-ring: 14px;
 }
 
 .realm-hualong {
-  --ward: 0.72;
+  --ward: 0.7;
+  --ward-primary: 242, 217, 138;
+  --ward-secondary: 121, 216, 208;
+  --ward-ring: 22px;
 }
 
 .realm-xiantai {
   --ward: 0.86;
+  --ward-primary: 255, 248, 223;
+  --ward-secondary: 242, 217, 138;
+  --ward-ring: 32px;
 }
 
 .realm-diguan {
   --ward: 1;
+  --ward-primary: 242, 217, 138;
+  --ward-secondary: 194, 64, 42;
+  --ward-alert: 194, 64, 42;
+  --ward-ring: 44px;
 }
 
 /* 帝关临战：防护罩转为朱红金双色战备形态 */
@@ -2046,43 +2071,46 @@ body.is-divining .artifact-panel {
     radial-gradient(
       circle at center,
       transparent 50%,
-      rgba(194, 64, 42, 0.16) 64%,
-      rgba(242, 217, 138, 0.32) 84%,
+      rgba(var(--ward-alert), 0.2) 64%,
+      rgba(var(--ward-primary), 0.4) 84%,
       transparent 96%
     );
 }
 
 .realm-diguan.is-shielded .hangzhou-marker__shield--ward {
   background: none;
-  border-color: rgba(194, 64, 42, 0.75);
+  border-color: rgba(var(--ward-alert), 0.78);
 }
 
 /* 轮海秘境：仅外环微光，观察态 */
 .realm-lunhai .hangzhou-marker__array--mid,
 .realm-lunhai .hangzhou-marker__array--core,
 .realm-lunhai .hangzhou-marker__lotus {
-  opacity: 0.25;
+  opacity: 0.14;
 }
 
 .realm-lunhai .hangzhou-marker__array {
-  border-color: rgba(242, 217, 138, 0.4);
+  border-color: rgba(var(--ward-primary), 0.32);
 }
 
 /* 道宫秘境：青色灯环亮起 */
 .realm-daogong .hangzhou-marker__array--mid {
-  border-color: rgba(121, 216, 208, 0.9);
-  box-shadow: 0 0 18px rgba(121, 216, 208, 0.35);
+  border-color: rgba(var(--ward-primary), 0.9);
+  box-shadow: 0 0 18px rgba(var(--ward-primary), 0.38);
 }
 
 /* 四极秘境：金环稳固加粗 */
 .realm-siji .hangzhou-marker__array {
   border-width: 2px;
-  box-shadow: 0 0 22px rgba(242, 217, 138, 0.28);
+  box-shadow: 0 0 26px rgba(var(--ward-primary), 0.38);
 }
 
 /* 化龙秘境：莲台全开 + 阵环加速 */
 .realm-hualong .hangzhou-marker__array {
   animation-duration: 10s;
+  box-shadow:
+    0 0 34px rgba(var(--ward-primary), 0.48),
+    0 0 58px rgba(var(--ward-secondary), 0.22);
 }
 
 .realm-hualong .hangzhou-marker__array--mid {
@@ -2092,21 +2120,25 @@ body.is-divining .artifact-panel {
 /* 仙台秘境：核心脉冲 + 全阵金辉（脉冲已有），追加外圈光晕 */
 .realm-xiantai .hangzhou-marker__array {
   animation-duration: 7s;
-  box-shadow: 0 0 40px rgba(242, 217, 138, 0.45);
+  box-shadow:
+    0 0 42px rgba(var(--ward-primary), 0.62),
+    0 0 76px rgba(var(--ward-secondary), 0.34);
 }
 
 /* 帝关临战：朱红警戒环 + 最快转速 */
 .realm-diguan .hangzhou-marker__array {
-  border-color: rgba(194, 64, 42, 0.85);
-  box-shadow: 0 0 44px rgba(194, 64, 42, 0.5);
+  border-color: rgba(var(--ward-alert), 0.9);
+  box-shadow:
+    0 0 48px rgba(var(--ward-alert), 0.58),
+    0 0 86px rgba(var(--ward-primary), 0.36);
   animation-duration: 5s;
 }
 
 .realm-diguan .hangzhou-marker strong {
-  border-color: rgba(194, 64, 42, 0.9);
+  border-color: rgba(var(--ward-alert), 0.9);
   box-shadow:
-    0 0 22px rgba(194, 64, 42, 0.6),
-    0 0 52px rgba(242, 217, 138, 0.3);
+    0 0 22px rgba(var(--ward-alert), 0.68),
+    0 0 58px rgba(var(--ward-primary), 0.38);
 }
 
 /* ═══════════ 巴威五称号差异特效 ═══════════ */
@@ -2134,20 +2166,164 @@ body.is-divining .artifact-panel {
   border-color: rgba(121, 216, 208, 0.45);
 }
 
-/* 巴威天尊：风暴橙全形态 + 金色符文环高亮（默认形态即此，补符文辉光） */
-.bavi-tianzun .bavi-marker__sigil {
-  filter: drop-shadow(0 0 6px rgba(242, 217, 138, 0.7));
+/* 巴威天尊：金橙台风体，符文外放但仍保留清晰风眼 */
+.bavi-tianzun {
+  filter:
+    drop-shadow(0 0 26px rgba(242, 217, 138, 0.52))
+    drop-shadow(0 0 54px rgba(220, 98, 71, 0.34));
 }
 
-/* 归墟帝影：深红压暗 + 旋涡加速（加速已有） */
+.bavi-tianzun .bavi-marker__wake {
+  background: radial-gradient(ellipse 74% 42% at 66% 60%, rgba(242, 165, 76, 0.44), transparent 74%);
+  filter: blur(5px) saturate(1.2);
+}
+
+.bavi-tianzun .bavi-marker__arms--outer {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 16deg,
+    rgba(242, 143, 76, 0.56) 38deg 96deg,
+    transparent 118deg 138deg,
+    rgba(242, 217, 138, 0.34) 158deg 214deg,
+    transparent 236deg 258deg,
+    rgba(220, 98, 71, 0.48) 278deg 334deg,
+    transparent 356deg
+  );
+  filter: blur(1.1px) saturate(1.28) brightness(1.08);
+}
+
+.bavi-tianzun .bavi-marker__arms--mid {
+  background: conic-gradient(
+    from 90deg,
+    transparent 0 30deg,
+    rgba(242, 217, 138, 0.38) 52deg 112deg,
+    transparent 134deg 210deg,
+    rgba(255, 248, 223, 0.26) 232deg 290deg,
+    transparent 314deg
+  );
+}
+
+.bavi-tianzun .bavi-marker__vortex {
+  background:
+    radial-gradient(circle at center, rgba(255, 248, 223, 0.9) 0 7%, transparent 9%),
+    conic-gradient(
+      from 20deg,
+      rgba(242, 217, 138, 0.08),
+      rgba(242, 143, 76, 0.86),
+      rgba(255, 248, 223, 0.18),
+      rgba(48, 25, 22, 0.9),
+      rgba(242, 217, 138, 0.08)
+    );
+  box-shadow:
+    0 0 30px rgba(242, 217, 138, 0.42),
+    0 0 68px rgba(220, 98, 71, 0.32);
+}
+
+.bavi-tianzun .bavi-marker__sigil {
+  border-color: rgba(242, 217, 138, 0.72);
+  filter: drop-shadow(0 0 10px rgba(242, 217, 138, 0.86));
+  animation-duration: 18s;
+}
+
+.bavi-tianzun .bavi-marker__ring {
+  border-color: rgba(242, 217, 138, 0.72);
+  box-shadow: 0 0 26px rgba(242, 217, 138, 0.4);
+}
+
+.bavi-tianzun .bavi-marker__eye {
+  box-shadow:
+    0 0 22px rgba(255, 248, 223, 0.92),
+    0 0 54px rgba(242, 217, 138, 0.64),
+    0 0 84px rgba(220, 98, 71, 0.34);
+}
+
+/* 归墟帝影：深红压暗，外圈扩大，风眼像被阴影吞住 */
+.bavi-guixu-shadow {
+  filter:
+    drop-shadow(0 0 30px rgba(194, 64, 42, 0.58))
+    drop-shadow(0 0 76px rgba(70, 10, 16, 0.72))
+    brightness(0.86)
+    saturate(1.18);
+}
+
+.bavi-guixu-shadow .bavi-marker__wake {
+  inset: 6px;
+  opacity: 1;
+  background: radial-gradient(ellipse 84% 50% at 66% 60%, rgba(194, 64, 42, 0.62), transparent 72%);
+  filter: blur(8px) saturate(1.45);
+  transform: rotate(var(--wake-angle, 45deg)) scale(1.82);
+}
+
 .bavi-guixu-shadow .bavi-marker__arms {
-  filter: blur(1px) saturate(1.3) brightness(0.85);
+  opacity: calc(0.52 + var(--power, 0.5) * 0.48);
+  filter: blur(1.6px) saturate(1.65) brightness(0.7);
+}
+
+.bavi-guixu-shadow .bavi-marker__arms--outer {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 12deg,
+    rgba(194, 64, 42, 0.72) 34deg 104deg,
+    transparent 126deg 142deg,
+    rgba(80, 10, 18, 0.78) 160deg 220deg,
+    transparent 240deg 256deg,
+    rgba(220, 98, 71, 0.56) 276deg 342deg,
+    transparent 356deg
+  );
+  animation-duration: calc(8s - var(--power, 0.5) * 5.5s);
+}
+
+.bavi-guixu-shadow .bavi-marker__arms--mid {
+  background: conic-gradient(
+    from 90deg,
+    transparent 0 28deg,
+    rgba(194, 64, 42, 0.36) 50deg 116deg,
+    transparent 134deg 210deg,
+    rgba(242, 217, 138, 0.16) 232deg 292deg,
+    transparent 314deg
+  );
+  animation-duration: calc(5.8s - var(--power, 0.5) * 3.4s);
+}
+
+.bavi-guixu-shadow .bavi-marker__vortex {
+  inset: 22px;
+  background:
+    radial-gradient(circle at center, rgba(255, 248, 223, 0.72) 0 5%, transparent 7%),
+    conic-gradient(
+      from 20deg,
+      rgba(80, 10, 18, 0.28),
+      rgba(194, 64, 42, 0.92),
+      rgba(20, 6, 10, 0.92),
+      rgba(5, 6, 10, 0.98),
+      rgba(80, 10, 18, 0.28)
+    );
+  box-shadow:
+    0 0 34px rgba(194, 64, 42, 0.62),
+    0 0 88px rgba(70, 10, 16, 0.78);
+  animation-duration: calc(3.8s - var(--power, 0.5) * 2.2s);
+}
+
+.bavi-guixu-shadow .bavi-marker__sigil {
+  border-color: rgba(194, 64, 42, 0.76);
+  filter: hue-rotate(-28deg) saturate(1.8) drop-shadow(0 0 12px rgba(194, 64, 42, 0.72));
+  animation-duration: 12s;
+}
+
+.bavi-guixu-shadow .bavi-marker__ring {
+  inset: 30px;
+  border-color: rgba(194, 64, 42, 0.7);
+  box-shadow:
+    0 0 30px rgba(194, 64, 42, 0.48),
+    0 0 68px rgba(70, 10, 16, 0.42);
 }
 
 .bavi-guixu-shadow .bavi-marker__eye {
+  background: #fff0d6;
+  filter: brightness(calc(0.72 + var(--power, 0.5) * 0.34));
   box-shadow:
-    0 0 18px rgba(255, 248, 223, 0.78),
-    0 0 52px rgba(220, 98, 71, 0.7);
+    0 0 14px rgba(255, 248, 223, 0.72),
+    0 0 46px rgba(194, 64, 42, 0.92),
+    0 0 86px rgba(70, 10, 16, 0.78);
 }
 
 /* 归墟压境：朱红警戒 + 外环脉冲 + 尾迹全开 */

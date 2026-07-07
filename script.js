@@ -453,8 +453,8 @@ function renderStatus() {
   setText(els.realmLore, `${bavi.name}：${bavi.basis}`);
   setText(els.heroSummary, heroSummaryText(distanceKm, bavi, hangzhou));
   setText(els.cityBanter, cityBanterText(hangzhou, risk.level));
-  setText(els.balconyIndex, balconyIndexText(distanceKm, point.windSpeedMps));
-  setText(els.takeoutIndex, takeoutIndexText(distanceKm, point.windSpeedMps));
+  setText(els.balconyIndex, balconyIndexText(distanceKm, point.windSpeedMps, hangzhou));
+  setText(els.takeoutIndex, takeoutIndexText(distanceKm, point.windSpeedMps, hangzhou));
   if (els.distanceNote) {
     setText(els.distanceNote, distanceNoteText(point));
   }
@@ -963,7 +963,20 @@ function cityBanterText(hangzhouRealm, riskLevel) {
   return `${hangzhouRealm.name}：先看天机推演，不制造恐慌。`;
 }
 
-function balconyIndexText(distanceKm, windSpeedMps) {
+function balconyIndexText(distanceKm, windSpeedMps, hangzhouRealm = {}) {
+  const byRealm = {
+    lunhai: '保持巡查',
+    daogong: '提前点灯',
+    siji: '门窗巡守',
+    hualong: '提前收阵',
+    xiantai: '立即收阵',
+    diguan: '封窗闭关'
+  };
+
+  if (byRealm[hangzhouRealm.key]) {
+    return byRealm[hangzhouRealm.key];
+  }
+
   if (distanceKm <= 300 || windSpeedMps >= 50) {
     return '立即收阵';
   }
@@ -975,7 +988,20 @@ function balconyIndexText(distanceKm, windSpeedMps) {
   return '保持巡查';
 }
 
-function takeoutIndexText(distanceKm, windSpeedMps) {
+function takeoutIndexText(distanceKm, windSpeedMps, hangzhouRealm = {}) {
+  const byRealm = {
+    lunhai: '普通模式',
+    daogong: '留意风雨',
+    siji: '谨慎下单',
+    hualong: '避开风口',
+    xiantai: '不宜冒险',
+    diguan: '暂停外卖'
+  };
+
+  if (byRealm[hangzhouRealm.key]) {
+    return byRealm[hangzhouRealm.key];
+  }
+
   if (distanceKm <= 250 || windSpeedMps >= 50) {
     return '不宜冒险';
   }

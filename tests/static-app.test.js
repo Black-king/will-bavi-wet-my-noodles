@@ -51,9 +51,13 @@ test('css provides premium dark map staging and advanced effects', async () => {
   assert.match(css, /\.realm-panel\.is-collapsed/);
   assert.match(css, /\.artifact-dock/);
   assert.match(css, /\.hangzhou-marker__array/);
+  assert.match(css, /--ward-primary/);
+  assert.match(css, /--ward-ring/);
   assert.match(css, /\.is-fully-prepped::before/);
   assert.match(css, /@keyframes full-prep-pulse/);
   assert.match(css, /\.bavi-marker__vortex/);
+  assert.match(css, /\.bavi-tianzun \.bavi-marker__vortex/);
+  assert.match(css, /\.bavi-guixu-shadow \.bavi-marker__vortex/);
   assert.match(css, /\.distance-ruler-label/);
   assert.match(css, /@keyframes array-rotate/);
   assert.match(css, /@keyframes vortex-spin/);
@@ -167,6 +171,8 @@ test('timeline-driven status uses the selected point instead of the latest point
   assert.doesNotMatch(renderStatusBody, /getLatestObservedPoint/);
   assert.match(renderStatusBody, /classifyHangzhouRisk\(\{\s*distanceKm,\s*windSpeedMps:\s*point\.windSpeedMps\s*\}\)/);
   assert.match(renderStatusBody, /selectedPointTimeLabel\(point\)/);
+  assert.match(renderStatusBody, /balconyIndexText\(distanceKm,\s*point\.windSpeedMps,\s*hangzhou\)/);
+  assert.match(renderStatusBody, /takeoutIndexText\(distanceKm,\s*point\.windSpeedMps,\s*hangzhou\)/);
   assert.match(js, /setTimelineFromClientX/);
   assert.match(js, /pointerdown/);
   assert.match(js, /pointermove/);
