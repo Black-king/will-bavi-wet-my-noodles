@@ -2,16 +2,16 @@
   "meta": {
     "currentStormName": "巴威",
     "englishName": "Bavi",
-    "stormId": "2026-BAVI-SAMPLE",
+    "stormId": "NP_2609",
     "year": 2026,
     "basin": "NP",
     "isActive": true,
     "isLiveLike": true,
-    "dataMode": "sample-normalized",
-    "updatedAt": "2026-07-07T18:00:00+08:00",
-    "displayUpdatedAt": "2026-07-07 18:00",
-    "dataFreshness": "示例数据，等待接入 QWeather 或其他授权数据源",
-    "sourceNote": "首版用于验证交互和数据结构，不作为正式气象预警依据。"
+    "dataMode": "qweather-live",
+    "updatedAt": "2026-07-07T18:34:57.970Z",
+    "displayUpdatedAt": "2026年-07-08 02:34",
+    "dataFreshness": "GitHub Actions 已接入 QWeather，页面展示最近一次成功更新的数据。",
+    "sourceNote": "数据来自 QWeather Tropical Cyclone API，正式预警请以气象部门发布为准。"
   },
   "hangzhou": {
     "name": "杭州",
@@ -21,7 +21,7 @@
   "sources": [
     {
       "name": "QWeather Tropical Cyclone API",
-      "role": "planned-primary",
+      "role": "primary-live",
       "url": "https://dev.qweather.com/docs/api/tropical-cyclone/storm-list/"
     },
     {
@@ -33,112 +33,864 @@
   "track": [
     {
       "type": "observed",
-      "time": "2026-07-06T08:00:00+08:00",
-      "label": "07-06 08:00",
-      "lat": 14.4,
-      "lon": 146.2,
-      "level": "强台风",
-      "windSpeedMps": 45,
-      "pressureHpa": 950,
-      "movement": "西北偏西",
+      "time": "2026-07-02T08:00+08:00",
+      "label": "07-02 08:00",
+      "lat": 11,
+      "lon": 160.1,
+      "level": "TS",
+      "windSpeedMps": 18,
+      "pressureHpa": 998,
+      "movement": "WNW",
       "windRadiiKm": {
-        "r7": 320,
-        "r10": 150,
-        "r12": 80
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
       }
     },
     {
       "type": "observed",
-      "time": "2026-07-06T20:00:00+08:00",
-      "label": "07-06 20:00",
-      "lat": 15.6,
-      "lon": 143.9,
-      "level": "超强台风",
-      "windSpeedMps": 58,
-      "pressureHpa": 925,
-      "movement": "西北偏西",
+      "time": "2026-07-02T11:00+08:00",
+      "label": "07-02 11:00",
+      "lat": 11.5,
+      "lon": 159.4,
+      "level": "TS",
+      "windSpeedMps": 20,
+      "pressureHpa": 995,
+      "movement": "WNW",
       "windRadiiKm": {
-        "r7": 360,
-        "r10": 180,
-        "r12": 90
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
       }
     },
     {
       "type": "observed",
-      "time": "2026-07-07T08:00:00+08:00",
-      "label": "07-07 08:00",
-      "lat": 17.2,
-      "lon": 140.8,
-      "level": "超强台风",
-      "windSpeedMps": 60,
-      "pressureHpa": 920,
-      "movement": "西北",
+      "time": "2026-07-02T14:00+08:00",
+      "label": "07-02 14:00",
+      "lat": 11.6,
+      "lon": 159,
+      "level": "TS",
+      "windSpeedMps": 23,
+      "pressureHpa": 990,
+      "movement": "WNW",
       "windRadiiKm": {
-        "r7": 380,
-        "r10": 190,
-        "r12": 100
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
       }
     },
     {
       "type": "observed",
-      "time": "2026-07-07T18:00:00+08:00",
-      "label": "07-07 18:00",
-      "lat": 18.7,
-      "lon": 137.4,
-      "level": "超强台风",
-      "windSpeedMps": 56,
-      "pressureHpa": 930,
-      "movement": "西北",
+      "time": "2026-07-02T17:00+08:00",
+      "label": "07-02 17:00",
+      "lat": 11.7,
+      "lon": 158.6,
+      "level": "STS",
+      "windSpeedMps": 25,
+      "pressureHpa": 985,
+      "movement": "WNW",
       "windRadiiKm": {
-        "r7": 360,
-        "r10": 180,
-        "r12": 90
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
       }
     },
     {
-      "type": "forecast",
-      "time": "2026-07-08T18:00:00+08:00",
-      "label": "07-08 18:00",
-      "lat": 21.4,
-      "lon": 132.1,
-      "level": "强台风",
-      "windSpeedMps": 48,
-      "pressureHpa": 945,
-      "movement": "西北",
+      "type": "observed",
+      "time": "2026-07-02T20:00+08:00",
+      "label": "07-02 20:00",
+      "lat": 11.9,
+      "lon": 158.2,
+      "level": "STS",
+      "windSpeedMps": 28,
+      "pressureHpa": 982,
+      "movement": "WNW",
       "windRadiiKm": {
-        "r7": 330,
-        "r10": 150,
-        "r12": 70
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
       }
     },
     {
-      "type": "forecast",
-      "time": "2026-07-09T18:00:00+08:00",
-      "label": "07-09 18:00",
-      "lat": 24.2,
-      "lon": 127.8,
-      "level": "台风",
+      "type": "observed",
+      "time": "2026-07-02T23:00+08:00",
+      "label": "07-02 23:00",
+      "lat": 12.3,
+      "lon": 157.4,
+      "level": "STS",
+      "windSpeedMps": 28,
+      "pressureHpa": 982,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-03T02:00+08:00",
+      "label": "07-03 02:00",
+      "lat": 12.6,
+      "lon": 156.8,
+      "level": "STS",
+      "windSpeedMps": 30,
+      "pressureHpa": 980,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-03T05:00+08:00",
+      "label": "07-03 05:00",
+      "lat": 12.7,
+      "lon": 156.1,
+      "level": "STS",
+      "windSpeedMps": 30,
+      "pressureHpa": 980,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-03T08:00+08:00",
+      "label": "07-03 08:00",
+      "lat": 13,
+      "lon": 155.3,
+      "level": "TY",
+      "windSpeedMps": 35,
+      "pressureHpa": 970,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-03T11:00+08:00",
+      "label": "07-03 11:00",
+      "lat": 12.9,
+      "lon": 154.8,
+      "level": "TY",
       "windSpeedMps": 40,
       "pressureHpa": 960,
-      "movement": "西北",
+      "movement": "W",
       "windRadiiKm": {
-        "r7": 280,
-        "r10": 110,
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-03T14:00+08:00",
+      "label": "07-03 14:00",
+      "lat": 12.9,
+      "lon": 154.2,
+      "level": "STY",
+      "windSpeedMps": 48,
+      "pressureHpa": 945,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-03T17:00+08:00",
+      "label": "07-03 17:00",
+      "lat": 12.9,
+      "lon": 153.6,
+      "level": "STY",
+      "windSpeedMps": 48,
+      "pressureHpa": 945,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-03T20:00+08:00",
+      "label": "07-03 20:00",
+      "lat": 12.8,
+      "lon": 153.2,
+      "level": "STY",
+      "windSpeedMps": 50,
+      "pressureHpa": 940,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-03T23:00+08:00",
+      "label": "07-03 23:00",
+      "lat": 12.7,
+      "lon": 152.8,
+      "level": "STY",
+      "windSpeedMps": 50,
+      "pressureHpa": 940,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-04T02:00+08:00",
+      "label": "07-04 02:00",
+      "lat": 12.7,
+      "lon": 152.3,
+      "level": "SuperTY",
+      "windSpeedMps": 55,
+      "pressureHpa": 930,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-04T05:00+08:00",
+      "label": "07-04 05:00",
+      "lat": 12.7,
+      "lon": 151.8,
+      "level": "SuperTY",
+      "windSpeedMps": 60,
+      "pressureHpa": 920,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-04T08:00+08:00",
+      "label": "07-04 08:00",
+      "lat": 12.6,
+      "lon": 151.6,
+      "level": "SuperTY",
+      "windSpeedMps": 60,
+      "pressureHpa": 920,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-04T11:00+08:00",
+      "label": "07-04 11:00",
+      "lat": 12.6,
+      "lon": 151.3,
+      "level": "SuperTY",
+      "windSpeedMps": 60,
+      "pressureHpa": 920,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-04T14:00+08:00",
+      "label": "07-04 14:00",
+      "lat": 12.5,
+      "lon": 150.9,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-04T17:00+08:00",
+      "label": "07-04 17:00",
+      "lat": 12.5,
+      "lon": 150.7,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-04T20:00+08:00",
+      "label": "07-04 20:00",
+      "lat": 12.6,
+      "lon": 150.3,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-04T23:00+08:00",
+      "label": "07-04 23:00",
+      "lat": 12.7,
+      "lon": 149.9,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-05T02:00+08:00",
+      "label": "07-05 02:00",
+      "lat": 12.7,
+      "lon": 149.6,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-05T05:00+08:00",
+      "label": "07-05 05:00",
+      "lat": 12.8,
+      "lon": 149.2,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-05T08:00+08:00",
+      "label": "07-05 08:00",
+      "lat": 12.8,
+      "lon": 149,
+      "level": "SuperTY",
+      "windSpeedMps": 60,
+      "pressureHpa": 920,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-05T11:00+08:00",
+      "label": "07-05 11:00",
+      "lat": 13.1,
+      "lon": 148.7,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-05T14:00+08:00",
+      "label": "07-05 14:00",
+      "lat": 13.4,
+      "lon": 148.2,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-05T17:00+08:00",
+      "label": "07-05 17:00",
+      "lat": 13.5,
+      "lon": 147.7,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-05T20:00+08:00",
+      "label": "07-05 20:00",
+      "lat": 13.7,
+      "lon": 147.1,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-05T23:00+08:00",
+      "label": "07-05 23:00",
+      "lat": 13.7,
+      "lon": 146.6,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-06T02:00+08:00",
+      "label": "07-06 02:00",
+      "lat": 13.9,
+      "lon": 146.2,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-06T05:00+08:00",
+      "label": "07-06 05:00",
+      "lat": 14.1,
+      "lon": 145.7,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-06T08:00+08:00",
+      "label": "07-06 08:00",
+      "lat": 14.3,
+      "lon": 145.1,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-06T11:00+08:00",
+      "label": "07-06 11:00",
+      "lat": 14.6,
+      "lon": 144.6,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-06T14:00+08:00",
+      "label": "07-06 14:00",
+      "lat": 14.8,
+      "lon": 144.2,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-06T17:00+08:00",
+      "label": "07-06 17:00",
+      "lat": 15.1,
+      "lon": 143.4,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-06T20:00+08:00",
+      "label": "07-06 20:00",
+      "lat": 15.4,
+      "lon": 142.8,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-06T23:00+08:00",
+      "label": "07-06 23:00",
+      "lat": 15.7,
+      "lon": 142,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-07T02:00+08:00",
+      "label": "07-07 02:00",
+      "lat": 15.8,
+      "lon": 141.2,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "WNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-07T05:00+08:00",
+      "label": "07-07 05:00",
+      "lat": 16,
+      "lon": 140.6,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-07T08:00+08:00",
+      "label": "07-07 08:00",
+      "lat": 16.2,
+      "lon": 139.9,
+      "level": "SuperTY",
+      "windSpeedMps": 62,
+      "pressureHpa": 915,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-07T11:00+08:00",
+      "label": "07-07 11:00",
+      "lat": 16.3,
+      "lon": 139.2,
+      "level": "SuperTY",
+      "windSpeedMps": 55,
+      "pressureHpa": 930,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-07T14:00+08:00",
+      "label": "07-07 14:00",
+      "lat": 16.5,
+      "lon": 138.4,
+      "level": "SuperTY",
+      "windSpeedMps": 55,
+      "pressureHpa": 930,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-07T17:00+08:00",
+      "label": "07-07 17:00",
+      "lat": 16.7,
+      "lon": 137.7,
+      "level": "SuperTY",
+      "windSpeedMps": 55,
+      "pressureHpa": 930,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-07T20:00+08:00",
+      "label": "07-07 20:00",
+      "lat": 16.8,
+      "lon": 136.6,
+      "level": "SuperTY",
+      "windSpeedMps": 55,
+      "pressureHpa": 930,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "observed",
+      "time": "2026-07-07T23:00+08:00",
+      "label": "07-07 23:00",
+      "lat": 16.8,
+      "lon": 136,
+      "level": "SuperTY",
+      "windSpeedMps": 58,
+      "pressureHpa": 925,
+      "movement": "W",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
         "r12": 0
       }
     },
     {
       "type": "forecast",
-      "time": "2026-07-10T18:00:00+08:00",
-      "label": "07-10 18:00",
-      "lat": 27.0,
-      "lon": 124.4,
-      "level": "强热带风暴",
-      "windSpeedMps": 28,
-      "pressureHpa": 982,
-      "movement": "西北偏北",
+      "time": "2026-07-08T11:00+08:00",
+      "label": "07-08 11:00",
+      "lat": 17,
+      "lon": 133.6,
+      "level": "SuperTY",
+      "windSpeedMps": 55,
+      "pressureHpa": 930,
+      "movement": "暂无",
       "windRadiiKm": {
-        "r7": 180,
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-08T23:00+08:00",
+      "label": "07-08 23:00",
+      "lat": 17.5,
+      "lon": 131.7,
+      "level": "SuperTY",
+      "windSpeedMps": 55,
+      "pressureHpa": 930,
+      "movement": "暂无",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-09T11:00+08:00",
+      "label": "07-09 11:00",
+      "lat": 18.7,
+      "lon": 130,
+      "level": "SuperTY",
+      "windSpeedMps": 55,
+      "pressureHpa": 930,
+      "movement": "暂无",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-09T23:00+08:00",
+      "label": "07-09 23:00",
+      "lat": 20,
+      "lon": 128.1,
+      "level": "SuperTY",
+      "windSpeedMps": 60,
+      "pressureHpa": 920,
+      "movement": "暂无",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-10T11:00+08:00",
+      "label": "07-10 11:00",
+      "lat": 21.7,
+      "lon": 126.2,
+      "level": "SuperTY",
+      "windSpeedMps": 60,
+      "pressureHpa": 920,
+      "movement": "暂无",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-10T23:00+08:00",
+      "label": "07-10 23:00",
+      "lat": 23.5,
+      "lon": 124.3,
+      "level": "SuperTY",
+      "windSpeedMps": 55,
+      "pressureHpa": 930,
+      "movement": "暂无",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-11T23:00+08:00",
+      "label": "07-11 23:00",
+      "lat": 27.5,
+      "lon": 119.9,
+      "level": "TY",
+      "windSpeedMps": 40,
+      "pressureHpa": 960,
+      "movement": "暂无",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-12T23:00+08:00",
+      "label": "07-12 23:00",
+      "lat": 32.1,
+      "lon": 116.5,
+      "level": "TS",
+      "windSpeedMps": 23,
+      "pressureHpa": 990,
+      "movement": "暂无",
+      "windRadiiKm": {
+        "r7": 0,
         "r10": 0,
         "r12": 0
       }
@@ -151,5 +903,5 @@
     "门窗检查",
     "阳台收纳"
   ],
-  "disclaimer": "本页面用于互动展示和生活提醒，正式预警请以气象部门发布为准。"
+  "disclaimer": "本页面用于互动展示和生活提醒，正式预警、避险指引和灾害信息请以气象部门及政府部门发布为准。"
 }
