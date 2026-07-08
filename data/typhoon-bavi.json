@@ -8,8 +8,8 @@
     "isActive": true,
     "isLiveLike": true,
     "dataMode": "qweather-live",
-    "updatedAt": "2026-07-08T16:52:07.086Z",
-    "displayUpdatedAt": "2026年-07-09 00:52",
+    "updatedAt": "2026-07-08T18:49:50.636Z",
+    "displayUpdatedAt": "2026年-07-09 02:49",
     "dataFreshness": "GitHub Actions 已接入 QWeather，页面展示最近一次成功更新的数据。",
     "sourceNote": "数据来自 QWeather Tropical Cyclone API，正式预警请以气象部门发布为准。"
   },
