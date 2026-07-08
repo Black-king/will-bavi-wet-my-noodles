@@ -47,7 +47,6 @@ npm test
 4. 转换成当前 JSON 结构。
 5. 提交更新后的 `data/typhoon-bavi.json`。
 
-这样不会在浏览器前端暴露 API Key，也能在接口失败时继续展示上一次成功缓存。
 
 ## QWeather + GitHub Pages 配置
 
