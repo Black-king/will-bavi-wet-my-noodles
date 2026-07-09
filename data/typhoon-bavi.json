@@ -8,8 +8,8 @@
     "isActive": true,
     "isLiveLike": true,
     "dataMode": "qweather-live",
-    "updatedAt": "2026-07-09T20:08:57.877Z",
-    "displayUpdatedAt": "2026年-07-10 04:08",
+    "updatedAt": "2026-07-09T21:49:01.407Z",
+    "displayUpdatedAt": "2026年-07-10 05:49",
     "dataFreshness": "GitHub Actions 已接入 QWeather，页面展示最近一次成功更新的数据。",
     "sourceNote": "数据来自 QWeather Tropical Cyclone API，正式预警请以气象部门发布为准。"
   },
@@ -1040,11 +1040,27 @@
       }
     },
     {
+      "type": "observed",
+      "time": "2026-07-10T05:00+08:00",
+      "label": "07-10 05:00",
+      "lat": 20.4,
+      "lon": 128,
+      "level": "STY",
+      "windSpeedMps": 45,
+      "pressureHpa": 945,
+      "movement": "NNW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
       "type": "forecast",
-      "time": "2026-07-10T14:00+08:00",
-      "label": "07-10 14:00",
-      "lat": 21.7,
-      "lon": 127,
+      "time": "2026-07-10T17:00+08:00",
+      "label": "07-10 17:00",
+      "lat": 22.2,
+      "lon": 126.7,
       "level": "STY",
       "windSpeedMps": 48,
       "pressureHpa": 940,
@@ -1057,45 +1073,13 @@
     },
     {
       "type": "forecast",
-      "time": "2026-07-11T02:00+08:00",
-      "label": "07-11 02:00",
-      "lat": 23.7,
-      "lon": 125.2,
-      "level": "SuperTY",
-      "windSpeedMps": 52,
-      "pressureHpa": 930,
-      "movement": "暂无",
-      "windRadiiKm": {
-        "r7": 0,
-        "r10": 0,
-        "r12": 0
-      }
-    },
-    {
-      "type": "forecast",
-      "time": "2026-07-11T14:00+08:00",
-      "label": "07-11 14:00",
-      "lat": 25.1,
-      "lon": 122.7,
-      "level": "SuperTY",
-      "windSpeedMps": 52,
-      "pressureHpa": 930,
-      "movement": "暂无",
-      "windRadiiKm": {
-        "r7": 0,
-        "r10": 0,
-        "r12": 0
-      }
-    },
-    {
-      "type": "forecast",
-      "time": "2026-07-12T02:00+08:00",
-      "label": "07-12 02:00",
-      "lat": 25.6,
-      "lon": 120.6,
+      "time": "2026-07-11T05:00+08:00",
+      "label": "07-11 05:00",
+      "lat": 24.2,
+      "lon": 124.7,
       "level": "STY",
       "windSpeedMps": 48,
-      "pressureHpa": 935,
+      "pressureHpa": 940,
       "movement": "暂无",
       "windRadiiKm": {
         "r7": 0,
@@ -1105,10 +1089,42 @@
     },
     {
       "type": "forecast",
-      "time": "2026-07-12T14:00+08:00",
-      "label": "07-12 14:00",
-      "lat": 29.1,
-      "lon": 117.9,
+      "time": "2026-07-11T17:00+08:00",
+      "label": "07-11 17:00",
+      "lat": 26.1,
+      "lon": 122.2,
+      "level": "STY",
+      "windSpeedMps": 48,
+      "pressureHpa": 940,
+      "movement": "暂无",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-12T05:00+08:00",
+      "label": "07-12 05:00",
+      "lat": 27.8,
+      "lon": 120.1,
+      "level": "TY",
+      "windSpeedMps": 40,
+      "pressureHpa": 960,
+      "movement": "暂无",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-12T17:00+08:00",
+      "label": "07-12 17:00",
+      "lat": 30,
+      "lon": 118.1,
       "level": "TY",
       "windSpeedMps": 33,
       "pressureHpa": 975,
@@ -1121,10 +1137,10 @@
     },
     {
       "type": "forecast",
-      "time": "2026-07-13T02:00+08:00",
-      "label": "07-13 02:00",
-      "lat": 31.1,
-      "lon": 115.9,
+      "time": "2026-07-13T05:00+08:00",
+      "label": "07-13 05:00",
+      "lat": 31.9,
+      "lon": 116.9,
       "level": "TS",
       "windSpeedMps": 20,
       "pressureHpa": 995,
@@ -1137,10 +1153,10 @@
     },
     {
       "type": "forecast",
-      "time": "2026-07-14T02:00+08:00",
-      "label": "07-14 02:00",
-      "lat": 33.7,
-      "lon": 115,
+      "time": "2026-07-14T05:00+08:00",
+      "label": "07-14 05:00",
+      "lat": 34,
+      "lon": 116.9,
       "level": "TD",
       "windSpeedMps": 15,
       "pressureHpa": 998,
