@@ -8,8 +8,8 @@
     "isActive": true,
     "isLiveLike": true,
     "dataMode": "qweather-live",
-    "updatedAt": "2026-07-09T23:39:36.684Z",
-    "displayUpdatedAt": "2026年-07-10 07:39",
+    "updatedAt": "2026-07-10T04:18:36.137Z",
+    "displayUpdatedAt": "2026年-07-10 12:18",
     "dataFreshness": "GitHub Actions 已接入 QWeather，页面展示最近一次成功更新的数据。",
     "sourceNote": "数据来自 QWeather Tropical Cyclone API，正式预警请以气象部门发布为准。"
   },
@@ -1056,15 +1056,15 @@
       }
     },
     {
-      "type": "forecast",
-      "time": "2026-07-10T17:00+08:00",
-      "label": "07-10 17:00",
-      "lat": 22.2,
-      "lon": 126.7,
+      "type": "observed",
+      "time": "2026-07-10T08:00+08:00",
+      "label": "07-10 08:00",
+      "lat": 20.8,
+      "lon": 127.6,
       "level": "STY",
-      "windSpeedMps": 48,
-      "pressureHpa": 940,
-      "movement": "暂无",
+      "windSpeedMps": 42,
+      "pressureHpa": 955,
+      "movement": "NW",
       "windRadiiKm": {
         "r7": 0,
         "r10": 0,
@@ -1072,46 +1072,30 @@
       }
     },
     {
-      "type": "forecast",
-      "time": "2026-07-11T05:00+08:00",
-      "label": "07-11 05:00",
-      "lat": 24.2,
-      "lon": 124.7,
-      "level": "STY",
-      "windSpeedMps": 48,
-      "pressureHpa": 940,
-      "movement": "暂无",
-      "windRadiiKm": {
-        "r7": 0,
-        "r10": 0,
-        "r12": 0
-      }
-    },
-    {
-      "type": "forecast",
-      "time": "2026-07-11T17:00+08:00",
-      "label": "07-11 17:00",
-      "lat": 26.1,
-      "lon": 122.2,
-      "level": "STY",
-      "windSpeedMps": 48,
-      "pressureHpa": 940,
-      "movement": "暂无",
-      "windRadiiKm": {
-        "r7": 0,
-        "r10": 0,
-        "r12": 0
-      }
-    },
-    {
-      "type": "forecast",
-      "time": "2026-07-12T05:00+08:00",
-      "label": "07-12 05:00",
-      "lat": 27.8,
-      "lon": 120.1,
+      "type": "observed",
+      "time": "2026-07-10T11:00+08:00",
+      "label": "07-10 11:00",
+      "lat": 21.1,
+      "lon": 127.3,
       "level": "TY",
       "windSpeedMps": 40,
       "pressureHpa": 960,
+      "movement": "NW",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-10T23:00+08:00",
+      "label": "07-10 23:00",
+      "lat": 22.9,
+      "lon": 125.9,
+      "level": "STY",
+      "windSpeedMps": 42,
+      "pressureHpa": 955,
       "movement": "暂无",
       "windRadiiKm": {
         "r7": 0,
@@ -1121,13 +1105,13 @@
     },
     {
       "type": "forecast",
-      "time": "2026-07-12T17:00+08:00",
-      "label": "07-12 17:00",
-      "lat": 30,
-      "lon": 118.1,
-      "level": "TY",
-      "windSpeedMps": 33,
-      "pressureHpa": 975,
+      "time": "2026-07-11T11:00+08:00",
+      "label": "07-11 11:00",
+      "lat": 25.1,
+      "lon": 123.8,
+      "level": "STY",
+      "windSpeedMps": 45,
+      "pressureHpa": 950,
       "movement": "暂无",
       "windRadiiKm": {
         "r7": 0,
@@ -1137,10 +1121,42 @@
     },
     {
       "type": "forecast",
-      "time": "2026-07-13T05:00+08:00",
-      "label": "07-13 05:00",
-      "lat": 31.9,
-      "lon": 116.9,
+      "time": "2026-07-11T23:00+08:00",
+      "label": "07-11 23:00",
+      "lat": 26.8,
+      "lon": 121.6,
+      "level": "STY",
+      "windSpeedMps": 45,
+      "pressureHpa": 950,
+      "movement": "暂无",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-12T11:00+08:00",
+      "label": "07-12 11:00",
+      "lat": 28.8,
+      "lon": 119.3,
+      "level": "STS",
+      "windSpeedMps": 30,
+      "pressureHpa": 980,
+      "movement": "暂无",
+      "windRadiiKm": {
+        "r7": 0,
+        "r10": 0,
+        "r12": 0
+      }
+    },
+    {
+      "type": "forecast",
+      "time": "2026-07-12T23:00+08:00",
+      "label": "07-12 23:00",
+      "lat": 30.8,
+      "lon": 117.7,
       "level": "TS",
       "windSpeedMps": 20,
       "pressureHpa": 995,
@@ -1153,13 +1169,13 @@
     },
     {
       "type": "forecast",
-      "time": "2026-07-14T05:00+08:00",
-      "label": "07-14 05:00",
-      "lat": 34,
+      "time": "2026-07-13T11:00+08:00",
+      "label": "07-13 11:00",
+      "lat": 32.8,
       "lon": 116.9,
       "level": "TD",
       "windSpeedMps": 15,
-      "pressureHpa": 998,
+      "pressureHpa": 1000,
       "movement": "暂无",
       "windRadiiKm": {
         "r7": 0,
